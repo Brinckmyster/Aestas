@@ -3,265 +3,157 @@
 <head>
   <meta charset="UTF-8">
   <title>Academic Allies</title>
-  <meta name="description" content="Academic Allies - Your disability accommodations and support network">
+  <meta name="description" content="Academic Allies: Your disability accommodations and support network">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
   <style>
-    :root {
-      --color-mental: #22c55e;
-      --color-physical: #fbbf24;
-      --color-spiritual: #3b82f6;
-      --color-academic: #bdbdbd;
-      --color-social: #8b5cf6;
-      --color-grey: #e5e7eb;
-      --color-surface: #fff;
-      --color-text: #13343b;
-      --color-success: #22c55e;
-      --color-border: #e5e7eb;
-      --color-info: #626c71;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #181a1b;
-      color: var(--color-text);
-      margin: 0;
-      padding: 0;
-    }
-    .tagline {
-      font-size: 1.15em;
-      color: #4b6cb7;
-      margin-top: 0.5em;
-      text-align: center;
-    }
-    .status-indicator {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 1000;
-    }
-    .status-circle {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: var(--color-grey);
-      border: 2px solid var(--color-surface);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
-      transition: background 0.3s;
-      font-size: 0;
-    }
-    .status-circle.segments { background: transparent; }
-    .status-segment {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      clip-path: polygon(50% 50%, 50% 0, 0 0);
-    }
-    .segment-mental { background: var(--color-mental); }
-    .segment-physical { background: var(--color-physical); }
-    .segment-spiritual { background: var(--color-spiritual); }
-    .segment-academic { background: var(--color-academic); }
-    .segment-social { background: var(--color-social); }
-    .profile-img {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid #3b82f6;
-      margin-left: 8px;
-    }
-    .profile-name {
-      color: #3b82f6;
-      font-size: 1.1em;
-      margin-left: 8px;
-    }
-    .banner {
-      background: var(--color-surface);
-      border: 2px solid var(--color-border);
-      border-radius: 8px;
-      padding: 16px;
-      margin-top: 16px;
-      text-align: center;
-      font-size: 16px;
-      color: var(--color-text);
-      font-weight: 500;
-      display: none;
-    }
-    nav {
-      margin-top: 2em;
-      text-align: center;
-    }
-    .nav-btn {
-      margin: 0 4px;
-      padding: 8px 14px;
-      font-size: 1em;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      background: #222;
-      color: #fff;
-      cursor: pointer;
-    }
-    .nav-btn:focus { outline: 2px solid #3b82f6; }
-    .content-section { display: none; max-width: 700px; margin: 0 auto; }
-    .content-section.active { display: block; }
-    .ai-panel { margin-top: 2em; }
-    .ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; }
-    .g_id_signin { margin-left: 24px; margin-top: 10px; }
-    .google-profile { display: flex; align-items: center; justify-content: flex-end; gap: 0.5em; margin-top: 8px; }
-    .logged-in-msg { color: #22c55e; text-align: center; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8fafc; margin: 0; }
+    header { text-align: center; margin-top: 2em; }
+    .tagline { font-size: 1.15em; color: #4b6cb7; margin-top: 0.5em; }
+    .status-indicator { position: absolute; top: 1em; right: 1em; }
+    .status-circle { width: 60px; height: 60px; border-radius: 50%; background: #e0e7ef; border: 2px solid #b6c5d6; display: flex; align-items: center; justify-content: center; }
+    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
+    nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
+    nav button.active { background: #2a4b7c; }
+    section { display: none; max-width: 600px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+    section.active { display: block; }
+    #perplexity-ai-panel { margin-top: 2em; }
+    #ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em; }
+    .google-signin { display: flex; justify-content: center; margin: 2em 0; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-  <header style="text-align:center; margin-top:2em;">
-    <h1 style="font-size:2.2em; font-weight:bold; color:#2a4b7c;">Academic Allies</h1>
+  <header>
+    <h1 style="font-size: 2.2em; font-weight: bold; color: #2a4b7c;">Academic Allies</h1>
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Status Circle Top Right -->
-  <div class="status-indicator">
-    <div id="statusCircle" class="status-circle" tabindex="0" aria-label="Status Circle"></div>
-    <div id="googleProfile"></div>
+  <!-- Status Circle (always top right) -->
+  <div class="status-indicator" id="statusIndicator">
+    <div class="status-circle" id="statusCircle" title="Your current status"></div>
   </div>
 
-  <!-- Google Sign-In button (client-side callback only, no login_uri) -->
-  <div id="g_id_onload"
-       data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
-       data-auto_prompt="false"
-       data-callback="handleCredentialResponse">
+  <!-- Google Sign-In Button (no edits needed) -->
+  <div class="google-signin" id="googleSignInContainer">
+    <div id="g_id_onload"
+      data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
+      data-callback="handleCredentialResponse"
+      data-auto_prompt="false">
+    </div>
+    <div id="g_id_signin"
+      class="g_id_signin"
+      data-type="standard"
+      data-shape="rectangular"
+      data-theme="outline"
+      data-text="signin_with"
+      data-size="large"
+      data-logo_alignment="left">
+    </div>
   </div>
-  <div id="g_id_signin" class="g_id_signin"></div>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <!-- Main App Navigation -->
+  <!-- Main Navigation -->
   <nav>
-    <button class="nav-btn" data-section="dashboard">Dashboard</button>
+    <button class="nav-btn active" data-section="dashboard">Dashboard</button>
     <button class="nav-btn" data-section="checkins">Check-Ins</button>
     <button class="nav-btn" data-section="logs">Logs</button>
-    <button class="nav-btn" data-section="admin-panel">Admin Panel</button>
-    <button class="nav-btn" data-section="messages">Messages</button>
+    <button class="nav-btn" data-section="admin">Admin Panel</button>
     <button class="nav-btn" data-section="settings">Settings</button>
   </nav>
 
-  <!-- Dashboard Section -->
-  <div id="dashboard" class="content-section active">
-    <h2>Welcome!</h2>
-    <p>Today's overview and quick actions.</p>
-  </div>
+  <!-- App Sections -->
+  <section id="dashboard" class="active">
+    <h2>Welcome back, <span id="userName">Mary</span>!</h2>
+    <p>Here’s your daily overview. Use the navigation above to check in, review logs, or manage your support network.</p>
+  </section>
 
-  <!-- Check-Ins Section -->
-  <div id="checkins" class="content-section">
+  <section id="checkins">
     <h2>Daily Check-Ins</h2>
-    <div class="checkin-section">
-      <h3>Did you experience any significant pain, fatigue, or brain fog today?</h3>
-      <div class="checkin-options">
-        <button class="nav-btn" data-answer="no">No</button>
-        <button class="nav-btn" data-answer="yes">Yes</button>
-        <button class="nav-btn" data-answer="skip">Skip for today</button>
-      </div>
+    <div class="checkin-reassurance">
+      <p>No need to answer if you’re not sure. Academic Allies already checks for signs of pain, fatigue, or brain fog in the background using your typing and heart rate patterns. No action is needed from you unless you want to add more details.</p>
     </div>
-  </div>
+    <p>Complete your check-in to update your status and notify your support network.</p>
+  </section>
 
-  <!-- Logs Section -->
-  <div id="logs" class="content-section">
-    <h2>Logs</h2>
-    <div id="log-display"></div>
-  </div>
+  <section id="logs">
+    <h2>Logs & History</h2>
+    <p>Review your recent check-ins, flags, and support activity.</p>
+  </section>
 
-  <!-- Admin Panel Section -->
-  <div id="admin-panel" class="content-section">
+  <section id="admin">
     <h2>Admin Panel</h2>
-    <div id="perplexity-ai-panel" class="ai-panel">
-      <h2>Perplexity AI Protocol Support Editor</h2>
-      <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or update here..."></textarea>
+    <p>Manage roles, permissions, and Perplexity AI access for your support team.</p>
+    <div id="perplexity-ai-panel">
+      <h3>Perplexity AI Protocol Support Editor</h3>
+      <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>
+      All changes are logged and visible to the student and Admins.</p>
+      <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or protocol update here..."></textarea>
       <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
-      <div id="ai-response" class="ai-response"></div>
+      <div id="ai-response"></div>
     </div>
-  </div>
+  </section>
 
-  <!-- Messages Section -->
-  <div id="messages" class="content-section">
-    <h2>Messages</h2>
-    <p>In-app messaging coming soon.</p>
-  </div>
-
-  <!-- Settings Section -->
-  <div id="settings" class="content-section">
+  <section id="settings">
     <h2>Settings</h2>
-    <p>Accessibility and encouragement options coming soon.</p>
-  </div>
+    <p>Customize your experience, notification preferences, and accessibility options.</p>
+  </section>
 
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
-    // --- Google Sign-In logic ---
-    function handleCredentialResponse(response) {
-      // Hide the Google Sign-In button
-      const signinDiv = document.getElementById("g_id_signin");
-      if (signinDiv) signinDiv.style.display = "none";
-      if (window.google && google.accounts && google.accounts.id) {
-        google.accounts.id.disableAutoSelect();
-        google.accounts.id.cancel();
-      }
-      // Decode JWT for user info
-      const user = parseJwt(response.credential);
-      // Show profile in the status indicator (top right)
-      const profileDiv = document.getElementById("googleProfile");
-      if (profileDiv) {
-        profileDiv.innerHTML = `
-          <div class="google-profile">
-            <img src="${user.picture}" alt="Profile" class="profile-img">
-            <span class="profile-name">${user.name || user.email}</span>
-          </div>
-        `;
-      }
-      // Optionally, show a logged-in message
-      document.body.insertAdjacentHTML("beforeend", `<p class='logged-in-msg'>Logged in with Google!</p>`);
-    }
-    function parseJwt(token) {
-      if (!token) return {};
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-      return JSON.parse(jsonPayload);
-    }
-
-    // --- Navigation logic for multi-mode app ---
-    window.onload = function() {
-      const navButtons = document.querySelectorAll('.nav-btn');
-      const sections = document.querySelectorAll('.content-section');
-      navButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const section = btn.getAttribute('data-section');
-          sections.forEach(sec => sec.classList.remove('active'));
-          document.getElementById(section).classList.add('active');
-        });
+    // Navigation logic
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(this.dataset.section).classList.add('active');
       });
-      document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById('dashboard').classList.add('active');
-      updateStatusCircle('pie');
-    };
+    });
 
-    // --- Status Circle Logic (Weekday, Saturday, Sunday) ---
-    function updateStatusCircle(view = 'pie') {
+    // Google Sign-In logic (global for callback)
+    function handleCredentialResponse(response) {
+      function parseJwt(token) {
+        if (!token) return {};
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      }
+      const user = parseJwt(response.credential);
+      document.getElementById('googleSignInContainer').classList.add('hidden');
+      const statusCircle = document.getElementById('statusCircle');
+      statusCircle.innerHTML = `<img src="${user.picture}" alt="Profile" style="width:48px;height:48px;border-radius:50%;border:2px solid #3b82f6;">`;
+      document.getElementById('userName').textContent = user.given_name || user.name || user.email || "User";
+    }
+
+    // Perplexity AI Panel (mockup)
+    document.getElementById('ai-send').addEventListener('click', async function() {
+      const input = document.getElementById('ai-input').value.trim();
+      const responseDiv = document.getElementById('ai-response');
+      if (!input) {
+        responseDiv.textContent = "Please enter a question or update.";
+        return;
+      }
+      responseDiv.textContent = "Thinking...";
+      setTimeout(() => {
+        responseDiv.textContent = "This is a mock response from Perplexity AI. (Replace with real API integration.)";
+      }, 1200);
+    });
+
+    // Status Circle (simple demo)
+    function updateStatusCircle(level = "good", dayOfWeek = (new Date()).getDay()) {
       const circle = document.getElementById('statusCircle');
-      circle.innerHTML = '';
-      circle.className = 'status-circle';
-      const dayOfWeek = new Date().getDay(); // 0 = Sunday, 6 = Saturday
-
-      if (view === 'pie') {
-        // SUNDAY: Only Spiritual, fills full circle
-        if (dayOfWeek === 0) {
-          circle.style.background = 'var(--color-spiritual)';
-          circle.setAttribute('aria-label', 'Spiritual check-in only for Sunday.');
-          circle.title = 'Spiritual check-in only for Sunday.';
-          circle.tabIndex = 0;
-          return;
-        }
-        // SATURDAY: All segments, Academic is grey with tooltip
-        if (dayOfWeek === 6) {
-          circle.classList.add('segments');
-          const segments = [
-            { key: 'mental', deg: 0, color: 'segment-mental', tooltip: 'Mental status' },
-            { key: 'physical', deg: 72, color: 'segment-physical', tooltip
+      circle.innerHTML = "";
+      let color = "#4bdb6c"; // green
+      if (dayOfWeek === 6) color = "#3B82F6"; // Saturday: blue
+      if (dayOfWeek === 0) color = "#8B5CF6"; // Sunday: purple
+      if (level === "moderate") color = "#fbbf24";
+      if (level === "bad") color = "#ef4444";
+      circle.style.background = color;
+    }
+    updateStatusCircle();
+  </script>
+</body>
+</html>

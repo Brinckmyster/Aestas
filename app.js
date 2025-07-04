@@ -1,8 +1,34 @@
-// --- Google Sign-In logic ---
 function handleCredentialResponse(response) {
-  // This is called directly by Google after login, no redirect or POST!
-  document.body.innerHTML += "<p style='color:green; text-align:center;'>Logged in with Google!</p>";
-  // You can decode response.credential (JWT) for user info if needed.
+  // Hide the Google Sign-In button and prompt
+  const signinDiv = document.getElementById("g_id_signin");
+  if (signinDiv) signinDiv.style.display = "none";
+  // Hide the One Tap prompt (if visible)
+  if (window.google && google.accounts && google.accounts.id) {
+    google.accounts.id.disableAutoSelect();
+    google.accounts.id.cancel();
+  }
+
+  // Decode the JWT to get user info (name, picture)
+  const user = parseJwt(response.credential);
+  const profileHTML = `
+    <div style="display:flex;align-items:center;gap:0.5em;justify-content:center;margin-top:1em;">
+      <img src="${user.picture}" alt="Profile" style="width:40px;height:40px;border-radius:50%;border:2px solid #3b82f6;">
+      <span style="font-size:1.1em;color:#3b82f6;">${user.name || user.email}</span>
+    </div>
+    <p style='color:green; text-align:center;'>Logged in with Google!</p>
+  `;
+  document.body.insertAdjacentHTML("afterbegin", profileHTML);
+}
+
+// Helper to decode JWT (Google credential)
+function parseJwt(token) {
+  if (!token) return {};
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+  return JSON.parse(jsonPayload);
 }
 
 // --- Navigation logic for multi-mode app ---

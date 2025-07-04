@@ -20,13 +20,34 @@
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Google Sign-In button (fixed for GitHub Pages: NO data-login_uri) -->
+  <!-- Google Sign-In button (client-side callback only, no login_uri) -->
   <div id="g_id_onload"
        data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
-       data-auto_prompt="false">
+       data-auto_prompt="false"
+       data-callback="handleCredentialResponse">
   </div>
-  <div id="g_id_signin" class="g_id_signin"
-       data-type="standard"
-       data-shape="rectangular"
-       data-theme="outline"
-       data-text="sign_in_with"
+  <div id="g_id_signin" class="g_id_signin"></div>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Main App Navigation -->
+  <nav style="margin-top:2em; text-align:center;">
+    <button class="nav-btn" data-section="dashboard">Dashboard</button>
+    <button class="nav-btn" data-section="checkins">Check-Ins</button>
+    <button class="nav-btn" data-section="logs">Logs</button>
+    <button class="nav-btn" data-section="admin-panel">Admin Panel</button>
+    <button class="nav-btn" data-section="messages">Messages</button>
+    <button class="nav-btn" data-section="settings">Settings</button>
+  </nav>
+
+  <!-- Dashboard Section -->
+  <div id="dashboard" class="content-section active">
+    <div class="status-indicator" id="statusIndicator">
+      <div class="status-circle" id="statusCircle"></div>
+    </div>
+    <h2>Welcome!</h2>
+    <p>Today's overview and quick actions.</p>
+  </div>
+
+  <!-- Check-Ins Section -->
+  <div id="checkins" class="content-section">
+    <h2>Daily Check

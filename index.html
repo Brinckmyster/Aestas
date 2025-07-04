@@ -7,16 +7,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8fafc; margin: 0; }
+    :root {
+      --color-background: #fcfcf9;
+      --color-surface: #fff;
+      --color-text: #13343b;
+      --color-success: #22c55e; /* Green */
+      --color-warning: #fbbf24; /* Yellow */
+      --color-error: #ef4444;   /* Red */
+      --color-primary: #3b82f6; /* Blue */
+      --color-info: #8b5cf6;    /* Purple */
+      --color-grey: #bdbdbd;    /* Academic grey */
+      --radius-base: 12px;
+      --space-16: 16px;
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
+      --font-main: 'Atkinson Hyperlegible', 'OpenDyslexic', Arial, Helvetica, sans-serif;
+    }
+    body {
+      font-family: var(--font-main);
+      background: var(--color-background);
+      color: var(--color-text);
+      margin: 0;
+      padding: var(--space-16);
+    }
     header { text-align: center; margin-top: 2em; }
     .tagline { font-size: 1.15em; color: #4b6cb7; margin-top: 0.5em; }
     .status-indicator { position: fixed; top: 24px; right: 24px; z-index: 1000; }
-    .status-circle { width: 80px; height: 80px; border-radius: 50%; background: #e0e7eb; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02); transition: background 0.3s; font-size: 0; }
-    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
-    nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
-    nav button.active { background: #2a4b7c; }
-    section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; }
-    section.active { display: block; }
+    .status-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--color-grey); border: 2px solid var(--color-surface);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden; box-shadow: var(--shadow-md);
+      transition: background 0.3s; font-size: 0;
+      min-width: 80px; min-height: 80px;
+    }
+    .status-circle.segments { background: transparent; }
+    .status-segment {
+      position: absolute; width: 100%; height: 100%;
+      clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0);
+    }
+    .segment-mental { background: var(--color-success); }
+    .segment-physical { background: var(--color-warning); }
+    .segment-spiritual { background: var(--color-primary); }
+    .segment-academic { background: var(--color-grey); }
+    .segment-social { background: var(--color-info); }
     .dashboard-summary { background: #fff; color: #1a2633; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; margin-top: 1.5em; }
     .dashboard-summary h2, .dashboard-summary p, .dashboard-summary .status-grid, .dashboard-summary .date-time { color: #1a2633 !important; }
     .status-grid { display: flex; gap: 2em; margin: 1em 0; }
@@ -28,8 +61,20 @@
     .shortcuts-panel { margin-top: 1em; color: #4b6cb7; }
     .google-signin { display: flex; justify-content: center; margin: 2em 0; }
     .hidden { display: none !important; }
+    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
+    nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
+    nav button.active { background: #2a4b7c; }
+    section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+    section.active { display: block; }
     #perplexity-ai-panel { margin-top: 2em; }
     #ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em; }
+    /* Dyslexia-friendly font fallback */
+    @font-face {
+      font-family: 'Atkinson Hyperlegible';
+      src: local('Atkinson Hyperlegible'), url('https://fonts.cdnfonts.com/s/17500/AtkinsonHyperlegible-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
   </style>
 </head>
 <body>
@@ -40,7 +85,7 @@
 
   <!-- Status Circle (top right) -->
   <div class="status-indicator" id="statusIndicator">
-    <div class="status-circle" id="statusCircle" title="Your current status"></div>
+    <div class="status-circle" id="statusCircle" title="Your current status" tabindex="0" aria-label="Status Circle"></div>
   </div>
 
   <!-- Google Sign-In Button -->
@@ -89,8 +134,8 @@
       <div class="calendar-preview">
         <strong>Calendar:</strong>
         <label><input type="checkbox" checked> Google</label>
-        <label><input type="checkbox" checked> BYU-I</label>
-        <label><input type="checkbox" checked> Health</label>
+        <label><input type="checkbox"> BYU-I</label>
+        <label><input type="checkbox"> Health</label>
         <ul>
           <li>9:30 AM  BIO 101 Exam (BYU-I Academic)</li>
           <li>1:00 PM  Doctor Appointment (Health)</li>
@@ -108,7 +153,24 @@
     <div class="checkin-reassurance">
       <p>No need to answer if you’re not sure. Academic Allies already checks for signs of pain, fatigue, or brain fog in the background using your typing and heart rate patterns. No action is needed from you unless you want to add more details.</p>
     </div>
-    <p>Complete your check-in to update your status and notify your support network.</p>
+    <p>Did you experience any significant pain, fatigue, or brain fog today?</p>
+    <div class="checkin-options">
+      <button class="btn" onclick="submitCheckin('no')">No</button>
+      <button class="btn" onclick="submitCheckin('yes')">Yes</button>
+      <button class="btn" onclick="submitCheckin('skip')">Skip for today</button>
+    </div>
+    <div id="symptomChecklist" style="display:none; margin-top:1em;">
+      <label><input type="checkbox"> Headache</label>
+      <label><input type="checkbox"> Muscle pain</label>
+      <label><input type="checkbox"> Joint pain</label>
+      <label><input type="checkbox"> Fatigue</label>
+      <label><input type="checkbox"> Brain fog</label>
+      <label><input type="checkbox"> Dizziness</label>
+      <label><input type="checkbox"> Nausea</label>
+      <label><input type="checkbox"> Other</label>
+      <button class="btn" style="display:block; margin-top:1em;" onclick="submitChecklist()">Submit Symptoms</button>
+    </div>
+    <div id="checkinStatus" style="margin-top:12px;font-size:1em;color:#21808d"></div>
   </section>
 
   <!-- Logs Section -->
@@ -129,12 +191,23 @@
       <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
       <div id="ai-response"></div>
     </div>
+    <div id="supportNetwork" style="margin-top:2em;">
+      <h3>Support Network</h3>
+      <ul>
+        <li>Mom (Admin)</li>
+        <li>Brinckmyster (Admin)</li>
+        <li>Mary (Student)</li>
+      </ul>
+    </div>
   </section>
 
   <!-- Settings Section -->
   <section id="settings">
     <h2>Settings</h2>
     <p>Customize your experience, notification preferences, and accessibility options.</p>
+    <label><input type="checkbox" id="togglePie" checked> Show pie chart segments in status circle</label>
+    <label><input type="checkbox" id="toggleSingle"> Show single color status circle</label>
+    <label><input type="checkbox" id="toggleDyslexiaFont"> Use dyslexia-friendly font</label>
   </section>
 
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -182,18 +255,59 @@
       }, 1200);
     });
 
-    // Status Circle (simple demo)
-    function updateStatusCircle(level = "good", dayOfWeek = (new Date()).getDay()) {
+    // Status Circle Logic (locked-in): toggle between pie and single color, no weekend logic unless you specify
+    let currentView = "pie"; // or "single"
+    function updateStatusCircle(view = currentView) {
       const circle = document.getElementById('statusCircle');
       circle.innerHTML = "";
-      let color = "#4bdb6c"; // green
-      if (dayOfWeek === 6) color = "#3B82F6"; // Saturday: blue
-      if (dayOfWeek === 0) color = "#8B5CF6"; // Sunday: purple
-      if (level === "moderate") color = "#fbbf24";
-      if (level === "bad") color = "#ef4444";
-      circle.style.background = color;
+      circle.className = "status-circle";
+      if (view === "pie") {
+        circle.classList.add('segments');
+        const segments = [
+          { key: "mental", deg: 0, tooltip: "Mental status" },
+          { key: "physical", deg: 72, tooltip: "Physical status" },
+          { key: "spiritual", deg: 144, tooltip: "Spiritual status" },
+          { key: "academic", deg: 216, tooltip: "Academic status" },
+          { key: "social", deg: 288, tooltip: "Social status" }
+        ];
+        segments.forEach(seg => {
+          const segment = document.createElement('div');
+          segment.className = `status-segment segment-${seg.key}`;
+          segment.style.transform = `rotate(${seg.deg}deg)`;
+          segment.setAttribute('tabindex', 0);
+          segment.setAttribute('aria-label', seg.tooltip);
+          segment.title = seg.tooltip;
+          circle.appendChild(segment);
+        });
+      } else {
+        circle.classList.remove('segments');
+        circle.style.background = "var(--color-success)";
+        circle.setAttribute('aria-label', "Overall status");
+        circle.title = "Overall status";
+      }
     }
     updateStatusCircle();
+
+    // Settings toggles for status circle view and dyslexia font
+    document.getElementById('togglePie').addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('toggleSingle').checked = false;
+        currentView = "pie";
+        updateStatusCircle("pie");
+      }
+    });
+    document.getElementById('toggleSingle').addEventListener('change', function() {
+      if (this.checked) {
+        document.getElementById('togglePie').checked = false;
+        currentView = "single";
+        updateStatusCircle("single");
+      }
+    });
+    document.getElementById('toggleDyslexiaFont').addEventListener('change', function() {
+      document.body.style.fontFamily = this.checked
+        ? "'Atkinson Hyperlegible', 'OpenDyslexic', Arial, Helvetica, sans-serif"
+        : "Arial, Helvetica, sans-serif";
+    });
 
     // Set today's date and time in dashboard
     function updateDateTime() {
@@ -205,6 +319,24 @@
       });
     }
     updateDateTime();
+
+    // Check-in logic
+    function submitCheckin(answer) {
+      if (answer === 'yes') {
+        document.getElementById('symptomChecklist').style.display = 'block';
+        document.getElementById('checkinStatus').textContent = "";
+      } else {
+        document.getElementById('symptomChecklist').style.display = 'none';
+        document.getElementById('checkinStatus').textContent =
+          answer === 'no'
+            ? "Logged: No significant symptoms today."
+            : "Skipped today's check-in.";
+      }
+    }
+    function submitChecklist() {
+      document.getElementById('checkinStatus').textContent = "Symptoms logged. Support notified if needed.";
+      document.getElementById('symptomChecklist').style.display = 'none';
+    }
   </script>
 </body>
 </html>

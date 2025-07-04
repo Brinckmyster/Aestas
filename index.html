@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Allies - Your disability accommodations and support network</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Accessibility Settings Panel -->
+    <div id="accessibility-panel" class="accessibility-panel hidden">
+        <div class="accessibility-content">
+            <h3>Accessibility Settings</h3>
+            <div class="form-group">
+                <label class="form-label">
+                    <input type="checkbox" id="high-contrast" class="accessibility-checkbox">
+                    High Contrast Mode
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="form-label">
+                    <input type="checkbox" id="large-buttons" class="accessibility-checkbox">
+                    Large Buttons
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="form-label">
+                    <input type="checkbox" id="bad-brain-day" class="accessibility-checkbox">
+                    Bad Brain Day Mode
+                </label>
+            </div>
+            <button class="btn btn--primary" onclick="closeAccessibilityPanel()">Close</button>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Academic Allies</h1>
+                <p class="tagline">Your disability accommodations and support network</p>
+            </div>
+            
+            <div class="card login-card">
+                <div class="card__body">
+                    <h2>Sign In</h2>
+                    <p>Access your support network and accommodations dashboard</p>
+                    
+                    <button class="btn btn--primary btn--full-width" onclick="loginWithPerplexity()">
+                        <span>Sign in with Perplexity</span>
+                    </button>
+                    
+                    <div class="login-demo">
+                        <h4>Demo Login</h4>
+                        <div class="demo-users">
+                            <button class="btn btn--secondary" onclick="loginAsStudent()">Login as Student</button>
+                            <button class="btn btn--secondary" onclick="loginAsAdmin()">Login as Admin</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="main-app hidden">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="app-branding">
+                    <h1>Academic Allies</h1>
+                    <span class="tagline">Your disability accommodations and support network</span>
+                </div>
+                
+                <div class="header-controls">
+                    <div class="mode-selector">
+                        <button class="mode-btn active" data-mode="search">Search</button>
+                        <button class="mode-btn" data-mode="research">Research</button>
+                        <button class="mode-btn labs-only" data-mode="labs">Labs</button>
+                    </div>
+                    
+                    <div class="user-controls">
+                        <button class="btn btn--secondary" onclick="showAccessibilityPanel()">
+                            <span>🔧</span>
+                            <span class="sr-only">Accessibility Settings</span>
+                        </button>
+                        <div class="user-profile">
+                            <span id="user-name">User</span>
+                            <button class="btn btn--secondary" onclick="logout()">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="main-nav">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="dashboard">Student Dashboard</button>
+                <button class="nav-tab admin-only" data-tab="admin">Admin Panel</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Student Dashboard -->
+            <div id="dashboard-tab" class="tab-content active">
+                <div class="container">
+                    <div class="dashboard-grid">
+                        <!-- Status Circle -->
+                        <div class="dashboard-card">
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Daily Status</h3>
+                                    <div class="status-circle-container">
+                                        <div class="status-circle" id="status-circle">
+                                            <div class="status-segment" data-value="1"></div>
+                                            <div class="status-segment" data-value="2"></div>
+                                            <div class="status-segment" data-value="3"></div>
+                                            <div class="status-segment" data-value="4"></div>
+                                            <div class="status-segment" data-value="5"></div>
+                                        </div>
+                                        <div class="status-value" id="status-value">0</div>
+                                    </div>
+                                    <div class="status-controls">
+                                        <button class="btn btn--secondary" onclick="updateStatus(1)">1</button>
+                                        <button class="btn btn--secondary" onclick="updateStatus(2)">2</button>
+                                        <button class="btn btn--secondary" onclick="updateStatus(3)">3</button>
+                                        <button class="btn btn--secondary" onclick="updateStatus(4)">4</button>
+                                        <button class="btn btn--secondary" onclick="updateStatus(5)">5</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Daily Check-in -->
+                        <div class="dashboard-card">
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Daily Check-in</h3>
+                                    <form id="checkin-form">
+                                        <div class="form-group">
+                                            <label class="form-label">How are you feeling today?</label>
+                                            <textarea class="form-control" id="checkin-notes" placeholder="Share your thoughts..."></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Choose an emoji</label>
+                                            <div class="emoji-selector">
+                                                <button type="button" class="emoji-btn" data-emoji="😊">😊</button>
+                                                <button type="button" class="emoji-btn" data-emoji="😐">😐</button>
+                                                <button type="button" class="emoji-btn" data-emoji="😔">😔</button>
+                                                <button type="button" class="emoji-btn" data-emoji="😴">😴</button>
+                                                <button type="button" class="emoji-btn" data-emoji="😰">😰</button>
+                                                <button type="button" class="emoji-btn" data-emoji="🤗">🤗</button>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn--primary">Submit Check-in</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Emergency Contacts -->
+                        <div class="dashboard-card">
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Emergency Contacts</h3>
+                                    <div class="emergency-contacts" id="emergency-contacts">
+                                        <!-- Contacts will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calendar Integration -->
+                        <div class="dashboard-card">
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Calendar Integration</h3>
+                                    <div class="calendar-toggle">
+                                        <label class="form-label">Calendar Source</label>
+                                        <div class="toggle-switch">
+                                            <input type="checkbox" id="calendar-toggle" class="toggle-input">
+                                            <label for="calendar-toggle" class="toggle-label">
+                                                <span class="toggle-text">Google</span>
+                                                <span class="toggle-slider"></span>
+                                                <span class="toggle-text">BYU-I</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="calendar-status" id="calendar-status">
+                                        <span class="status status--info">Connected to Google Calendar</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logs Section -->
+                    <div class="logs-section">
+                        <div class="card">
+                            <div class="card__body">
+                                <div class="logs-header">
+                                    <h3>Check-in History</h3>
+                                    <div class="logs-view-toggle">
+                                        <button class="btn btn--secondary active" data-view="list">List</button>
+                                        <button class="btn btn--secondary" data-view="chart">Chart</button>
+                                        <button class="btn btn--secondary" data-view="calendar">Calendar</button>
+                                    </div>
+                                </div>
+                                <div class="logs-content">
+                                    <div id="logs-list" class="logs-view active">
+                                        <!-- List view content -->
+                                    </div>
+                                    <div id="logs-chart" class="logs-view">
+                                        <canvas id="status-chart" width="400" height="200"></canvas>
+                                    </div>
+                                    <div id="logs-calendar" class="logs-view">
+                                        <div class="calendar-grid" id="calendar-grid">
+                                            <!-- Calendar will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Panel -->
+            <div id="admin-tab" class="tab-content">
+                <div class="container">
+                    <div class="admin-grid">
+                        <!-- User Management -->
+                        <div class="admin-card">
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Support Network Management</h3>
+                                    <div class="user-management">
+                                        <div class="add-user-form">
+                                            <h4>Add New User</h4>
+                                            <form id="add-user-form">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" placeholder="User Name" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <select class="form-control" required>
+                                                        <option value="">Select Role</option>
+                                                        <option value="Family">Family</option>
+                                                        <option value="Support">Support</option>
+                                                        <option value="BYU-I Staff">BYU-I Staff</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">
+                                                        <input type="checkbox" class="accessibility-checkbox">
+                                                        Admin Access
+                                                    </label>
+                                                </div>
+                                                <button type="submit" class="btn btn--primary">Add User</button>
+                                            </form>
+                                        </div>
+                                        <div class="user-list">
+                                            <h4>Current Users</h4>
+                                            <div id="user-list">
+                                                <!-- User list will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Labs Protocol Editor -->
+                        <div class="admin-card">
+                            <div class="card">
+                                <div class="card__body">
+                                    <h3>Perplexity Labs Protocol Editor</h3>
+                                    <div class="labs-editor">
+                                        <div class="labs-usage">
+                                            <div class="usage-info">
+                                                <span>Labs Usage: <span id="labs-usage-count">12</span>/50</span>
+                                                <div class="usage-bar">
+                                                    <div class="usage-progress" id="usage-progress"></div>
+                                                </div>
+                                            </div>
+                                            <div class="labs-controls">
+                                                <button class="btn btn--secondary" id="pause-labs">Pause</button>
+                                                <button class="btn btn--secondary" id="cancel-labs">Cancel</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="protocol-editor">
+                                            <label class="form-label">Protocol Instructions</label>
+                                            <textarea class="form-control" id="protocol-text" rows="6" placeholder="Enter your protocol instructions for Perplexity Labs..."></textarea>
+                                            <button class="btn btn--primary" onclick="runLabsProtocol()">Run Labs</button>
+                                        </div>
+
+                                        <div class="labs-tabs">
+                                            <button class="labs-tab active" data-tab="assets">Assets</button>
+                                            <button class="labs-tab" data-tab="app">App</button>
+                                        </div>
+
+                                        <div class="labs-content">
+                                            <div id="labs-assets" class="labs-panel active">
+                                                <h4>Generated Assets</h4>
+                                                <div class="asset-list" id="asset-list">
+                                                    <!-- Assets will be populated by JavaScript -->
+                                                </div>
+                                            </div>
+                                            <div id="labs-app" class="labs-panel">
+                                                <h4>Mini-App Preview</h4>
+                                                <div class="app-preview" id="app-preview">
+                                                    <p>Run a Labs protocol to generate a mini-app preview</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audit Trail -->
+                    <div class="audit-section">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Audit Trail</h3>
+                                <div class="audit-log" id="audit-log">
+                                    <!-- Audit entries will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

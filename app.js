@@ -1,23 +1,30 @@
+// --- Google Sign-In logic ---
 function handleCredentialResponse(response) {
-  // Hide the Google Sign-In button and prompt
+  // Hide the Google Sign-In button
   const signinDiv = document.getElementById("g_id_signin");
   if (signinDiv) signinDiv.style.display = "none";
-  // Hide the One Tap prompt (if visible)
+  // Hide the One Tap prompt
   if (window.google && google.accounts && google.accounts.id) {
     google.accounts.id.disableAutoSelect();
     google.accounts.id.cancel();
   }
 
-  // Decode the JWT to get user info (name, picture)
+  // Decode the JWT to get user info
   const user = parseJwt(response.credential);
-  const profileHTML = `
-    <div style="display:flex;align-items:center;gap:0.5em;justify-content:center;margin-top:1em;">
-      <img src="${user.picture}" alt="Profile" style="width:40px;height:40px;border-radius:50%;border:2px solid #3b82f6;">
-      <span style="font-size:1.1em;color:#3b82f6;">${user.name || user.email}</span>
-    </div>
-    <p style='color:green; text-align:center;'>Logged in with Google!</p>
-  `;
-  document.body.insertAdjacentHTML("afterbegin", profileHTML);
+
+  // Show profile in the status indicator (top right)
+  const statusIndicator = document.getElementById("statusIndicator");
+  if (statusIndicator) {
+    statusIndicator.innerHTML = `
+      <div style="display:flex;align-items:center;gap:0.5em;justify-content:flex-end;">
+        <img src="${user.picture}" alt="Profile" style="width:48px;height:48px;border-radius:50%;border:2px solid #3b82f6;">
+        <span style="font-size:1.1em;color:#3b82f6;">${user.name || user.email}</span>
+      </div>
+    `;
+  }
+
+  // Also show a "Logged in" message for clarity
+  document.body.insertAdjacentHTML("afterbegin", `<p style='color:green; text-align:center;'>Logged in with Google!</p>`);
 }
 
 // Helper to decode JWT (Google credential)

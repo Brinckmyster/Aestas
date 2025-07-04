@@ -10,12 +10,21 @@
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8fafc; margin: 0; }
     header { text-align: center; margin-top: 2em; }
     .tagline { font-size: 1.15em; color: #4b6cb7; margin-top: 0.5em; }
-    .status-indicator { position: absolute; top: 1em; right: 1em; }
-    .status-circle { width: 60px; height: 60px; border-radius: 50%; background: #e0e7ef; border: 2px solid #b6c5d6; display: flex; align-items: center; justify-content: center; }
+    .status-indicator { position: fixed; top: 24px; right: 24px; z-index: 1000; }
+    .status-circle { width: 80px; height: 80px; border-radius: 50%; background: #e5e7eb; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02); transition: background 0.3s; font-size: 0; }
+    .status-circle.segments { background: transparent; }
+    .status-segment { position: absolute; width: 100%; height: 100%; clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0); }
+    .segment-mental { background: #22c55e; }
+    .segment-physical { background: #fbbf24; }
+    .segment-spiritual { background: #3b82f6; }
+    .segment-academic { background: #bdbdbd; }
+    .segment-social { background: #8b5cf6; }
+    .dashboard-summary, #dashboard, .welcome-section { background: #fff !important; color: #1a2633 !important; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; margin-top: 1.5em; }
+    #dashboard h2, #dashboard p, #dashboard .status-info, #dashboard .status-grid, #dashboard .date-time { color: #1a2633 !important; }
     nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
     nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
     nav button.active { background: #2a4b7c; }
-    section { display: none; max-width: 600px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+    section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2em; }
     section.active { display: block; }
     #perplexity-ai-panel { margin-top: 2em; }
     #ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em; }
@@ -29,9 +38,9 @@
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Status Circle (always top right) -->
-  <div class="status-indicator" id="statusIndicator">
-    <div class="status-circle" id="statusCircle" title="Your current status"></div>
+  <!-- Status Circle (top right, locked-in logic) -->
+  <div class="status-indicator">
+    <div id="statusCircle" class="status-circle" tabindex="0" aria-label="Status Circle"></div>
   </div>
 
   <!-- Google Sign-In Button (no edits needed) -->
@@ -61,12 +70,39 @@
     <button class="nav-btn" data-section="settings">Settings</button>
   </nav>
 
-  <!-- App Sections -->
+  <!-- Dashboard Section -->
   <section id="dashboard" class="active">
-    <h2>Welcome back, <span id="userName">Mary</span>!</h2>
-    <p>Here’s your daily overview. Use the navigation above to check in, review logs, or manage your support network.</p>
+    <div class="dashboard-summary welcome-section">
+      <h2>Welcome back, <span id="userName">Brinckmyster</span>!</h2>
+      <p class="date-time" id="dateTime"></p>
+      <div class="status-grid">
+        <div class="status-item"><span class="label">Brain Fog:</span> <span class="value" id="fogLevel">Moderate</span></div>
+        <div class="status-item"><span class="label">Cognitive:</span> <span class="value" id="cognitiveScore">35</span></div>
+        <div class="status-item"><span class="label">Checklist:</span> <span class="value" id="checklistProgress">4/6</span></div>
+      </div>
+      <div class="quick-actions">
+        <button>Start Check-In</button>
+        <button>See Logs</button>
+        <button>Send Message</button>
+        <button>Quick Emergency Contacts</button>
+      </div>
+      <div class="calendar-preview">
+        <strong>Calendar:</strong>
+        <label><input type="checkbox" checked> Google</label>
+        <label><input type="checkbox" checked> BYU-I</label>
+        <label><input type="checkbox" checked> Health</label>
+        <ul>
+          <li>9:30 AM  BIO 101 Exam (BYU-I Academic)</li>
+          <li>1:00 PM  Doctor Appointment (Health)</li>
+        </ul>
+      </div>
+      <div class="shortcuts-panel">
+        <small>Shortcuts: Alt+1 Dashboard, Alt+2 Check-Ins, ...</small>
+      </div>
+    </div>
   </section>
 
+  <!-- Check-Ins Section -->
   <section id="checkins">
     <h2>Daily Check-Ins</h2>
     <div class="checkin-reassurance">
@@ -75,11 +111,13 @@
     <p>Complete your check-in to update your status and notify your support network.</p>
   </section>
 
+  <!-- Logs Section -->
   <section id="logs">
     <h2>Logs & History</h2>
     <p>Review your recent check-ins, flags, and support activity.</p>
   </section>
 
+  <!-- Admin Panel Section -->
   <section id="admin">
     <h2>Admin Panel</h2>
     <p>Manage roles, permissions, and Perplexity AI access for your support team.</p>
@@ -93,6 +131,7 @@
     </div>
   </section>
 
+  <!-- Settings Section -->
   <section id="settings">
     <h2>Settings</h2>
     <p>Customize your experience, notification preferences, and accessibility options.</p>
@@ -123,6 +162,7 @@
       }
       const user = parseJwt(response.credential);
       document.getElementById('googleSignInContainer').classList.add('hidden');
+      // Show user info in status indicator
       const statusCircle = document.getElementById('statusCircle');
       statusCircle.innerHTML = `<img src="${user.picture}" alt="Profile" style="width:48px;height:48px;border-radius:50%;border:2px solid #3b82f6;">`;
       document.getElementById('userName').textContent = user.given_name || user.name || user.email || "User";
@@ -142,18 +182,106 @@
       }, 1200);
     });
 
-    // Status Circle (simple demo)
-    function updateStatusCircle(level = "good", dayOfWeek = (new Date()).getDay()) {
+    // Status Circle: Locked-in logic for weekdays, Saturday, Sunday
+    const statusColors = {
+      mental: "#22c55e",       // Green
+      physical: "#fbbf24",     // Yellow
+      spiritual: "#3b82f6",    // Blue
+      academic: "#bdbdbd",     // Grey
+      social: "#8b5cf6"        // Purple
+    };
+    const tooltips = {
+      mental: "Mental status",
+      physical: "Physical status",
+      spiritual: "Spiritual status",
+      academic: "Academic status",
+      academicSat: "Grey: no school today. Still tracking.",
+      social: "Social status",
+      sunday: "Spiritual check-in only for Sunday.",
+      overall: "Your overall status for the week."
+    };
+    function updateStatusCircle(view = "pie") {
       const circle = document.getElementById('statusCircle');
       circle.innerHTML = "";
-      let color = "#4bdb6c"; // green
-      if (dayOfWeek === 6) color = "#3B82F6"; // Saturday: blue
-      if (dayOfWeek === 0) color = "#8B5CF6"; // Sunday: purple
-      if (level === "moderate") color = "#fbbf24";
-      if (level === "bad") color = "#ef4444";
-      circle.style.background = color;
+      circle.className = "status-circle";
+      circle.removeAttribute('aria-label');
+      const dayOfWeek = new Date().getDay(); // 0 = Sunday, 6 = Saturday
+
+      if (view === "pie") {
+        if (dayOfWeek === 6) { // Saturday
+          circle.classList.add('segments');
+          const segments = [
+            { key: "mental", color: statusColors.mental, tooltip: tooltips.mental },
+            { key: "physical", color: statusColors.physical, tooltip: tooltips.physical },
+            { key: "spiritual", color: statusColors.spiritual, tooltip: tooltips.spiritual },
+            { key: "academic", color: statusColors.academic, tooltip: tooltips.academicSat },
+            { key: "social", color: statusColors.social, tooltip: tooltips.social }
+          ];
+          segments.forEach((seg, i) => {
+            const segment = document.createElement('div');
+            segment.className = `status-segment segment-${seg.key}`;
+            segment.style.background = seg.color;
+            segment.style.transform = `rotate(${i * 72}deg)`;
+            segment.title = seg.tooltip;
+            if (seg.key === "academic") {
+              segment.setAttribute('tabindex', 0);
+              segment.setAttribute('aria-label', seg.tooltip);
+            }
+            circle.appendChild(segment);
+          });
+          return;
+        }
+        if (dayOfWeek === 0) { // Sunday
+          circle.classList.remove('segments');
+          circle.style.background = statusColors.spiritual;
+          circle.setAttribute('tabindex', 0);
+          circle.setAttribute('aria-label', tooltips.sunday);
+          circle.title = tooltips.sunday;
+          return;
+        }
+        // Weekdays (Mon-Fri)
+        circle.classList.add('segments');
+        const segments = [
+          { key: "mental", color: statusColors.mental, tooltip: tooltips.mental },
+          { key: "physical", color: statusColors.physical, tooltip: tooltips.physical },
+          { key: "spiritual", color: statusColors.spiritual, tooltip: tooltips.spiritual },
+          { key: "academic", color: statusColors.academic, tooltip: tooltips.academic },
+          { key: "social", color: statusColors.social, tooltip: tooltips.social }
+        ];
+        segments.forEach((seg, i) => {
+          const segment = document.createElement('div');
+          segment.className = `status-segment segment-${seg.key}`;
+          segment.style.background = seg.color;
+          segment.style.transform = `rotate(${i * 72}deg)`;
+          segment.title = seg.tooltip;
+          circle.appendChild(segment);
+        });
+        return;
+      }
+      // Single color overall view (default)
+      circle.classList.remove('segments');
+      circle.style.background = statusColors.mental;
+      circle.setAttribute('tabindex', 0);
+      if (dayOfWeek === 0) {
+        circle.setAttribute('aria-label', tooltips.overall);
+        circle.title = tooltips.overall;
+      } else {
+        circle.setAttribute('aria-label', "Your overall status.");
+        circle.title = "Your overall status.";
+      }
     }
     updateStatusCircle();
+
+    // Set today's date and time in dashboard
+    function updateDateTime() {
+      const dateTimeElem = document.getElementById('dateTime');
+      const now = new Date();
+      dateTimeElem.textContent = now.toLocaleString(undefined, {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+    updateDateTime();
   </script>
 </body>
 </html>

@@ -9,65 +9,6 @@
 
   <!-- Load Google Sign-In library -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-  <!-- Firebase SDKs (modular) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      signInWithCredential,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-    // Your Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8mB8tN_oskE",
-      authDomain: "academic-allies-464901.firebaseapp.com",
-      projectId: "academic-allies-464901",
-      storageBucket: "academic-allies-464901.firebasestorage.app",
-      messagingSenderId: "93996985456",
-      appId: "1:93996985456:web:c697df7623bbceeb1d18b5"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // Expose for other scripts
-    window.firebaseAuth = auth;
-    window.firebaseDB   = db;
-
-    // Google One-Tap / Button
-    google.accounts.id.initialize({
-      client_id: "93996985456-abcdefg.apps.googleusercontent.com",
-      callback: async response => {
-        const credential = GoogleAuthProvider.credential(response.credential);
-        await signInWithCredential(auth, credential);
-      }
-    });
-    window.onload = () => {
-      google.accounts.id.renderButton(
-        document.getElementById("googleSignInContainer"),
-        { theme: "outline", size: "large" }
-      );
-    };
-
-    // Handle auth state changes
-    onAuthStateChanged(auth, user => {
-      document.getElementById("userName").textContent = user
-        ? (user.displayName || user.email)
-        : "Guest";
-      document.getElementById("googleSignInContainer").style.display = user
-        ? "none"
-        : "flex";
-      // Re-render other UI as needed
-    });
-  </script>
-
-  <script src="app.js" type="module" defer></script>
 </head>
 <body>
   <header>
@@ -76,12 +17,15 @@
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
+  <!-- Container for the Google Sign-In button -->
   <div id="googleSignInContainer" class="google-signin"></div>
 
+  <!-- Status indicator circle -->
   <div class="status-indicator">
     <button id="statusCircle" class="status-circle" aria-label="Current status: normal"></button>
   </div>
 
+  <!-- Main navigation -->
   <nav id="mainNav" class="nav-bar" role="navigation" aria-label="Main Navigation">
     <button data-sec="dashboard" class="nav-btn active">Dashboard</button>
     <button data-sec="checkins" class="nav-btn">Check-Ins</button>
@@ -93,6 +37,7 @@
   </nav>
 
   <main>
+    <!-- Dashboard section -->
     <section id="dashboard" class="active">
       <h2>Welcome, <span id="userName">Guest</span>!</h2>
       <p>Your daily overview. Check in to update your status or manage your support network.</p>
@@ -103,10 +48,11 @@
       <div id="calendarPreview" class="calendar-preview">Loading…</div>
     </section>
 
+    <!-- Check-Ins section -->
     <section id="checkins">
       <h2>Daily Check-Ins</h2>
       <label for="statusSelect">Select status:</label>
-      <select id="statusSelect" onchange="setStatus(this.value)">
+      <select id="statusSelect">
         <option value="normal">Normal</option>
         <option value="semi-nope">Semi-Nope</option>
         <option value="nope">Nope</option>
@@ -116,11 +62,13 @@
       <button class="btn" onclick="saveCheckIn()">Submit</button>
     </section>
 
+    <!-- Logs section -->
     <section id="logs">
       <h2>Logs &amp; History</h2>
       <div id="logsList" class="logs-list">Loading…</div>
     </section>
 
+    <!-- Messages section -->
     <section id="messages">
       <h2>Messages</h2>
       <div id="contactGrid" class="contact-grid">Loading…</div>
@@ -129,30 +77,32 @@
       <button class="btn" onclick="sendMessage()">Send</button>
     </section>
 
+    <!-- Emergency contacts section -->
     <section id="emergency">
       <h2>Emergency Contacts</h2>
       <div id="emergencyContacts" class="contact-grid"></div>
     </section>
 
+    <!-- Settings section -->
     <section id="settings">
       <h2>Settings</h2>
       <label><input type="checkbox" id="minimalUIMode"> Minimal UI Mode</label>
       <label><input type="checkbox" id="segmentView"> Status Segment View</label>
     </section>
 
+    <!-- Admin panel section -->
     <section id="admin">
       <h2>Admin Panel</h2>
-      <div id="perplexity-ai-panel" style="margin-top:2em;">
+      <div id="perplexity-ai-panel">
         <h3>Perplexity AI Protocol Editor</h3>
-        <p>
-          Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>
-          All changes are logged and visible to the student and Admins.
-        </p>
-        <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or protocol update here…"></textarea>
-        <button id="ai-send" class="btn" style="margin-top:0.5em;">Send to Perplexity AI</button>
-        <div id="ai-response" style="margin-top:1em; background:#f3f6fa; padding:1em; border-radius:8px;"></div>
+        <textarea id="ai-input" rows="4" placeholder="Type your question or protocol update…"></textarea>
+        <button id="ai-send" class="btn">Send to AI</button>
+        <div id="ai-response"></div>
       </div>
     </section>
   </main>
+
+  <!-- Your application logic -->
+  <script type="module" src="app.js" defer></script>
 </body>
 </html>

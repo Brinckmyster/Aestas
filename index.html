@@ -7,11 +7,8 @@
   <meta name="description" content="Academic Allies: Your disability accommodations and support network">
   <link rel="stylesheet" href="style.css">
 
-  <!-- 1. Load Google Sign-In library -->
+  <!-- 1. Load Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-  <!-- 2. Load Firebase SDKs as ES modules -->
-  <!-- We move all module logic into app.js -->
 </head>
 <body>
   <header>
@@ -20,15 +17,15 @@
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Google Sign-In Button Container -->
+  <!-- 2. Google Sign-In Button Container -->
   <div id="googleSignInContainer" class="google-signin"></div>
 
-  <!-- Day-Mode Status Circle -->
+  <!-- 3. Day-Mode Status Circle -->
   <div class="status-indicator">
     <button id="statusCircle" class="status-circle" aria-label="Current status: normal"></button>
   </div>
 
-  <!-- Main Navigation -->
+  <!-- 4. Main Navigation -->
   <nav id="mainNav" class="nav-bar" role="navigation" aria-label="Main Navigation">
     <button data-sec="dashboard" class="nav-btn active">Dashboard</button>
     <button data-sec="checkins" class="nav-btn">Check-Ins</button>
@@ -51,7 +48,7 @@
       <div id="calendarPreview" class="calendar-preview">Loading…</div>
     </section>
 
-    <!-- Check-Ins: Day Modes -->
+    <!-- Check-Ins -->
     <section id="checkins">
       <h2>Daily Check-Ins</h2>
       <label for="statusSelect">Select status:</label>
@@ -105,7 +102,7 @@
     </section>
   </main>
 
-  <!-- App logic: all modules, Firebase init, day-modes, sign-in, navigation -->
+  <!-- 5. App Logic -->
   <script type="module" src="app.js" defer></script>
 </body>
 </html>

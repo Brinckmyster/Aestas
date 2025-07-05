@@ -6,7 +6,7 @@
   --font-size-lg: 20px;
   --font-size-sm: 16px;
 
-  /* Palette */
+  /* Color Palette */
   --color-bg: #fcfcf9;
   --color-surface: #fffdfd;
   --color-text: #13343b;
@@ -193,7 +193,6 @@ textarea {
     width: 60px;
     height: 60px;
   }
-
   .nav-btn {
     flex: 1 1 45%;
   }

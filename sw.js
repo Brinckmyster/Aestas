@@ -1,131 +1,144 @@
-import { googleClientId } from './config.js'; // if you use a config module; otherwise inline
+// Import Firebase & Google Identity modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithCredential,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-// Grab the initialized instances from window
-const auth = window.firebaseAuth;
-const db = window.firebaseDB;
+// 1. Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
+  authDomain: "academic-allies-464901.firebaseapp.com",
+  projectId: "academic-allies-464901",
+  storageBucket: "academic-allies-464901.firebasestorage.app",
+  messagingSenderId: "93996985456",
+  appId: "1:93996985456:web:c697df7623bbceeb1d18b5"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
-let appStatus = 'normal';
-let user = null;
+// 2. Google Sign-In initialization
+window.onload = () => {
+  google.accounts.id.initialize({
+    client_id: "93996985456-abcdefg.apps.googleusercontent.com",  // replace with your Web Client ID
+    callback: async (response) => {
+      const credential = GoogleAuthProvider.credential(response.credential);
+      await signInWithCredential(auth, credential);
+    }
+  });
+  google.accounts.id.renderButton(
+    document.getElementById("googleSignInContainer"),
+    { theme: "outline", size: "large" }
+  );
+};
 
-// Navigation
-document.querySelectorAll('.nav-btn').forEach(btn =>
-  btn.addEventListener('click', () => show(btn.dataset.sec))
-);
-document.getElementById('homeBtn').addEventListener('click', () => show('dashboard'));
-
-function show(sec) {
-  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(sec).classList.add('active');
-  document.querySelector(`.nav-btn[data-sec="${sec}"]`).classList.add('active');
+// 3. Handle auth state changes
+onAuthStateChanged(auth, (user) => {
+  document.getElementById("userName").textContent = user
+    ? (user.displayName || user.email)
+    : "Guest";
+  document.getElementById("googleSignInContainer").style.display = user ? "none" : "flex";
   renderAll();
-}
-
-// Status Circle
-const statusCircle = document.getElementById('statusCircle');
-statusCircle.addEventListener('click', () => {
-  document.getElementById('segmentView').checked = !document.getElementById('segmentView').checked;
-  updateStatusCircle();
 });
 
+// 4. Navigation helper
+function show(sectionId) {
+  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById(sectionId).classList.add("active");
+  document.querySelector(`.nav-btn[data-sec="${sectionId}"]`).classList.add("active");
+  renderAll();
+}
+document.getElementById("homeBtn").addEventListener("click", () => show("dashboard"));
+document.querySelectorAll(".nav-btn").forEach(btn => btn.addEventListener("click", () => show(btn.dataset.sec)));
+
+// 5. Status circle updates
+let appStatus = "normal";
+const statusCircle = document.getElementById("statusCircle");
+statusCircle.addEventListener("click", () => {
+  document.getElementById("segmentView").checked = !document.getElementById("segmentView").checked;
+  updateStatusCircle();
+});
 function updateStatusCircle() {
   statusCircle.style.background = `var(--color-${appStatus})`;
-  statusCircle.setAttribute('aria-label', `Current status: ${appStatus}`);
+  statusCircle.setAttribute("aria-label", `Current status: ${appStatus}`);
 }
 
-// Status Selection
-document.getElementById('statusSelect').addEventListener('change', e => {
+// 6. Check-in logic
+document.getElementById("statusSelect").addEventListener("change", e => {
   appStatus = e.target.value;
-  document.body.classList.toggle('minimal-ui', ['nope','semi-nope'].includes(appStatus));
   updateStatusCircle();
   saveCheckIn();
 });
-
-// Minimal UI Toggle
-document.getElementById('minimalUIMode').addEventListener('change', e =>
-  document.body.classList.toggle('minimal-ui', e.target.checked)
-);
-
-// Google Sign-In
-window.onload = () => {
-  google.accounts.id.initialize({
-    client_id: "93996985456-abcdefg.apps.googleusercontent.com",
-    callback: resp => { /* handle JWT if needed */ }
-  });
-  google.accounts.id.renderButton(
-    document.getElementById('googleSignInContainer'),
-    { theme: 'outline', size: 'large' }
-  );
-  onAuthStateChanged(auth, u => {
-    user = u;
-    document.getElementById('userName').textContent = u ? u.displayName || u.email : 'Guest';
-    document.getElementById('googleSignInContainer').style.display = u ? 'none' : 'flex';
-    renderAll();
-  });
-};
-
-// Firestore Operations
 async function saveCheckIn() {
-  if (!user) return;
-  await addDoc(collection(db,'checkins'), {
-    userId: user.uid,
+  if (!auth.currentUser) return;
+  await addDoc(collection(db, "checkins"), {
+    userId: auth.currentUser.uid,
     status: appStatus,
     timestamp: serverTimestamp()
   });
   renderLogs();
 }
 
+// 7. Render logs
 async function renderLogs() {
-  const list = document.getElementById('logsList');
-  const q = query(collection(db,'checkins'), orderBy('timestamp','desc'));
+  const list = document.getElementById("logsList");
+  const q = query(collection(db, "checkins"), orderBy("timestamp", "desc"));
   const snap = await getDocs(q);
-  list.innerHTML = snap.empty ? '<p>No logs yet.</p>' : 
-    snap.docs.map(d => {
-      const data = d.data();
-      return `<p>${new Date(data.timestamp?.toDate()).toLocaleString()}: ${data.status}</p>`;
-    }).join('');
+  list.innerHTML = snap.empty
+    ? "<p>No logs yet.</p>"
+    : snap.docs.map(d => {
+        const data = d.data();
+        return `<p>${new Date(data.timestamp?.toDate()).toLocaleString()}: ${data.status}</p>`;
+      }).join("");
 }
 
+// 8. Messaging logic
 async function sendMessage() {
-  if (!user) return;
-  const text = document.getElementById('messageInput').value.trim();
+  if (!auth.currentUser) return;
+  const text = document.getElementById("messageInput").value.trim();
   if (!text) return;
-  await addDoc(collection(db,'messages'), {
-    userId: user.uid,
+  await addDoc(collection(db, "messages"), {
+    userId: auth.currentUser.uid,
     message: text,
     timestamp: serverTimestamp()
   });
-  document.getElementById('messageInput').value = '';
+  document.getElementById("messageInput").value = "";
   renderMessages();
 }
-
 async function renderMessages() {
-  const grid = document.getElementById('contactGrid');
-  const snap = await getDocs(collection(db,'messages'));
-  grid.innerHTML = snap.empty ? '<p>No messages yet.</p>' :
-    snap.docs.map(d => {
-      const data = d.data();
-      return `<p>${new Date(data.timestamp?.toDate()).toLocaleString()}: ${data.message}</p>`;
-    }).join('');
+  const grid = document.getElementById("contactGrid");
+  const snap = await getDocs(collection(db, "messages"));
+  grid.innerHTML = snap.empty
+    ? "<p>No messages yet.</p>"
+    : snap.docs.map(d => `<p>${new Date(d.data().timestamp?.toDate()).toLocaleString()}: ${d.data().message}</p>`).join("");
 }
 
+// 9. Emergency contacts
 function renderEmergencyContacts() {
-  document.getElementById('emergencyContacts').innerHTML = `
+  document.getElementById("emergencyContacts").innerHTML = `
     <p>Mom: <a href="tel:+1234567890">Call</a> | <a href="mailto:mom@example.com">Email</a></p>
     <p>You: <a href="tel:+1234567891">Call</a></p>
   `;
 }
 
-async function renderAll() {
+// 10. Render all UI parts
+function renderAll() {
   updateStatusCircle();
   renderLogs();
   renderMessages();
   renderEmergencyContacts();
-  document.getElementById('perplexity-ai-panel').style.display = 
-    (user && user.email === 'your-admin-email@example.com') ? 'block' : 'none';
+  document.getElementById("perplexity-ai-panel").style.display =
+    auth.currentUser?.email === "your-admin-email@example.com" ? "block" : "none";
 }
+
+// 11. Wire AI panel (if using)
+document.getElementById("ai-send")?.addEventListener("click", async () => {
+  /* your existing AI-call code here */
+});
 
 export { saveCheckIn, sendMessage };

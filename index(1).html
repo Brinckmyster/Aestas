@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Academic Allies</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2a4b7c">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <style>
+        :root {
+            --color-mental: #22c55e;
+            --color-physical: #fbbf24;
+            --color-spiritual: #3b82f6;
+            --color-academic: #bdbdbd;
+            --color-social: #8b5cf6;
+            --color-surface: #fff;
+            --color-text: #13343b;
+            --color-error: #ef4444;
+            --radius-base: 8px;
+        }
+
+        /* Status Circle */
+        .status-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e5e7eb;
+            border: 2px solid var(--color-surface);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            overflow: hidden;
+            z-index: 1000;
+        }
+        
+        .status-segment {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(50% 50%, 50% 0%, 0% 0%);
+        }
+
+        /* Check-In Sections */
+        .checkin-section {
+            background: var(--color-surface);
+            border-radius: var(--radius-base);
+            padding: 1rem;
+            margin: 1rem auto;
+            max-width: 600px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Perplexity AI Panel */
+        #ai-panel {
+            border: 2px solid #e5e7eb;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Circle -->
+    <div class="status-circle" id="statusCircle"></div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Check-In Sections -->
+        <section class="checkin-section" id="symptomCheckin">
+            <h2>Daily Symptom Check-In</h2>
+            <div class="checkin-options">
+                <button onclick="submitCheckin('good')">Good Day</button>
+                <button onclick="submitCheckin('bad')">Bad Brain Day</button>
+            </div>
+        </section>
+
+        <!-- Admin Panel -->
+        <section id="ai-panel">
+            <h2>Perplexity AI Protocol Editor</h2>
+            <textarea id="ai-input"></textarea>
+            <button onclick="handleAIRequest()">Send to Perplexity</button>
+            <div id="ai-response"></div>
+        </section>
+    </main>
+
+    <script>
+        // Real Health API Integration
+        let healthData = {
+            heartRate: null,
+            sleepHours: null,
+            activityLevel: null
+        };
+
+        // Initialize Health Connect
+        async function initHealth() {
+            if ('HealthConnect' in window) {
+                const granted = await HealthConnect.requestPermissions(['heart_rate', 'sleep']);
+                if (granted) {
+                    healthData.heartRate = await HealthConnect.readLatest('heart_rate');
+                    healthData.sleepHours = await HealthConnect.readInterval('sleep');
+                }
+            }
+        }
+
+        // Status Circle Logic
+        function updateStatusCircle() {
+            const circle = document.getElementById('statusCircle');
+            const today = new Date();
+            
+            // Weekend Logic
+            if(today.getDay() === 6) { // Saturday
+                circle.innerHTML = `
+                    <div class="status-segment" style="background: var(--color-academic); transform: rotate(0deg)"></div>
+                    <div class="status-segment" style="background: var(--color-academic); transform: rotate(180deg)"></div>
+                `;
+            } else if(today.getDay() === 0) { // Sunday
+                circle.style.background = var(--color-spiritual);
+            } else {
+                // Update based on real health data
+                if(healthData.sleepHours < 6) {
+                    circle.style.background = var(--color-error);
+                }
+            }
+        }
+
+        // Flag System
+        function checkKeywords(text) {
+            const flags = [];
+            if(text.includes('tired') || text.includes('exhausted')) flags.push('yellow');
+            if(text.includes('bed') || text.includes('couldnt get up')) flags.push('red');
+            return flags;
+        }
+
+        // PWA Service Worker
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker failed', err));
+        }
+
+        // Initialize
+        initHealth();
+        updateStatusCircle();
+    </script>
+</body>
+</html>

@@ -15,97 +15,64 @@
   --color-primary-hover: #1d7480;
   --color-border: #5e523f33;
   --color-btn-text: #fffdfd;
+
+  /* Day-Mode Colors */
   --color-normal: #4bdb6c;
   --color-semi-nope: #fbbf24;
   --color-nope: #f97316;
   --color-bad-brain: #ef4444;
   --color-recovery: #8b5cf6;
-  --color-sat: #3b82f6;
-  --color-sun: #8b5cf6;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
-  margin: 0;
-  padding: var(--space);
-  font-family: 'Atkinson Hyperlegible', 'OpenDyslexic', sans-serif;
+  margin: 0; padding: var(--space);
+  font-family: 'Atkinson Hyperlegible','OpenDyslexic',sans-serif;
   font-size: var(--font-size-base);
   background: var(--color-bg);
   color: var(--color-text);
 }
 
 header {
-  text-align: center;
-  margin-bottom: var(--space);
+  text-align: center; margin-bottom: var(--space);
   position: relative;
 }
-
 .icon-btn {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  padding: var(--space);
-  cursor: pointer;
+  position: absolute; top: 0; left: 0;
+  background: none; border: none; font-size: 1.5em;
+  padding: var(--space); cursor: pointer;
 }
-
-h1 {
-  margin: 0;
-  font-size: 2em;
-  color: var(--color-primary);
-}
-
-.tagline {
-  margin: 8px 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-}
+h1 { margin: 0; font-size: 2em; color: var(--color-primary); }
+.tagline { margin: 8px 0; font-size: var(--font-size-sm); }
 
 .nav-bar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: var(--space);
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 8px; margin-bottom: var(--space);
 }
-
 .nav-btn {
   background: var(--color-surface);
   border: 2px solid var(--color-primary);
   border-radius: var(--radius);
   padding: 0.5em 1em;
   font-size: var(--font-size-lg);
-  cursor: pointer;
   color: var(--color-primary);
-  transition: background 0.3s, color 0.3s;
+  cursor: pointer;
+  transition: background 0.3s,color 0.3s;
 }
-
 .nav-btn.active,
 .nav-btn:hover {
   background: var(--color-primary);
   color: var(--color-btn-text);
 }
 
-.google-signin {
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--space);
-}
+.google-signin { display: flex; justify-content: center; margin-bottom: var(--space); }
 
 .status-indicator {
-  position: fixed;
-  top: var(--space);
-  right: var(--space);
+  position: fixed; top: var(--space); right: var(--space);
 }
-
 .status-circle {
-  width: 72px;
-  height: 72px;
+  width: 72px; height: 72px;
   border-radius: 50%;
   background: var(--color-normal);
   border: 3px solid var(--color-border);
@@ -113,18 +80,14 @@ h1 {
   cursor: pointer;
   transition: transform 0.2s;
 }
-
-.status-circle:focus,
-.status-circle:hover {
-  transform: scale(1.05);
-  outline: none;
+.status-circle:hover,
+.status-circle:focus {
+  transform: scale(1.05); outline: none;
 }
 
 main {
-  max-width: 720px;
-  margin: 0 auto;
+  max-width: 720px; margin: 0 auto;
 }
-
 section {
   display: none;
   background: var(--color-surface);
@@ -133,25 +96,11 @@ section {
   padding: var(--space);
   margin-bottom: var(--space);
 }
-
-section.active {
-  display: block;
-}
-
-h2 {
-  margin-top: 0;
-}
-
-label {
-  display: block;
-  margin: 0.5em 0;
-  font-size: var(--font-size-sm);
-}
-
-select,
-textarea {
-  width: 100%;
-  padding: 8px;
+section.active { display: block; }
+h2 { margin-top: 0; }
+label { display: block; margin: 0.5em 0; font-size: var(--font-size-sm); }
+select, textarea {
+  width: 100%; padding: 8px;
   font-size: var(--font-size-base);
   margin-bottom: var(--space);
   border: 1px solid var(--color-border);
@@ -162,14 +111,12 @@ textarea {
   display: inline-block;
   background: var(--color-primary);
   color: var(--color-btn-text);
-  border: none;
-  border-radius: var(--radius);
+  border: none; border-radius: var(--radius);
   padding: 0.75em 1.25em;
   font-size: var(--font-size-lg);
   cursor: pointer;
   transition: background 0.3s;
 }
-
 .btn:hover,
 .btn:focus {
   background: var(--color-primary-hover);
@@ -177,23 +124,13 @@ textarea {
 }
 
 .quick-actions {
-  display: flex;
-  gap: var(--space);
-  flex-wrap: wrap;
+  display: flex; gap: var(--space); flex-wrap: wrap;
 }
-
 .calendar-preview,
 .logs-list,
-.contact-grid {
-  margin-top: var(--space);
-}
+.contact-grid { margin-top: var(--space); }
 
 @media (max-width: 600px) {
-  .status-circle {
-    width: 60px;
-    height: 60px;
-  }
-  .nav-btn {
-    flex: 1 1 45%;
-  }
+  .status-circle { width: 60px; height: 60px; }
+  .nav-btn { flex: 1 1 45%; }
 }

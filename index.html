@@ -4,83 +4,27 @@
   <meta charset="UTF-8">
   <title>Academic Allies</title>
   <meta name="description" content="Academic Allies: Your disability accommodations and support network">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Color Palette & Base Styles -->
-  <style>
-    :root {
-      --color-background: #fcfcf9;
-      --color-surface: #fffdfd;
-      --color-text: #13343b;
-      --color-text-secondary: #626c71;
-      --color-primary: #21808d;
-      --color-primary-hover: #1d7480;
-      --color-primary-active: #1a6873;
-      --color-secondary: rgba(94,82,64,0.12);
-      --color-border: rgba(94,82,64,0.2);
-      --color-btn-text: #fffdfd;
-      --color-error: #c0152f;
-      --color-success: #21808d;
-      --color-warning: #a84b2f;
-      --color-info: #626c71;
-      --color-academic: #bdbdbd;
-      --color-social: #8b5cf6;
-      --radius: 8px;
-      --space: 16px;
-      --shadow: 0 4px 6px -1px rgba(0,0,0,0.04),0 2px 4px -1px rgba(0,0,0,0.02);
-    }
-    body { font-family: 'Atkinson Hyperlegible', 'OpenDyslexic', Arial, sans-serif; background: var(--color-background); color: var(--color-text); margin:0; padding:var(--space); }
-    header { text-align:center; margin-top:var(--space); }
-    .tagline { color: var(--color-primary); font-size:1.2em; margin-bottom:var(--space); }
-    .google-signin { display:flex; justify-content:center; margin:var(--space) 0; }
-    .status-indicator { position:fixed; top:var(--space); right:var(--space); z-index:1000; }
-    .status-circle { width:60px; height:60px; border-radius:50%; background:var(--color-success); border:2px solid var(--color-border); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transition:background 0.3s; }
-    .status-circle.segments { background:transparent; }
-    .status-segment { position:absolute; width:100%; height:100%; clip-path:polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0); transform-origin:center; }
-    nav { display:flex; justify-content:center; gap:1em; flex-wrap:wrap; margin:var(--space) 0; }
-    nav button { background:var(--color-primary); color:var(--color-btn-text); border:none; padding:0.5em 1em; border-radius:var(--radius); cursor:pointer; min-width:100px; }
-    nav button.active { background:var(--color-primary-active); }
-    section { display:none; max-width:720px; margin:0 auto var(--space); background:var(--color-surface); border-radius:var(--radius); box-shadow:var(--shadow); padding:var(--space); }
-    section.active { display:block; }
-    .btn { background:var(--color-primary); color:var(--color-btn-text); border:none; padding:0.5em 1em; border-radius:var(--radius); cursor:pointer; margin:0.5em 0; }
-    .btn:hover { background:var(--color-primary-hover); }
-    .checkin-reassurance { background:var(--color-secondary); border-left:4px solid var(--color-primary); padding:1em; border-radius:var(--radius); margin-bottom:var(--space); }
-    .checkin-options { display:flex; gap:1em; flex-wrap:wrap; }
-    #symptomChecklist { border:1px solid var(--color-border); padding:1em; border-radius:var(--radius); margin-top:var(--space); }
-    .support-list { list-style:none; padding:0; }
-    .support-list li { margin:0.5em 0; font-size:1em; }
-    .role-desc { color:var(--color-text-secondary); font-size:0.9em; margin-left:0.5em; }
-    .logs-controls { display:flex; gap:1em; flex-wrap:wrap; margin-bottom:var(--space); }
-    .contact-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:var(--space); margin:var(--space) 0; }
-    .contact-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius); padding:1em; }
-    .contact-actions { display:flex; gap:0.5em; margin-top:0.5em; }
-    .contact-actions button { padding:0.3em 0.8em; font-size:0.9em; }
-    *:focus { outline:2px solid var(--color-info); outline-offset:2px; }
-    @media(max-width:768px){ nav{flex-direction:column;} }
-  </style>
-  <!-- PouchDB for Offline Sync -->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/pouchdb@7.3.1/dist/pouchdb.min.js"></script>
-  <!-- Google Sign-In & GAPI for Calendar -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://apis.google.com/js/api.js" async defer></script>
 </head>
 <body>
   <header>
+    <div class="home-icon">🏠</div>
     <h1>Academic Allies</h1>
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Google Sign-In -->
   <div class="google-signin" id="googleSignInContainer"></div>
 
-  <!-- Status Circle -->
   <div class="status-indicator">
-    <div class="status-circle" id="statusCircle" title="Your status" tabindex="0"></div>
+    <div class="status-circle" id="statusCircle" tabindex="0" title="Your status"></div>
   </div>
 
-  <!-- Navigation -->
   <nav id="mainNav"></nav>
 
-  <!-- Sections -->
   <section id="dashboard" class="active"></section>
   <section id="checkins"></section>
   <section id="logs"></section>
@@ -89,147 +33,6 @@
   <section id="emergency"></section>
   <section id="settings"></section>
 
-  <script>
-  // ================== PouchDB Offline Sync ==================
-  const localDB = new PouchDB('academic_allies');
-  const remotes = [
-    'https://<your-cloudant>.cloudantnosqldb.appdomain.cloud/academic_allies',
-    'https://<your-fly-app>.fly.dev/academic_allies'
-  ];
-  remotes.forEach(url => localDB.sync(url, {live:true,retry:true}));
-
-  // ================ Google Sign-In & Calendar ================
-  const CLIENT_ID = '93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com';
-  function initGapi() {
-    gapi.load('client:auth2', ()=> gapi.client.init({
-      clientId: CLIENT_ID,
-      scope: 'https://www.googleapis.com/auth/calendar.readonly'
-    }));
-  }
-  function handleCredentialResponse(response) {
-    const user = JSON.parse(atob(response.credential.split('.')[1]));
-    document.getElementById('userName').textContent = user.given_name||user.name;
-    document.getElementById('googleSignInContainer').style.display='none';
-  }
-  window.onload = initGapi;
-  google.accounts.id.initialize({
-    client_id: CLIENT_ID,
-    callback: handleCredentialResponse,
-    ux_mode: 'popup'
-  });
-  google.accounts.id.renderButton(
-    document.getElementById('googleSignInContainer'),
-    { theme:'outline', size:'large' }
-  );
-
-  // ================== App UI & Logic ==================
-  const modes = ['dashboard','checkins','logs','admin','messages','emergency','settings'];
-  // Render nav buttons
-  modes.forEach((m,i)=>
-    document.getElementById('mainNav').innerHTML +=
-      `<button class="${i===0?'active':''}" data-sec="${m}">${m.charAt(0).toUpperCase()+m.slice(1)}</button>`
-  );
-  document.querySelectorAll('#mainNav button').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      document.querySelectorAll('#mainNav button').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      modes.forEach(s=>document.getElementById(s).classList.remove('active'));
-      document.getElementById(btn.dataset.sec).classList.add('active');
-    });
-  });
-
-  function updateDateTime(){
-    const now=new Date();
-    document.querySelector('#dashboard').innerHTML=`
-      <div class="dashboard-summary">
-        <h2>Welcome back, <span id="userName">Mary</span>!</h2>
-        <p class="date-time">${now.toLocaleString(undefined,{
-          weekday:'long',year:'numeric',month:'long',day:'numeric',
-          hour:'2-digit',minute:'2-digit'})}</p>
-        <div class="status-grid">
-          <div class="status-item"><strong>Brain Fog:</strong> Moderate</div>
-          <div class="status-item"><strong>Cognitive:</strong> 35</div>
-          <div class="status-item"><strong>Checklist:</strong> 4/6</div>
-        </div>
-        <div class="quick-actions">
-          <button onclick="show('checkins')">Start Check-In</button>
-          <button onclick="show('logs')">See Logs</button>
-          <button onclick="show('messages')">Send Message</button>
-          <button onclick="show('emergency')">Emergency</button>
-        </div>
-        <div class="calendar-preview">
-          <strong>Calendar:</strong>
-          <label><input type="checkbox" checked> Google</label>
-          <ul id="todaysEvents"><li>Loading events…</li></ul>
-        </div>
-        <div class="shortcuts-panel">
-          <small>Shortcuts: Alt+1 Dashboard, Alt+2 Check-Ins, Alt+3 Logs…</small>
-        </div>
-      </div>`;
-  }
-
-  function show(sec){ document.querySelector(`[data-sec="${sec}"]`).click(); }
-
-  function updateStatusCircle(){
-    const circle=document.getElementById('statusCircle');
-    circle.innerHTML='';circle.className='status-circle';
-    const view = Array.from(document.querySelectorAll('input[name="circleView"]'))
-                   .find(r=>r.checked)?.value||'single';
-    const now=new Date(), d=now.getDay();
-    if(view==='pie'){
-      const count = d===6||d===0?2:5;
-      circle.classList.add('segments');
-      for(let i=0;i<count;i++){
-        const type=d===6?'spiritual':d===0?'social':['mental','physical','spiritual','academic','social'][i];
-        const seg=document.createElement('div');
-        seg.className=`status-segment segment-${type}`;
-        seg.style.transform=`rotate(${i*360/count}deg)`;
-        seg.title=type+' status';circle.appendChild(seg);
-      }
-    } else {
-      circle.style.background= 'var(--color-success)';
-      circle.title="Overall status";
-    }
-  }
-
-  // Fetch Google Calendar events
-  async function connectGoogle(){
-    const auth2=gapi.auth2.getAuthInstance();
-    await auth2.signIn();
-    await gapi.client.load('calendar','v3');
-    const res=await gapi.client.calendar.events.list({
-      calendarId:'primary',timeMin:(new Date()).toISOString(),singleEvents:true});
-    document.getElementById('todaysEvents').innerHTML=
-      res.result.items.map(e=>`<li>${(e.start.dateTime||e.start.date)} – ${e.summary}</li>`).join('');
-  }
-
-  // PouchDB-based messaging
-  async function refreshMessages(){
-    const msgs=(await localDB.find({selector:{type:'message'}})).docs;
-    document.getElementById('messages').innerHTML=`
-      <h2>Messages</h2>`+msgs.map(m=>
-      `<p><strong>${m.sender}:</strong> ${m.text}</p>`).join('')+
-      `<button class="btn" onclick="composeMessage()">Compose</button>`;
-  }
-  async function composeMessage(){
-    const text=prompt('Message:'); if(!text) return;
-    await localDB.post({type:'message',sender:'Me',text,timestamp:Date.now()});
-    refreshMessages();
-  }
-
-  // Initialize App
-  document.addEventListener('DOMContentLoaded',()=>{
-    updateDateTime();updateStatusCircle();
-    setInterval(updateDateTime,60000);
-    PouchDB.plugin(window.pouchdbFind);
-    localDB.createIndex({index:{fields:['type']}}).then(()=>refreshMessages());
-    connectGoogle();
-    // Status view radio
-    document.querySelector('section#settings').innerHTML=`
-      <h2>Settings</h2>
-      <label><input type="radio" name="circleView" value="single" checked onchange="updateStatusCircle()">Single Color</label><br>
-      <label><input type="radio" name="circleView" value="pie" onchange="updateStatusCircle()">Pie Chart</label>`;
-  });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>

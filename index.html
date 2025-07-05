@@ -5,338 +5,231 @@
   <title>Academic Allies</title>
   <meta name="description" content="Academic Allies: Your disability accommodations and support network">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <!-- Color Palette & Base Styles -->
   <style>
     :root {
       --color-background: #fcfcf9;
-      --color-surface: #fff;
+      --color-surface: #fffdfd;
       --color-text: #13343b;
-      --color-success: #22c55e; /* Green */
-      --color-warning: #fbbf24; /* Yellow */
-      --color-error: #ef4444;   /* Red */
-      --color-primary: #3b82f6; /* Blue */
-      --color-info: #8b5cf6;    /* Purple */
-      --color-grey: #bdbdbd;    /* Academic grey */
-      --radius-base: 12px;
-      --space-16: 16px;
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
-      --font-main: 'Atkinson Hyperlegible', 'OpenDyslexic', Arial, Helvetica, sans-serif;
+      --color-text-secondary: #626c71;
+      --color-primary: #21808d;
+      --color-primary-hover: #1d7480;
+      --color-primary-active: #1a6873;
+      --color-secondary: rgba(94,82,64,0.12);
+      --color-border: rgba(94,82,64,0.2);
+      --color-btn-text: #fffdfd;
+      --color-error: #c0152f;
+      --color-success: #21808d;
+      --color-warning: #a84b2f;
+      --color-info: #626c71;
+      --color-academic: #bdbdbd;
+      --color-social: #8b5cf6;
+      --radius: 8px;
+      --space: 16px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.04),0 2px 4px -1px rgba(0,0,0,0.02);
     }
-    body {
-      font-family: var(--font-main);
-      background: var(--color-background);
-      color: var(--color-text);
-      margin: 0;
-      padding: var(--space-16);
-    }
-    header { text-align: center; margin-top: 2em; }
-    .tagline { font-size: 1.15em; color: #4b6cb7; margin-top: 0.5em; }
-    .status-indicator { position: fixed; top: 24px; right: 24px; z-index: 1000; }
-    .status-circle {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: var(--color-grey); border: 2px solid var(--color-surface);
-      display: flex; align-items: center; justify-content: center;
-      position: relative; overflow: hidden; box-shadow: var(--shadow-md);
-      transition: background 0.3s; font-size: 0;
-      min-width: 80px; min-height: 80px;
-    }
-    .status-circle.segments { background: transparent; }
-    .status-segment {
-      position: absolute; width: 100%; height: 100%;
-      clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0);
-    }
-    .segment-mental { background: var(--color-success); }
-    .segment-physical { background: var(--color-warning); }
-    .segment-spiritual { background: var(--color-primary); }
-    .segment-academic { background: var(--color-grey); }
-    .segment-social { background: var(--color-info); }
-    .dashboard-summary { background: #fff; color: #1a2633; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; margin-top: 1.5em; }
-    .dashboard-summary h2, .dashboard-summary p, .dashboard-summary .status-grid, .dashboard-summary .date-time { color: #1a2633 !important; }
-    .status-grid { display: flex; gap: 2em; margin: 1em 0; }
-    .status-item .label { font-weight: bold; }
-    .quick-actions { margin: 1.5em 0; }
-    .quick-actions button { margin-right: 1em; margin-bottom: 0.5em; padding: 0.7em 1.2em; border-radius: 8px; background: #4b6cb7; color: #fff; border: none; font-size: 1em; }
-    .calendar-preview { margin: 1em 0; }
-    .calendar-preview label { margin-right: 1em; }
-    .shortcuts-panel { margin-top: 1em; color: #4b6cb7; }
-    .google-signin { display: flex; justify-content: center; margin: 2em 0; }
-    .hidden { display: none !important; }
-    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
-    nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
-    nav button.active { background: #2a4b7c; }
-    section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; }
-    section.active { display: block; }
-    #perplexity-ai-panel { margin-top: 2em; }
-    #ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em; }
-    /* Dyslexia-friendly font fallback */
-    @font-face {
-      font-family: 'Atkinson Hyperlegible';
-      src: local('Atkinson Hyperlegible'), url('https://fonts.cdnfonts.com/s/17500/AtkinsonHyperlegible-Regular.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
-    }
+    body { font-family: 'Atkinson Hyperlegible', 'OpenDyslexic', Arial, sans-serif; background: var(--color-background); color: var(--color-text); margin:0; padding:var(--space); }
+    header { text-align:center; margin-top:var(--space); }
+    .tagline { color: var(--color-primary); font-size:1.2em; margin-bottom:var(--space); }
+    .google-signin { display:flex; justify-content:center; margin:var(--space) 0; }
+    .status-indicator { position:fixed; top:var(--space); right:var(--space); z-index:1000; }
+    .status-circle { width:60px; height:60px; border-radius:50%; background:var(--color-success); border:2px solid var(--color-border); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transition:background 0.3s; }
+    .status-circle.segments { background:transparent; }
+    .status-segment { position:absolute; width:100%; height:100%; clip-path:polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0); transform-origin:center; }
+    nav { display:flex; justify-content:center; gap:1em; flex-wrap:wrap; margin:var(--space) 0; }
+    nav button { background:var(--color-primary); color:var(--color-btn-text); border:none; padding:0.5em 1em; border-radius:var(--radius); cursor:pointer; min-width:100px; }
+    nav button.active { background:var(--color-primary-active); }
+    section { display:none; max-width:720px; margin:0 auto var(--space); background:var(--color-surface); border-radius:var(--radius); box-shadow:var(--shadow); padding:var(--space); }
+    section.active { display:block; }
+    .btn { background:var(--color-primary); color:var(--color-btn-text); border:none; padding:0.5em 1em; border-radius:var(--radius); cursor:pointer; margin:0.5em 0; }
+    .btn:hover { background:var(--color-primary-hover); }
+    .checkin-reassurance { background:var(--color-secondary); border-left:4px solid var(--color-primary); padding:1em; border-radius:var(--radius); margin-bottom:var(--space); }
+    .checkin-options { display:flex; gap:1em; flex-wrap:wrap; }
+    #symptomChecklist { border:1px solid var(--color-border); padding:1em; border-radius:var(--radius); margin-top:var(--space); }
+    .support-list { list-style:none; padding:0; }
+    .support-list li { margin:0.5em 0; font-size:1em; }
+    .role-desc { color:var(--color-text-secondary); font-size:0.9em; margin-left:0.5em; }
+    .logs-controls { display:flex; gap:1em; flex-wrap:wrap; margin-bottom:var(--space); }
+    .contact-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:var(--space); margin:var(--space) 0; }
+    .contact-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius); padding:1em; }
+    .contact-actions { display:flex; gap:0.5em; margin-top:0.5em; }
+    .contact-actions button { padding:0.3em 0.8em; font-size:0.9em; }
+    *:focus { outline:2px solid var(--color-info); outline-offset:2px; }
+    @media(max-width:768px){ nav{flex-direction:column;} }
   </style>
+  <!-- PouchDB for Offline Sync -->
+  <script src="https://cdn.jsdelivr.net/npm/pouchdb@7.3.1/dist/pouchdb.min.js"></script>
+  <!-- Google Sign-In & GAPI for Calendar -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://apis.google.com/js/api.js" async defer></script>
 </head>
 <body>
   <header>
-    <h1 style="font-size: 2.2em; font-weight: bold; color: #2a4b7c;">Academic Allies</h1>
+    <h1>Academic Allies</h1>
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Status Circle (top right) -->
-  <div class="status-indicator" id="statusIndicator">
-    <div class="status-circle" id="statusCircle" title="Your current status" tabindex="0" aria-label="Status Circle"></div>
+  <!-- Google Sign-In -->
+  <div class="google-signin" id="googleSignInContainer"></div>
+
+  <!-- Status Circle -->
+  <div class="status-indicator">
+    <div class="status-circle" id="statusCircle" title="Your status" tabindex="0"></div>
   </div>
 
-  <!-- Google Sign-In Button -->
-  <div class="google-signin" id="googleSignInContainer">
-    <div id="g_id_onload"
-      data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
-      data-callback="handleCredentialResponse"
-      data-auto_prompt="false">
-    </div>
-    <div id="g_id_signin"
-      class="g_id_signin"
-      data-type="standard"
-      data-shape="rectangular"
-      data-theme="outline"
-      data-text="signin_with"
-      data-size="large"
-      data-logo_alignment="left">
-    </div>
-  </div>
+  <!-- Navigation -->
+  <nav id="mainNav"></nav>
 
-  <!-- Main Navigation -->
-  <nav>
-    <button class="nav-btn active" data-section="dashboard">Dashboard</button>
-    <button class="nav-btn" data-section="checkins">Check-Ins</button>
-    <button class="nav-btn" data-section="logs">Logs</button>
-    <button class="nav-btn" data-section="admin">Admin Panel</button>
-    <button class="nav-btn" data-section="settings">Settings</button>
-  </nav>
+  <!-- Sections -->
+  <section id="dashboard" class="active"></section>
+  <section id="checkins"></section>
+  <section id="logs"></section>
+  <section id="admin"></section>
+  <section id="messages"></section>
+  <section id="emergency"></section>
+  <section id="settings"></section>
 
-  <!-- Dashboard Section -->
-  <section id="dashboard" class="active">
-    <div class="dashboard-summary">
-      <h2>Welcome back, <span id="userName">Brinckmyster</span>!</h2>
-      <p class="date-time" id="dateTime"></p>
-      <div class="status-grid">
-        <div class="status-item"><span class="label">Brain Fog:</span> <span class="value" id="fogLevel">Moderate</span></div>
-        <div class="status-item"><span class="label">Cognitive:</span> <span class="value" id="cognitiveScore">35</span></div>
-        <div class="status-item"><span class="label">Checklist:</span> <span class="value" id="checklistProgress">4/6</span></div>
-      </div>
-      <div class="quick-actions">
-        <button>Start Check-In</button>
-        <button>See Logs</button>
-        <button>Send Message</button>
-        <button>Quick Emergency Contacts</button>
-      </div>
-      <div class="calendar-preview">
-        <strong>Calendar:</strong>
-        <label><input type="checkbox" checked> Google</label>
-        <label><input type="checkbox"> BYU-I</label>
-        <label><input type="checkbox"> Health</label>
-        <ul>
-          <li>9:30 AM  BIO 101 Exam (BYU-I Academic)</li>
-          <li>1:00 PM  Doctor Appointment (Health)</li>
-        </ul>
-      </div>
-      <div class="shortcuts-panel">
-        <small>Shortcuts: Alt+1 Dashboard, Alt+2 Check-Ins, ...</small>
-      </div>
-    </div>
-  </section>
-
-  <!-- Check-Ins Section -->
-  <section id="checkins">
-    <h2>Daily Check-Ins</h2>
-    <div class="checkin-reassurance">
-      <p>No need to answer if you’re not sure. Academic Allies already checks for signs of pain, fatigue, or brain fog in the background using your typing and heart rate patterns. No action is needed from you unless you want to add more details.</p>
-    </div>
-    <p>Did you experience any significant pain, fatigue, or brain fog today?</p>
-    <div class="checkin-options">
-      <button class="btn" onclick="submitCheckin('no')">No</button>
-      <button class="btn" onclick="submitCheckin('yes')">Yes</button>
-      <button class="btn" onclick="submitCheckin('skip')">Skip for today</button>
-    </div>
-    <div id="symptomChecklist" style="display:none; margin-top:1em;">
-      <label><input type="checkbox"> Headache</label>
-      <label><input type="checkbox"> Muscle pain</label>
-      <label><input type="checkbox"> Joint pain</label>
-      <label><input type="checkbox"> Fatigue</label>
-      <label><input type="checkbox"> Brain fog</label>
-      <label><input type="checkbox"> Dizziness</label>
-      <label><input type="checkbox"> Nausea</label>
-      <label><input type="checkbox"> Other</label>
-      <button class="btn" style="display:block; margin-top:1em;" onclick="submitChecklist()">Submit Symptoms</button>
-    </div>
-    <div id="checkinStatus" style="margin-top:12px;font-size:1em;color:#21808d"></div>
-  </section>
-
-  <!-- Logs Section -->
-  <section id="logs">
-    <h2>Logs & History</h2>
-    <p>Review your recent check-ins, flags, and support activity.</p>
-  </section>
-
-  <!-- Admin Panel Section -->
-  <section id="admin">
-    <h2>Admin Panel</h2>
-    <p>Manage roles, permissions, and Perplexity AI access for your support team.</p>
-    <div id="perplexity-ai-panel">
-      <h3>Perplexity AI Protocol Support Editor</h3>
-      <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>
-      All changes are logged and visible to the student and Admins.</p>
-      <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or protocol update here..."></textarea>
-      <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
-      <div id="ai-response"></div>
-    </div>
-    <div id="supportNetwork" style="margin-top:2em;">
-      <h3>Support Network</h3>
-      <ul>
-        <li>Mom (Admin)</li>
-        <li>Brinckmyster (Admin)</li>
-        <li>Mary (Student)</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Settings Section -->
-  <section id="settings">
-    <h2>Settings</h2>
-    <p>Customize your experience, notification preferences, and accessibility options.</p>
-    <label><input type="checkbox" id="togglePie" checked> Show pie chart segments in status circle</label>
-    <label><input type="checkbox" id="toggleSingle"> Show single color status circle</label>
-    <label><input type="checkbox" id="toggleDyslexiaFont"> Use dyslexia-friendly font</label>
-  </section>
-
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
-    // Navigation logic
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-        document.getElementById(this.dataset.section).classList.add('active');
-      });
+  // ================== PouchDB Offline Sync ==================
+  const localDB = new PouchDB('academic_allies');
+  const remotes = [
+    'https://<your-cloudant>.cloudantnosqldb.appdomain.cloud/academic_allies',
+    'https://<your-fly-app>.fly.dev/academic_allies'
+  ];
+  remotes.forEach(url => localDB.sync(url, {live:true,retry:true}));
+
+  // ================ Google Sign-In & Calendar ================
+  const CLIENT_ID = '93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com';
+  function initGapi() {
+    gapi.load('client:auth2', ()=> gapi.client.init({
+      clientId: CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/calendar.readonly'
+    }));
+  }
+  function handleCredentialResponse(response) {
+    const user = JSON.parse(atob(response.credential.split('.')[1]));
+    document.getElementById('userName').textContent = user.given_name||user.name;
+    document.getElementById('googleSignInContainer').style.display='none';
+  }
+  window.onload = initGapi;
+  google.accounts.id.initialize({
+    client_id: CLIENT_ID,
+    callback: handleCredentialResponse,
+    ux_mode: 'popup'
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('googleSignInContainer'),
+    { theme:'outline', size:'large' }
+  );
+
+  // ================== App UI & Logic ==================
+  const modes = ['dashboard','checkins','logs','admin','messages','emergency','settings'];
+  // Render nav buttons
+  modes.forEach((m,i)=>
+    document.getElementById('mainNav').innerHTML +=
+      `<button class="${i===0?'active':''}" data-sec="${m}">${m.charAt(0).toUpperCase()+m.slice(1)}</button>`
+  );
+  document.querySelectorAll('#mainNav button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('#mainNav button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      modes.forEach(s=>document.getElementById(s).classList.remove('active'));
+      document.getElementById(btn.dataset.sec).classList.add('active');
     });
+  });
 
-    // Google Sign-In logic (global for callback)
-    function handleCredentialResponse(response) {
-      function parseJwt(token) {
-        if (!token) return {};
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
+  function updateDateTime(){
+    const now=new Date();
+    document.querySelector('#dashboard').innerHTML=`
+      <div class="dashboard-summary">
+        <h2>Welcome back, <span id="userName">Mary</span>!</h2>
+        <p class="date-time">${now.toLocaleString(undefined,{
+          weekday:'long',year:'numeric',month:'long',day:'numeric',
+          hour:'2-digit',minute:'2-digit'})}</p>
+        <div class="status-grid">
+          <div class="status-item"><strong>Brain Fog:</strong> Moderate</div>
+          <div class="status-item"><strong>Cognitive:</strong> 35</div>
+          <div class="status-item"><strong>Checklist:</strong> 4/6</div>
+        </div>
+        <div class="quick-actions">
+          <button onclick="show('checkins')">Start Check-In</button>
+          <button onclick="show('logs')">See Logs</button>
+          <button onclick="show('messages')">Send Message</button>
+          <button onclick="show('emergency')">Emergency</button>
+        </div>
+        <div class="calendar-preview">
+          <strong>Calendar:</strong>
+          <label><input type="checkbox" checked> Google</label>
+          <ul id="todaysEvents"><li>Loading events…</li></ul>
+        </div>
+        <div class="shortcuts-panel">
+          <small>Shortcuts: Alt+1 Dashboard, Alt+2 Check-Ins, Alt+3 Logs…</small>
+        </div>
+      </div>`;
+  }
+
+  function show(sec){ document.querySelector(`[data-sec="${sec}"]`).click(); }
+
+  function updateStatusCircle(){
+    const circle=document.getElementById('statusCircle');
+    circle.innerHTML='';circle.className='status-circle';
+    const view = Array.from(document.querySelectorAll('input[name="circleView"]'))
+                   .find(r=>r.checked)?.value||'single';
+    const now=new Date(), d=now.getDay();
+    if(view==='pie'){
+      const count = d===6||d===0?2:5;
+      circle.classList.add('segments');
+      for(let i=0;i<count;i++){
+        const type=d===6?'spiritual':d===0?'social':['mental','physical','spiritual','academic','social'][i];
+        const seg=document.createElement('div');
+        seg.className=`status-segment segment-${type}`;
+        seg.style.transform=`rotate(${i*360/count}deg)`;
+        seg.title=type+' status';circle.appendChild(seg);
       }
-      const user = parseJwt(response.credential);
-      document.getElementById('googleSignInContainer').classList.add('hidden');
-      // Show user info in status indicator
-      const statusCircle = document.getElementById('statusCircle');
-      statusCircle.innerHTML = `<img src="${user.picture}" alt="Profile" style="width:48px;height:48px;border-radius:50%;border:2px solid #3b82f6;">`;
-      document.getElementById('userName').textContent = user.given_name || user.name || user.email || "User";
+    } else {
+      circle.style.background= 'var(--color-success)';
+      circle.title="Overall status";
     }
+  }
 
-    // Perplexity AI Panel (mockup)
-    document.getElementById('ai-send').addEventListener('click', async function() {
-      const input = document.getElementById('ai-input').value.trim();
-      const responseDiv = document.getElementById('ai-response');
-      if (!input) {
-        responseDiv.textContent = "Please enter a question or update.";
-        return;
-      }
-      responseDiv.textContent = "Thinking...";
-      setTimeout(() => {
-        responseDiv.textContent = "This is a mock response from Perplexity AI. (Replace with real API integration.)";
-      }, 1200);
-    });
+  // Fetch Google Calendar events
+  async function connectGoogle(){
+    const auth2=gapi.auth2.getAuthInstance();
+    await auth2.signIn();
+    await gapi.client.load('calendar','v3');
+    const res=await gapi.client.calendar.events.list({
+      calendarId:'primary',timeMin:(new Date()).toISOString(),singleEvents:true});
+    document.getElementById('todaysEvents').innerHTML=
+      res.result.items.map(e=>`<li>${(e.start.dateTime||e.start.date)} – ${e.summary}</li>`).join('');
+  }
 
-    // Status Circle Logic (locked-in): toggle between pie and single color, no weekend logic unless you specify
-    let currentView = "pie"; // or "single"
-    function updateStatusCircle(view = currentView) {
-      const circle = document.getElementById('statusCircle');
-      circle.innerHTML = "";
-      circle.className = "status-circle";
-      if (view === "pie") {
-        circle.classList.add('segments');
-        const segments = [
-          { key: "mental", deg: 0, tooltip: "Mental status" },
-          { key: "physical", deg: 72, tooltip: "Physical status" },
-          { key: "spiritual", deg: 144, tooltip: "Spiritual status" },
-          { key: "academic", deg: 216, tooltip: "Academic status" },
-          { key: "social", deg: 288, tooltip: "Social status" }
-        ];
-        segments.forEach(seg => {
-          const segment = document.createElement('div');
-          segment.className = `status-segment segment-${seg.key}`;
-          segment.style.transform = `rotate(${seg.deg}deg)`;
-          segment.setAttribute('tabindex', 0);
-          segment.setAttribute('aria-label', seg.tooltip);
-          segment.title = seg.tooltip;
-          circle.appendChild(segment);
-        });
-      } else {
-        circle.classList.remove('segments');
-        circle.style.background = "var(--color-success)";
-        circle.setAttribute('aria-label', "Overall status");
-        circle.title = "Overall status";
-      }
-    }
-    updateStatusCircle();
+  // PouchDB-based messaging
+  async function refreshMessages(){
+    const msgs=(await localDB.find({selector:{type:'message'}})).docs;
+    document.getElementById('messages').innerHTML=`
+      <h2>Messages</h2>`+msgs.map(m=>
+      `<p><strong>${m.sender}:</strong> ${m.text}</p>`).join('')+
+      `<button class="btn" onclick="composeMessage()">Compose</button>`;
+  }
+  async function composeMessage(){
+    const text=prompt('Message:'); if(!text) return;
+    await localDB.post({type:'message',sender:'Me',text,timestamp:Date.now()});
+    refreshMessages();
+  }
 
-    // Settings toggles for status circle view and dyslexia font
-    document.getElementById('togglePie').addEventListener('change', function() {
-      if (this.checked) {
-        document.getElementById('toggleSingle').checked = false;
-        currentView = "pie";
-        updateStatusCircle("pie");
-      }
-    });
-    document.getElementById('toggleSingle').addEventListener('change', function() {
-      if (this.checked) {
-        document.getElementById('togglePie').checked = false;
-        currentView = "single";
-        updateStatusCircle("single");
-      }
-    });
-    document.getElementById('toggleDyslexiaFont').addEventListener('change', function() {
-      document.body.style.fontFamily = this.checked
-        ? "'Atkinson Hyperlegible', 'OpenDyslexic', Arial, Helvetica, sans-serif"
-        : "Arial, Helvetica, sans-serif";
-    });
-
-    // Set today's date and time in dashboard
-    function updateDateTime() {
-      const dateTimeElem = document.getElementById('dateTime');
-      const now = new Date();
-      dateTimeElem.textContent = now.toLocaleString(undefined, {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-      });
-    }
-    updateDateTime();
-
-    // Check-in logic
-    function submitCheckin(answer) {
-      if (answer === 'yes') {
-        document.getElementById('symptomChecklist').style.display = 'block';
-        document.getElementById('checkinStatus').textContent = "";
-      } else {
-        document.getElementById('symptomChecklist').style.display = 'none';
-        document.getElementById('checkinStatus').textContent =
-          answer === 'no'
-            ? "Logged: No significant symptoms today."
-            : "Skipped today's check-in.";
-      }
-    }
-    function submitChecklist() {
-      document.getElementById('checkinStatus').textContent = "Symptoms logged. Support notified if needed.";
-      document.getElementById('symptomChecklist').style.display = 'none';
-    }
+  // Initialize App
+  document.addEventListener('DOMContentLoaded',()=>{
+    updateDateTime();updateStatusCircle();
+    setInterval(updateDateTime,60000);
+    PouchDB.plugin(window.pouchdbFind);
+    localDB.createIndex({index:{fields:['type']}}).then(()=>refreshMessages());
+    connectGoogle();
+    // Status view radio
+    document.querySelector('section#settings').innerHTML=`
+      <h2>Settings</h2>
+      <label><input type="radio" name="circleView" value="single" checked onchange="updateStatusCircle()">Single Color</label><br>
+      <label><input type="radio" name="circleView" value="pie" onchange="updateStatusCircle()">Pie Chart</label>`;
+  });
   </script>
 </body>
 </html>

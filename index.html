@@ -6,15 +6,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Academic Allies: Your disability accommodations and support network">
   <link rel="stylesheet" href="style.css">
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://apis.google.com/js/api.js" async defer></script>
+  <script type="module">
+    // Import Firebase SDK modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
+      authDomain: "academic-allies-464901.firebaseapp.com",
+      projectId: "academic-allies-464901",
+      storageBucket: "academic-allies-464901.firebasestorage.app",
+      messagingSenderId: "93996985456",
+      appId: "1:93996985456:web:c697df7623bbceeb1d18b5"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Export for app.js usage
+    window.firebaseAuth = auth;
+    window.firebaseDB = db;
+  </script>
+  <script src="app.js" type="module" defer></script>
 </head>
 <body>
   <header>
-    <button class="icon-btn" id="homeBtn" aria-label="Go to Dashboard">🏠</button>
+    <button id="homeBtn" class="icon-btn" aria-label="Go to Dashboard">🏠</button>
     <h1>Academic Allies</h1>
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
@@ -43,7 +64,7 @@
         <button class="btn" onclick="show('checkins')">Quick Check-In</button>
         <button class="btn" onclick="show('messages')">Send Message</button>
       </div>
-      <div id="calendarPreview" class="calendar-preview"></div>
+      <div id="calendarPreview" class="calendar-preview">Loading…</div>
     </section>
 
     <section id="checkins">
@@ -60,7 +81,7 @@
     </section>
 
     <section id="logs">
-      <h2>Logs & History</h2>
+      <h2>Logs &amp; History</h2>
       <div id="logsList" class="logs-list">Loading…</div>
     </section>
 
@@ -79,8 +100,8 @@
 
     <section id="settings">
       <h2>Settings</h2>
-      <label><input type="checkbox" id="minimalUIMode" onchange="toggleMinimalUI()"> Minimal UI Mode</label>
-      <label><input type="checkbox" id="segmentView" onchange="toggleStatusView()"> Status Segment View</label>
+      <label><input type="checkbox" id="minimalUIMode"> Minimal UI Mode</label>
+      <label><input type="checkbox" id="segmentView"> Status Segment View</label>
     </section>
 
     <section id="admin">
@@ -93,7 +114,5 @@
       </div>
     </section>
   </main>
-
-  <script src="app.js"></script>
 </body>
 </html>

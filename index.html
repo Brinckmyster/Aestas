@@ -6,15 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Academic Allies: Your disability accommodations and support network">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Load Google Sign-In library -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Firebase SDKs (modular) -->
   <script type="module">
-    // Import Firebase SDK modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithCredential,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-    // Your web app's Firebase configuration
+    // Your Firebase configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
+      apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8mB8tN_oskE",
       authDomain: "academic-allies-464901.firebaseapp.com",
       projectId: "academic-allies-464901",
       storageBucket: "academic-allies-464901.firebasestorage.app",
@@ -27,10 +36,37 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Export for app.js usage
+    // Expose for other scripts
     window.firebaseAuth = auth;
-    window.firebaseDB = db;
+    window.firebaseDB   = db;
+
+    // Google One-Tap / Button
+    google.accounts.id.initialize({
+      client_id: "93996985456-abcdefg.apps.googleusercontent.com",
+      callback: async response => {
+        const credential = GoogleAuthProvider.credential(response.credential);
+        await signInWithCredential(auth, credential);
+      }
+    });
+    window.onload = () => {
+      google.accounts.id.renderButton(
+        document.getElementById("googleSignInContainer"),
+        { theme: "outline", size: "large" }
+      );
+    };
+
+    // Handle auth state changes
+    onAuthStateChanged(auth, user => {
+      document.getElementById("userName").textContent = user
+        ? (user.displayName || user.email)
+        : "Guest";
+      document.getElementById("googleSignInContainer").style.display = user
+        ? "none"
+        : "flex";
+      // Re-render other UI as needed
+    });
   </script>
+
   <script src="app.js" type="module" defer></script>
 </head>
 <body>
@@ -106,11 +142,15 @@
 
     <section id="admin">
       <h2>Admin Panel</h2>
-      <div id="perplexity-ai-panel">
-        <h3>AI Protocol Editor</h3>
-        <textarea id="ai-input" rows="4" placeholder="Type your question or protocol update…"></textarea>
-        <button class="btn" id="ai-send">Send to AI</button>
-        <div id="ai-response"></div>
+      <div id="perplexity-ai-panel" style="margin-top:2em;">
+        <h3>Perplexity AI Protocol Editor</h3>
+        <p>
+          Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>
+          All changes are logged and visible to the student and Admins.
+        </p>
+        <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or protocol update here…"></textarea>
+        <button id="ai-send" class="btn" style="margin-top:0.5em;">Send to Perplexity AI</button>
+        <div id="ai-response" style="margin-top:1em; background:#f3f6fa; padding:1em; border-radius:8px;"></div>
       </div>
     </section>
   </main>

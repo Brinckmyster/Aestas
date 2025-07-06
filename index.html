@@ -1,66 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Academic Allies</title>
-  <meta name="description" content="Your disability accommodations and support network" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Academic Allies – Your disability accommodations and support network">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fcfcf9; margin: 0; color: #13343b; }
+    header { text-align: center; margin-top: 2em; }
+    .tagline { font-size: 1.2em; color: #4b6cb7; margin-top: 0.5em; }
+    .status-indicator { position: fixed; top: 24px; right: 24px; z-index: 1000; }
+    .status-circle { width: 80px; height: 80px; border-radius: 50%; background: #e5e7eb; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02); transition: background 0.3s; font-size: 0; min-width: 80px; min-height: 80px; }
+    .status-segment { position: absolute; width: 100%; height: 100%; border-radius: 50%; clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0); }
+    .segment-mental    { background: #22c55e; }
+    .segment-physical  { background: #fbbf24; }
+    .segment-spiritual { background: #3b82f6; }
+    .segment-academic  { background: #bdbdbd; }
+    .segment-social    { background: #8b5cf6; }
+    .google-signin { display: flex; justify-content: center; margin: 2em 0; }
+    .hidden { display: none !important; }
+    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
+    nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
+    nav button.active { background: #2a4b7c; }
+    section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+    section.active { display: block; }
+    .support-list { list-style: none; padding: 0; }
+    .support-list li { margin-bottom: 0.5em; }
+    .role-desc { color: #626c71; font-size: 0.95em; margin-left: 0.5em; }
+    .perplexity-ai-panel { margin-top: 2em; }
+    .ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em; }
+  </style>
 </head>
 <body>
-  <div class="dashboard">
-    <!-- Status Circle top right -->
-    <div class="status-indicator">
-      <div id="statusCircle" class="status-circle"></div>
-    </div>
-    <div id="banner" class="banner" style="display:none;"></div>
-    <!-- Dashboard content -->
-    <div class="dashboard-content">
-      <h1>Academic Allies</h1>
-      <p class="tagline">Your disability accommodations and support network</p>
-      <div class="btn-container">
-        <button class="btn" onclick="toggleDefaultView()">Toggle Default View</button>
-        <button class="btn" onclick="showAdminPanel()">Admin Panel</button>
-      </div>
-      <p>Dashboard content here.</p>
-    </div>
-    <!-- Settings section for custom views -->
-    <div class="settings-section" id="settingsSection">
-      <h2>Settings</h2>
-      <div class="settings-option">
-        <label>Status Circle View</label>
-        <div class="radio-group">
-          <label><input type="radio" name="circleView" value="single" checked onclick="updateStatusCircle('single')" /> Single Color</label>
-          <label><input type="radio" name="circleView" value="pie" onclick="updateStatusCircle('pie')" /> Pie Chart (5 Segments)</label>
-          <label><input type="radio" name="circleView" value="custom" onclick="updateStatusCircle('custom')" /> Auto-Detected Metric</label>
-        </div>
-      </div>
-      <div class="settings-option">
-        <label><input type="checkbox" id="showEmoji" onchange="toggleEmoji()" /> Show Emoji</label>
-      </div>
-    </div>
-    <!-- Perplexity AI Admin Panel -->
-    <div id="ai-panel" style="display:none; margin-top:2em;">
-      <h2>Perplexity AI Protocol Support Editor</h2>
-      <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings. All changes are logged and visible to the student and Admins.</p>
-      <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or update..."></textarea>
-      <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
-      <div id="ai-response" style="margin-top:1em;background:#f3f6fa;padding:1em;border-radius:8px;"></div>
-    </div>
-    <!-- Health and Calendar Data -->
-    <div style="margin-top:2em;">
-      <h2>Health Data</h2>
-      <div>Heart Rate: <span id="heartRate">--</span> bpm</div>
-      <div>Sleep Hours: <span id="sleepHours">--</span> hrs</div>
-      <button onclick="fetchHealthData()">Refresh Health Data</button>
-    </div>
-    <div style="margin-top:2em;">
-      <h2>Calendar</h2>
-      <button onclick="googleSignIn()">Sync Google Calendar</button>
-      <div id="calendarEvents"></div>
-    </div>
+  <header>
+    <h1 style="font-size:2.2em;font-weight:bold;color:#2a4b7c;">Academic Allies</h1>
+    <p class="tagline">Your disability accommodations and support network</p>
+  </header>
+
+  <!-- Status Circle always top right -->
+  <div class="status-indicator" id="statusIndicator">
+    <div id="statusCircle" class="status-circle" tabindex="0" aria-label="Status Circle"></div>
   </div>
-  <script src="app.js"></script>
+
+  <!-- Google Sign-In Button Centered above dashboard -->
+  <div class="google-signin" id="googleSignInContainer">
+    <div id="g_id_onload"
+         data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false"></div>
+    <div id="g_id_signin"
+         class="g_id_signin"
+         data-type="standard"
+         data-shape="rectangular"
+         data-theme="outline"
+         data-text="signin_with"
+         data-size="large"
+         data-logo_alignment="left"></div>
+  </div>
+
+  <!-- Main Navigation -->
+  <nav>
+    <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+    <button class="nav-btn" data-section="checkins">Check-Ins</button>
+    <button class="nav-btn" data-section="logs">Logs</button>
+    <button class="nav-btn" data-section="admin">Admin Panel</button>
+    <button class="nav-btn" data-section="messages">Messages</button>
+    <button class="nav-btn" data-section="emergency">Emergency</button>
+    <button class="nav-btn" data-section="settings">Settings</button>
+  </nav>
+
+  <!-- App Sections -->
+  <section id="dashboard" class="active">
+    <h2>Welcome back, <span id="userName">Mary</span>!</h2>
+    <p>Here's your daily overview. Use the navigation above to check in, review logs, or manage your support network.</p>
+  </section>
+  <section id="checkins">
+    <h2>Daily Check-Ins</h2>
+    <p>Complete your check-in to update your status and notify your support network.</p>
+  </section>
+  <section id="logs">
+    <h2>Logs &amp; History</h2>
+    <p>Review your recent check-ins, flags, and support activity.</p>
+  </section>
+  <section id="admin">
+    <h2>Admin Panel</h2>
+    <div id="supportNetwork" style="margin-top:2em;">
+      <h3>Support Network</h3>
+      <ul class="support-list">
+        <li>Mary <strong>Student</strong> <span class="role-desc">students@email</span></li>
+        <li>Brinckmyster <strong>Admin</strong> <span class="role-desc">your@email</span></li>
+        <li>Mom <strong>Family</strong> <span class="role-desc">moms@email</span></li>
+        <li>test <strong>Support</strong> <span class="role-desc">KarenBrinckFH@gmail.com</span></li>
+        <li>KarenBrinck <strong>Nearby Help</strong> <span class="role-desc">KarenBrinck@gmail.com</span></li>
+      </ul>
+    </div>
+    <div class="perplexity-ai-panel" id="perplexity-ai-panel">
+      <h3>Perplexity AI Protocol Support Editor</h3>
+      <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>All changes are logged and visible to the student and Admins.</p>
+      <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or protocol update here..."></textarea>
+      <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
+      <div id="ai-response" class="ai-response"></div>
+    </div>
+  </section>
+  <section id="messages">
+    <h2>Messages</h2>
+    <div id="messageThread"><p>No new messages. In-app messaging coming soon.</p></div>
+  </section>
+  <section id="emergency">
+    <h2>Quick Emergency Contacts</h2>
+    <div class="contacts-grid" id="contactsGrid">
+      <div>
+        <h4>Accessibility Services</h4>
+        <p>208-496-9210<br>accessibility@byui.edu</p>
+        <button class="btn" onclick="callContact('2084969210')">Call</button>
+        <button class="btn" onclick="emailContact('accessibility@byui.edu')">Email</button>
+      </div>
+      <div>
+        <h4>Testing Center</h4>
+        <p>208-496-1750<br>testingcenter@byui.edu</p>
+        <button class="btn" onclick="callContact('2084961750')">Call</button>
+        <button class="btn" onclick="emailContact('testingcenter@byui.edu')">Email</button>
+      </div>
+      <div>
+        <h4>Counseling Center</h4>
+        <p>208-496-9370<br>counselingcenter@byui.edu</p>
+        <button class="btn" onclick="callContact('2084969370')">Call</button>
+        <button class="btn" onclick="emailContact('counselingcenter@byui.edu')">Email</button>
+      </div>
+      <!-- Custom contacts can be added here -->
+    </div>
+    <button class="btn" onclick="addCustomContact()">Add Custom Contact</button>
+  </section>
+  <section id="settings">
+    <h2>Settings</h2>
+    <p>Customize your experience, notification preferences, and accessibility options.</p>
+  </section>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    // Google Sign-In logic
+    function handleCredentialResponse(response) {
+      function parseJwt(token) {
+        if (!token) return {};
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      }
+      const user = parseJwt(response.credential);
+      document.getElementById('googleSignInContainer').classList.add('hidden');
+      document.getElementById('userName').textContent = user.given_name || user.name || user.email;
+      // Optionally show user photo in status circle
+      // document.getElementById('statusCircle').innerHTML = `<img src="${user.picture}" alt="Profile" style="width:48px;height:48px;border-radius:50%;border:2px solid #3b82f6;">`;
+    }
+
+    // Navigation logic
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(this.dataset.section).classList.add('active');
+      });
+    });
+
+    // Status Circle Logic (weekday, Saturday, Sunday)
+    function updateStatusCircle() {
+      const circle = document.getElementById('statusCircle');
+      circle.innerHTML = '';
+      const dayOfWeek = new Date().getDay();
+      // Example: 5 segments on weekdays, grey academic on Saturday, single blue on Sunday
+      if (dayOfWeek === 6) { // Saturday
+        const segments = [
+          { key: 'mental',    deg: 0,   color: '#22c55e' },
+          { key: 'physical',  deg: 72,  color: '#fbbf24' },
+          { key: 'spiritual', deg: 144, color: '#3b82f6' },
+          { key: 'academic',  deg: 216, color: '#bdbdbd' },
+          { key: 'social',    deg: 288, color: '#8b5cf6' }
+        ];
+        segments.forEach(seg => {
+          const segment = document.createElement('div');
+          segment.className = `status-segment segment-${seg.key}`;
+          segment.style.background = seg.color;
+          segment.style.transform = `rotate(${seg.deg}deg) skewY(-54deg)`;
+          circle.appendChild(segment);
+        });
+        return;
+      }
+      if (dayOfWeek === 0) { // Sunday
+        const segment = document.createElement('div');
+        segment.className = 'status-segment segment-spiritual';
+        segment.style.background = '#3b82f6';
+        segment.style.transform = 'rotate(0deg) skewY(-54deg)';
+        circle.appendChild(segment);
+        return;
+      }
+      // Weekdays: all colored by status
+      const segments = [
+        { key: 'mental',    deg: 0,   color: '#22c55e' },
+        { key: 'physical',  deg: 72,  color: '#fbbf24' },
+        { key: 'spiritual', deg: 144, color: '#3b82f6' },
+        { key: 'academic',  deg: 216, color: '#bdbdbd' },
+        { key: 'social',    deg: 288, color: '#8b5cf6' }
+      ];
+      segments.forEach(seg => {
+        const segment = document.createElement('div');
+        segment.className = `status-segment segment-${seg.key}`;
+        segment.style.background = seg.color;
+        segment.style.transform = `rotate(${seg.deg}deg) skewY(-54deg)`;
+        circle.appendChild(segment);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', updateStatusCircle);
+
+    // Emergency Contact Functions
+    function callContact(number) {
+      if (confirm(`Call ${number}? This will open your phone app.`)) {
+        window.location.href = `tel:${number}`;
+      }
+    }
+    function emailContact(email) {
+      if (confirm(`Send email to ${email}? This will open your email app.`)) {
+        window.location.href = `mailto:${email}?subject=Student Support Request`;
+      }
+    }
+    function addCustomContact() {
+      const name = prompt('Contact Name:');
+      if (!name) return;
+      const phone = prompt('Phone Number (optional):');
+      const email = prompt('Email (optional):');
+      const contactsGrid = document.getElementById('contactsGrid');
+      const div = document.createElement('div');
+      div.innerHTML = `<h4>${name}</h4>
+        <p>${phone ? phone + '<br>' : ''}${email ? email : ''}</p>
+        ${phone ? `<button class="btn" onclick="callContact('${phone}')">Call</button>` : ''}
+        ${email ? `<button class="btn" onclick="emailContact('${email}')">Email</button>` : ''}
+        <button class="btn" onclick="this.parentElement.remove()">Remove</button>`;
+      contactsGrid.appendChild(div);
+    }
+
+    // Perplexity AI Panel mockup
+    document.addEventListener('DOMContentLoaded', function() {
+      const aiSend = document.getElementById('ai-send');
+      if (aiSend) {
+        aiSend.addEventListener('click', async function() {
+          const input = document.getElementById('ai-input').value.trim();
+          const responseDiv = document.getElementById('ai-response');
+          if (!input) { responseDiv.textContent = "Please enter a question or update."; return; }
+          responseDiv.textContent = "Thinking...";
+          setTimeout(() => {
+            responseDiv.textContent = "This is a mock response from Perplexity AI. Replace with real API integration.";
+          }, 1200);
+        });
+      }
+    });
+  </script>
 </body>
 </html>

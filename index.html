@@ -3,33 +3,215 @@
 <head>
   <meta charset="UTF-8">
   <title>Academic Allies</title>
-  <meta name="description" content="Academic Allies – Your disability accommodations and support network">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fcfcf9; margin: 0; color: #13343b; }
-    header { text-align: center; margin-top: 2em; }
-    .tagline { font-size: 1.2em; color: #4b6cb7; margin-top: 0.5em; }
-    .status-indicator { position: fixed; top: 24px; right: 24px; z-index: 1000; }
-    .status-circle { width: 80px; height: 80px; border-radius: 50%; background: #e5e7eb; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02); transition: background 0.3s; font-size: 0; min-width: 80px; min-height: 80px; }
-    .status-segment { position: absolute; width: 100%; height: 100%; border-radius: 50%; clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0); }
-    .segment-mental    { background: #22c55e; }
-    .segment-physical  { background: #fbbf24; }
-    .segment-spiritual { background: #3b82f6; }
-    .segment-academic  { background: #bdbdbd; }
-    .segment-social    { background: #8b5cf6; }
-    .google-signin { display: flex; justify-content: center; margin: 2em 0; }
-    .hidden { display: none !important; }
-    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
-    nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
-    nav button.active { background: #2a4b7c; }
-    section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+    :root {
+      --color-mental: #22c55e;
+      --color-physical: #fbbf24;
+      --color-spiritual: #3b82f6;
+      --color-academic: #bdbdbd;
+      --color-social: #8b5cf6;
+      --color-grey: #e5e7eb;
+      --color-surface: #fff;
+      --color-text: #13343b;
+      --color-primary: #2a4b7c;
+      --color-primary-active: #1a6873;
+      --color-alert: #e11d48;
+      --color-yellow: #fbbf24;
+      --color-orange: #fb923c;
+      --color-green: #22c55e;
+      --color-purple: #8b5cf6;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #fcfcf9;
+      color: var(--color-text);
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      margin-top: 2em;
+    }
+    .tagline {
+      font-size: 1.15em;
+      color: #4b6cb7;
+      margin-top: 0.5em;
+    }
+    .status-indicator {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+    .status-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--color-surface);
+      background: var(--color-grey);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
+      transition: background 0.3s;
+      font-size: 0;
+      min-width: 80px;
+      min-height: 80px;
+    }
+    .status-circle.segments { background: transparent; }
+    .status-segment {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0);
+    }
+    .segment-mental    { background: var(--color-mental); }
+    .segment-physical  { background: var(--color-physical); }
+    .segment-spiritual { background: var(--color-spiritual); }
+    .segment-academic  { background: var(--color-academic); }
+    .segment-social    { background: var(--color-social); }
+    .message-icon {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--color-grey);
+      border: 2px solid var(--color-surface);
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
+      font-size: 40px;
+      color: var(--color-primary);
+      position: relative;
+    }
+    .tooltip {
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      transform: translateX(-50%);
+      background: #222;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      white-space: nowrap;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .status-segment:focus-visible,
+    .status-segment:hover {
+      outline: 2px solid #333;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      margin: 2em 0 1em 0;
+    }
+    nav button {
+      font-size: 1.1em;
+      padding: 0.5em 1.5em;
+      border-radius: 8px;
+      border: none;
+      background: var(--color-primary);
+      color: #fff;
+      cursor: pointer;
+    }
+    nav button.active { background: var(--color-primary-active); }
+    section {
+      display: none;
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--color-surface);
+      border-radius: 16px;
+      box-shadow: 0 2px 8px #0001;
+      padding: 2em;
+    }
     section.active { display: block; }
-    .support-list { list-style: none; padding: 0; }
-    .support-list li { margin-bottom: 0.5em; }
-    .role-desc { color: #626c71; font-size: 0.95em; margin-left: 0.5em; }
-    .perplexity-ai-panel { margin-top: 2em; }
-    .ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em; }
+    .hidden { display: none !important; }
+    /* Mode Switcher */
+    .mode-switcher {
+      display: flex;
+      justify-content: center;
+      margin: 1em 0;
+      gap: 0.5em;
+    }
+    .mode-btn {
+      padding: 0.5em 1.2em;
+      border-radius: 7px;
+      border: 1px solid #4b6cb7;
+      background: #f3f6fa;
+      color: #2a4b7c;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .mode-btn.active, .mode-btn:focus-visible {
+      background: #2a4b7c;
+      color: #fff;
+      outline: 2px solid #2a4b7c;
+    }
+    /* User Tier Panel */
+    .user-tiers-panel {
+      margin: 2em 0 1em 0;
+      background: #f3f6fa;
+      border-radius: 10px;
+      padding: 1em;
+      box-shadow: 0 1px 4px #0001;
+    }
+    .user-tiers-panel h3 { margin-top: 0; }
+    .user-tier-list { list-style: none; padding: 0; }
+    .user-tier-list li {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 0.5em;
+      font-size: 1em;
+    }
+    .user-tier-role {
+      font-weight: bold;
+      margin-left: 0.5em;
+      color: #4b6cb7;
+    }
+    .user-tier-controls button {
+      margin-left: 0.5em;
+      border-radius: 6px;
+      border: none;
+      background: #e5e7eb;
+      color: #2a4b7c;
+      padding: 0.2em 0.8em;
+      font-size: 0.95em;
+      cursor: pointer;
+    }
+    .user-tier-controls button:focus-visible {
+      outline: 2px solid #2a4b7c;
+    }
+    /* Student Controls */
+    .student-controls {
+      margin: 1.5em 0;
+      background: #e5e7eb;
+      border-radius: 8px;
+      padding: 1em;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1em;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .student-controls label {
+      font-size: 1em;
+      margin-right: 0.5em;
+    }
+    .student-controls input[type="checkbox"] {
+      margin-right: 0.4em;
+      accent-color: #4b6cb7;
+    }
+    /* Accessibility */
+    .visually-hidden { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   </style>
 </head>
 <body>
@@ -41,22 +223,35 @@
   <!-- Status Circle always top right -->
   <div class="status-indicator" id="statusIndicator">
     <div id="statusCircle" class="status-circle" tabindex="0" aria-label="Status Circle"></div>
+    <div id="messageIcon" class="message-icon" style="display:none;" aria-label="New message">💬</div>
   </div>
 
-  <!-- Google Sign-In Button Centered above dashboard -->
-  <div class="google-signin" id="googleSignInContainer">
-    <div id="g_id_onload"
-         data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse"
-         data-auto_prompt="false"></div>
-    <div id="g_id_signin"
-         class="g_id_signin"
-         data-type="standard"
-         data-shape="rectangular"
-         data-theme="outline"
-         data-text="signin_with"
-         data-size="large"
-         data-logo_alignment="left"></div>
+  <!-- Mode Switcher -->
+  <div class="mode-switcher" aria-label="Mode Switcher" role="group">
+    <button class="mode-btn active" data-mode="normal" aria-label="Normal Mode">Normal</button>
+    <button class="mode-btn" data-mode="recovery" aria-label="Recovery Mode">Recovery</button>
+    <button class="mode-btn" data-mode="badbrain" aria-label="Bad Brain Day">Bad Brain Day</button>
+    <button class="mode-btn" data-mode="seminope" aria-label="Semi-Nope Day">Semi-Nope</button>
+    <button class="mode-btn" data-mode="nope" aria-label="Nope Day">Nope Day</button>
+  </div>
+
+  <!-- Student Controls -->
+  <div class="student-controls" aria-label="Student Controls">
+    <label><input type="checkbox" id="togglePie" checked> Pie Chart View</label>
+    <label><input type="checkbox" id="toggleEmoji"> Show Emoji in Status Circle</label>
+    <label><input type="checkbox" id="toggleCognitive"> Enable Cognitive Scale</label>
+    <label><input type="checkbox" id="toggleAccessibility" checked> High Contrast</label>
+  </div>
+
+  <!-- User Tier Panel -->
+  <div class="user-tiers-panel" aria-label="User Tiers">
+    <h3>Support Network</h3>
+    <ul class="user-tier-list" id="userTierList">
+      <!-- Populated by JS -->
+    </ul>
+    <div>
+      <button id="addSupportBtn">Add Support</button>
+    </div>
   </div>
 
   <!-- Main Navigation -->
@@ -85,22 +280,12 @@
   </section>
   <section id="admin">
     <h2>Admin Panel</h2>
-    <div id="supportNetwork" style="margin-top:2em;">
-      <h3>Support Network</h3>
-      <ul class="support-list">
-        <li>Mary <strong>Student</strong> <span class="role-desc">students@email</span></li>
-        <li>Brinckmyster <strong>Admin</strong> <span class="role-desc">your@email</span></li>
-        <li>Mom <strong>Family</strong> <span class="role-desc">moms@email</span></li>
-        <li>test <strong>Support</strong> <span class="role-desc">KarenBrinckFH@gmail.com</span></li>
-        <li>KarenBrinck <strong>Nearby Help</strong> <span class="role-desc">KarenBrinck@gmail.com</span></li>
-      </ul>
-    </div>
     <div class="perplexity-ai-panel" id="perplexity-ai-panel">
       <h3>Perplexity AI Protocol Support Editor</h3>
       <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>All changes are logged and visible to the student and Admins.</p>
       <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or protocol update here..."></textarea>
       <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
-      <div id="ai-response" class="ai-response"></div>
+      <div id="ai-response"></div>
     </div>
   </section>
   <section id="messages">
@@ -128,7 +313,6 @@
         <button class="btn" onclick="callContact('2084969370')">Call</button>
         <button class="btn" onclick="emailContact('counselingcenter@byui.edu')">Email</button>
       </div>
-      <!-- Custom contacts can be added here -->
     </div>
     <button class="btn" onclick="addCustomContact()">Add Custom Contact</button>
   </section>
@@ -137,27 +321,221 @@
     <p>Customize your experience, notification preferences, and accessibility options.</p>
   </section>
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
-    // Google Sign-In logic
-    function handleCredentialResponse(response) {
-      function parseJwt(token) {
-        if (!token) return {};
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
+    // --- User Tier Logic ---
+    const userTiers = [
+      { name: "Mary", role: "Student", email: "students@email", canEdit: false },
+      { name: "Mom", role: "Family", email: "moms@email", canEdit: false },
+      { name: "Brinckmyster", role: "Admin", email: "your@email", canEdit: true },
+      { name: "Karen", role: "Support", email: "KarenBrinckFH@gmail.com", canEdit: true },
+      { name: "Nearby Help", role: "Nearby Help", email: "neighbor@email", canEdit: true }
+    ];
+    function renderUserTiers() {
+      const ul = document.getElementById('userTierList');
+      ul.innerHTML = '';
+      userTiers.forEach((u, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${u.name} <span class="user-tier-role">${u.role}</span> <span style="color:#626c71;font-size:0.95em;">${u.email}</span></span>`;
+        const controls = document.createElement('span');
+        controls.className = 'user-tier-controls';
+        if (u.role !== "Student") {
+          controls.innerHTML = `<button onclick="removeTier(${i})" aria-label="Remove ${u.name}">Remove</button>`;
+        }
+        li.appendChild(controls);
+        ul.appendChild(li);
+      });
+    }
+    function removeTier(idx) {
+      if (userTiers[idx].role !== "Student") {
+        userTiers.splice(idx, 1);
+        renderUserTiers();
       }
-      const user = parseJwt(response.credential);
-      document.getElementById('googleSignInContainer').classList.add('hidden');
-      document.getElementById('userName').textContent = user.given_name || user.name || user.email;
-      // Optionally show user photo in status circle
-      // document.getElementById('statusCircle').innerHTML = `<img src="${user.picture}" alt="Profile" style="width:48px;height:48px;border-radius:50%;border:2px solid #3b82f6;">`;
+    }
+    document.getElementById('addSupportBtn').onclick = function() {
+      const name = prompt('Support Name:');
+      if (!name) return;
+      const email = prompt('Email:');
+      if (!email) return;
+      userTiers.push({ name, role: "Support", email, canEdit: true });
+      renderUserTiers();
+    };
+    renderUserTiers();
+
+    // --- Mode Switcher Logic ---
+    let currentMode = 'normal';
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentMode = this.dataset.mode;
+        // Mode-specific logic here (UI simplification, etc.)
+        updateStatusCircle();
+      });
+    });
+
+    // --- Student Controls ---
+    document.getElementById('togglePie').addEventListener('change', function() {
+      currentView = this.checked ? 'pie' : 'single';
+      updateStatusCircle();
+    });
+    document.getElementById('toggleEmoji').addEventListener('change', function() {
+      showEmoji = this.checked;
+      updateStatusCircle();
+    });
+    document.getElementById('toggleCognitive').addEventListener('change', function() {
+      enableCognitive = this.checked;
+      // Add cognitive scale logic if enabled
+    });
+    document.getElementById('toggleAccessibility').addEventListener('change', function() {
+      document.body.style.background = this.checked ? "#fcfcf9" : "#fff";
+    });
+
+    // --- Status Circle Logic (auto, ADA, weekend, bad brain day, message icon) ---
+    let currentView = 'pie'; // 'pie' or 'single'
+    let isBadBrainDay = false;
+    let newMessageWaiting = false;
+    let showEmoji = false;
+    let enableCognitive = false;
+
+    // Simulated status for demo; replace with real automation
+    const statusColors = {
+      mental:    'var(--color-mental)',
+      physical:  'var(--color-physical)',
+      spiritual: 'var(--color-spiritual)',
+      academic:  'var(--color-academic)',
+      social:    'var(--color-social)',
+      overall:   'var(--color-mental)' // Replace with real logic
+    };
+    const tooltips = {
+      mental:    'Mental status',
+      physical:  'Physical status',
+      spiritual: 'Spiritual status',
+      academic:  'Academic status',
+      academicSat: 'Academic Saturday status. No color showing.',
+      social:    'Social status',
+      sunday:    'Spiritual check-in only for Sunday.',
+      overall:   'Your overall status for the week.'
+    };
+
+    let tooltipDiv = null;
+    function showTooltip(e, text) {
+      hideTooltip();
+      tooltipDiv = document.createElement('div');
+      tooltipDiv.className = 'tooltip';
+      tooltipDiv.innerText = text;
+      document.body.appendChild(tooltipDiv);
+      const rect = e.target.getBoundingClientRect();
+      tooltipDiv.style.left = (rect.left + rect.width/2) + 'px';
+      tooltipDiv.style.top = (rect.bottom + 6) + 'px';
+      tooltipDiv.style.opacity = 1;
+    }
+    function hideTooltip() {
+      if (tooltipDiv) { tooltipDiv.remove(); tooltipDiv = null; }
+    }
+    window.addEventListener('scroll', hideTooltip);
+    window.addEventListener('click', hideTooltip);
+
+    function updateStatusCircle() {
+      const circle = document.getElementById('statusCircle');
+      const messageIcon = document.getElementById('messageIcon');
+      circle.innerHTML = '';
+      circle.className = 'status-circle';
+      circle.removeAttribute('aria-label');
+      messageIcon.style.display = 'none';
+
+      // Bad brain day logic: hide window unless new message triggers icon
+      if (currentMode === 'badbrain') {
+        circle.style.display = 'none';
+        if (newMessageWaiting) {
+          messageIcon.style.display = 'flex';
+        } else {
+          messageIcon.style.display = 'none';
+        }
+        return;
+      } else {
+        circle.style.display = 'flex';
+        messageIcon.style.display = 'none';
+      }
+
+      const today = new Date();
+      const dayOfWeek = today.getDay(); // 0 = Sunday, 6 = Saturday
+
+      // --- SEGMENTED PIE CHART VIEW ---
+      if (currentView === 'pie') {
+        // --- SATURDAY LOGIC ---
+        if (dayOfWeek === 6) {
+          circle.classList.add('segments');
+          const segments = [
+            { key: 'mental',    deg: 0,   color: statusColors.mental,    tooltip: tooltips.mental },
+            { key: 'physical',  deg: 72,  color: statusColors.physical,  tooltip: tooltips.physical },
+            { key: 'spiritual', deg: 144, color: statusColors.spiritual, tooltip: tooltips.spiritual },
+            { key: 'academic',  deg: 216, color: statusColors.academic,  tooltip: tooltips.academicSat },
+            { key: 'social',    deg: 288, color: statusColors.social,    tooltip: tooltips.social }
+          ];
+          segments.forEach(seg => {
+            const segment = document.createElement('div');
+            segment.className = `status-segment segment-${seg.key}`;
+            segment.style.background = seg.color;
+            segment.style.transform = `rotate(${seg.deg}deg) skewY(-54deg)`;
+            segment.setAttribute('aria-label', seg.tooltip);
+            if (seg.key === 'academic') {
+              segment.setAttribute('tabindex', '0');
+              segment.addEventListener('mouseenter', e => showTooltip(e, seg.tooltip));
+              segment.addEventListener('focus', e => showTooltip(e, seg.tooltip));
+              segment.addEventListener('mouseleave', hideTooltip);
+              segment.addEventListener('blur', hideTooltip);
+            } else {
+              segment.title = seg.tooltip;
+            }
+            circle.appendChild(segment);
+          });
+          return;
+        }
+        // --- SUNDAY LOGIC ---
+        if (dayOfWeek === 0) {
+          circle.classList.remove('segments');
+          circle.style.background = statusColors.spiritual;
+          circle.setAttribute('tabindex', '0');
+          circle.setAttribute('aria-label', tooltips.sunday);
+          circle.title = tooltips.sunday;
+          return;
+        }
+        // --- WEEKDAY LOGIC ---
+        circle.classList.add('segments');
+        const segments = [
+          { key: 'mental',    deg: 0,   color: statusColors.mental,    tooltip: tooltips.mental },
+          { key: 'physical',  deg: 72,  color: statusColors.physical,  tooltip: tooltips.physical },
+          { key: 'spiritual', deg: 144, color: statusColors.spiritual, tooltip: tooltips.spiritual },
+          { key: 'academic',  deg: 216, color: statusColors.academic,  tooltip: tooltips.academic },
+          { key: 'social',    deg: 288, color: statusColors.social,    tooltip: tooltips.social }
+        ];
+        segments.forEach(seg => {
+          const segment = document.createElement('div');
+          segment.className = `status-segment segment-${seg.key}`;
+          segment.style.background = seg.color;
+          segment.style.transform = `rotate(${seg.deg}deg) skewY(-54deg)`;
+          segment.title = seg.tooltip;
+          circle.appendChild(segment);
+        });
+        return;
+      }
+      // --- SINGLE COLOR OVERALL VIEW ---
+      circle.classList.remove('segments');
+      circle.style.background = statusColors.overall; // Replace with computed overall status
+      circle.setAttribute('tabindex', '0');
+      if (dayOfWeek === 0) {
+        circle.setAttribute('aria-label', tooltips.overall);
+        circle.title = tooltips.overall;
+      } else {
+        circle.setAttribute('aria-label', 'Your overall status.');
+        circle.title = 'Your overall status.';
+      }
     }
 
-    // Navigation logic
+    // Initialize on load
+    updateStatusCircle();
+
+    // --- Navigation logic ---
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -167,56 +545,7 @@
       });
     });
 
-    // Status Circle Logic (weekday, Saturday, Sunday)
-    function updateStatusCircle() {
-      const circle = document.getElementById('statusCircle');
-      circle.innerHTML = '';
-      const dayOfWeek = new Date().getDay();
-      // Example: 5 segments on weekdays, grey academic on Saturday, single blue on Sunday
-      if (dayOfWeek === 6) { // Saturday
-        const segments = [
-          { key: 'mental',    deg: 0,   color: '#22c55e' },
-          { key: 'physical',  deg: 72,  color: '#fbbf24' },
-          { key: 'spiritual', deg: 144, color: '#3b82f6' },
-          { key: 'academic',  deg: 216, color: '#bdbdbd' },
-          { key: 'social',    deg: 288, color: '#8b5cf6' }
-        ];
-        segments.forEach(seg => {
-          const segment = document.createElement('div');
-          segment.className = `status-segment segment-${seg.key}`;
-          segment.style.background = seg.color;
-          segment.style.transform = `rotate(${seg.deg}deg) skewY(-54deg)`;
-          circle.appendChild(segment);
-        });
-        return;
-      }
-      if (dayOfWeek === 0) { // Sunday
-        const segment = document.createElement('div');
-        segment.className = 'status-segment segment-spiritual';
-        segment.style.background = '#3b82f6';
-        segment.style.transform = 'rotate(0deg) skewY(-54deg)';
-        circle.appendChild(segment);
-        return;
-      }
-      // Weekdays: all colored by status
-      const segments = [
-        { key: 'mental',    deg: 0,   color: '#22c55e' },
-        { key: 'physical',  deg: 72,  color: '#fbbf24' },
-        { key: 'spiritual', deg: 144, color: '#3b82f6' },
-        { key: 'academic',  deg: 216, color: '#bdbdbd' },
-        { key: 'social',    deg: 288, color: '#8b5cf6' }
-      ];
-      segments.forEach(seg => {
-        const segment = document.createElement('div');
-        segment.className = `status-segment segment-${seg.key}`;
-        segment.style.background = seg.color;
-        segment.style.transform = `rotate(${seg.deg}deg) skewY(-54deg)`;
-        circle.appendChild(segment);
-      });
-    }
-    document.addEventListener('DOMContentLoaded', updateStatusCircle);
-
-    // Emergency Contact Functions
+    // --- Emergency Contact Functions ---
     function callContact(number) {
       if (confirm(`Call ${number}? This will open your phone app.`)) {
         window.location.href = `tel:${number}`;
@@ -242,20 +571,15 @@
       contactsGrid.appendChild(div);
     }
 
-    // Perplexity AI Panel mockup
-    document.addEventListener('DOMContentLoaded', function() {
-      const aiSend = document.getElementById('ai-send');
-      if (aiSend) {
-        aiSend.addEventListener('click', async function() {
-          const input = document.getElementById('ai-input').value.trim();
-          const responseDiv = document.getElementById('ai-response');
-          if (!input) { responseDiv.textContent = "Please enter a question or update."; return; }
-          responseDiv.textContent = "Thinking...";
-          setTimeout(() => {
-            responseDiv.textContent = "This is a mock response from Perplexity AI. Replace with real API integration.";
-          }, 1200);
-        });
-      }
+    // --- Perplexity AI Panel mockup ---
+    document.getElementById('ai-send').addEventListener('click', async function() {
+      const input = document.getElementById('ai-input').value.trim();
+      const responseDiv = document.getElementById('ai-response');
+      if (!input) { responseDiv.textContent = "Please enter a question or update."; return; }
+      responseDiv.textContent = "Thinking...";
+      setTimeout(() => {
+        responseDiv.textContent = "This is a mock response from Perplexity AI. Replace with real API integration.";
+      }, 1200);
     });
   </script>
 </body>

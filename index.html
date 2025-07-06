@@ -16,245 +16,90 @@
       --color-text: #13343b;
       --color-primary: #2a4b7c;
       --color-primary-active: #1a6873;
-      --color-alert: #e11d48;
-      --color-yellow: #fbbf24;
-      --color-orange: #fb923c;
-      --color-green: #22c55e;
-      --color-purple: #8b5cf6;
     }
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #fcfcf9;
-      color: var(--color-text);
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      text-align: center;
-      margin-top: 2em;
-    }
-    .tagline {
-      font-size: 1.15em;
-      color: #4b6cb7;
-      margin-top: 0.5em;
-    }
-    .status-indicator {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 1000;
-    }
+    body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fcfcf9; color:var(--color-text); }
+    header { text-align:center; margin:2em 0 1em; }
+    .tagline { font-size:1.15em; color:#4b6cb7; margin-top:0.5em; }
+    .status-indicator { position:fixed; top:24px; right:24px; z-index:1000; }
     .status-circle {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 2px solid var(--color-surface);
-      background: var(--color-grey);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
-      transition: background 0.3s;
-      font-size: 0;
-      min-width: 80px;
-      min-height: 80px;
+      width:80px; height:80px; border-radius:50%; border:2px solid var(--color-surface);
+      background:var(--color-grey); display:flex; align-items:center; justify-content:center;
+      position:relative; overflow:hidden; box-shadow:0 4px 6px rgba(0,0,0,0.04),0 2px 4px rgba(0,0,0,0.02);
+      transition:background 0.3s;
     }
-    .status-circle.segments { background: transparent; }
+    .status-circle.segments { background:transparent; }
     .status-segment {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0);
+      position:absolute; width:100%; height:100%; border-radius:50%;
+      clip-path:polygon(50% 50%,100% 0,100% 100%,0 100%,0 0);
     }
-    .segment-mental    { background: var(--color-mental); }
-    .segment-physical  { background: var(--color-physical); }
-    .segment-spiritual { background: var(--color-spiritual); }
-    .segment-academic  { background: var(--color-academic); }
-    .segment-social    { background: var(--color-social); }
-    .message-icon {
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--color-grey);
-      border: 2px solid var(--color-surface);
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
-      font-size: 40px;
-      color: var(--color-primary);
-      position: relative;
-    }
-    .tooltip {
-      position: absolute;
-      left: 50%;
-      top: 100%;
-      transform: translateX(-50%);
-      background: #222;
-      color: #fff;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 14px;
-      white-space: nowrap;
-      z-index: 10;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .status-segment:focus-visible,
-    .status-segment:hover {
-      outline: 2px solid #333;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 1em;
-      margin: 2em 0 1em 0;
-    }
-    nav button {
-      font-size: 1.1em;
-      padding: 0.5em 1.5em;
-      border-radius: 8px;
-      border: none;
-      background: var(--color-primary);
-      color: #fff;
-      cursor: pointer;
-    }
-    nav button.active { background: var(--color-primary-active); }
-    section {
-      display: none;
-      max-width: 700px;
-      margin: 0 auto;
-      background: var(--color-surface);
-      border-radius: 16px;
-      box-shadow: 0 2px 8px #0001;
-      padding: 2em;
-    }
-    section.active { display: block; }
-    .hidden { display: none !important; }
-    /* Mode Switcher */
-    .mode-switcher {
-      display: flex;
-      justify-content: center;
-      margin: 1em 0;
-      gap: 0.5em;
-    }
+    .mode-switcher { display:flex; justify-content:center; gap:0.5em; margin:1em 0; }
     .mode-btn {
-      padding: 0.5em 1.2em;
-      border-radius: 7px;
-      border: 1px solid #4b6cb7;
-      background: #f3f6fa;
-      color: #2a4b7c;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 1em;
+      padding:0.5em 1.2em; border:1px solid #4b6cb7; background:#f3f6fa; color:#2a4b7c;
+      border-radius:7px; font-weight:bold; cursor:pointer;
     }
-    .mode-btn.active, .mode-btn:focus-visible {
-      background: #2a4b7c;
-      color: #fff;
-      outline: 2px solid #2a4b7c;
-    }
-    /* User Tier Panel */
+    .mode-btn.active { background:var(--color-primary); color:#fff; }
+    .student-controls { display:flex; flex-wrap:wrap; gap:1em; justify-content:center; margin:1em 0; }
+    .student-controls label { font-size:1em; }
     .user-tiers-panel {
-      margin: 2em 0 1em 0;
-      background: #f3f6fa;
-      border-radius: 10px;
-      padding: 1em;
-      box-shadow: 0 1px 4px #0001;
+      background:#f3f6fa; padding:1em; border-radius:10px; max-width:700px;
+      margin:1em auto; box-shadow:0 1px 4px rgba(0,0,0,0.1);
     }
-    .user-tiers-panel h3 { margin-top: 0; }
-    .user-tier-list { list-style: none; padding: 0; }
+    .user-tier-list { list-style:none; padding:0; }
     .user-tier-list li {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 0.5em;
-      font-size: 1em;
+      display:flex; justify-content:space-between; align-items:center; margin:0.5em 0;
     }
-    .user-tier-role {
-      font-weight: bold;
-      margin-left: 0.5em;
-      color: #4b6cb7;
+    .user-tier-role { font-weight:bold; margin-left:0.5em; color:#4b6cb7; }
+    .user-tier-list button {
+      background:#e5e7eb; border:none; padding:0.2em 0.8em; border-radius:6px;
+      cursor:pointer; color:#2a4b7c;
     }
-    .user-tier-controls button {
-      margin-left: 0.5em;
-      border-radius: 6px;
-      border: none;
-      background: #e5e7eb;
-      color: #2a4b7c;
-      padding: 0.2em 0.8em;
-      font-size: 0.95em;
-      cursor: pointer;
+    nav { display:flex; justify-content:center; gap:1em; margin:1em 0; }
+    nav button {
+      padding:0.5em 1.5em; border:none; border-radius:8px;
+      background:var(--color-primary); color:#fff; cursor:pointer;
     }
-    .user-tier-controls button:focus-visible {
-      outline: 2px solid #2a4b7c;
-    }
-    /* Student Controls */
-    .student-controls {
-      margin: 1.5em 0;
-      background: #e5e7eb;
-      border-radius: 8px;
-      padding: 1em;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1em;
-      align-items: center;
-      justify-content: flex-start;
-    }
-    .student-controls label {
-      font-size: 1em;
-      margin-right: 0.5em;
-    }
-    .student-controls input[type="checkbox"] {
-      margin-right: 0.4em;
-      accent-color: #4b6cb7;
-    }
-    /* Accessibility */
-    .visually-hidden { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    nav button.active { background:var(--color-primary-active); }
+    section { display:none; max-width:700px; margin:0 auto; padding:2em; background:var(--color-surface); border-radius:16px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    section.active { display:block; }
+    .contacts-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1em; }
+    .contacts-grid .btn { margin-top:0.5em; padding:0.3em 0.8em; border:none; border-radius:6px; background:var(--color-primary); color:#fff; cursor:pointer; }
+    .perplexity-ai-panel { margin-top:2em; }
+    .perplexity-ai-panel textarea { width:100%; border-radius:6px; padding:0.5em; }
+    .perplexity-ai-panel button { margin-top:0.5em; padding:0.5em 1em; border:none; border-radius:6px; background:var(--color-primary); color:#fff; cursor:pointer; }
+    .ai-response { margin-top:1em; background:#f3f6fa; padding:1em; border-radius:8px; min-height:2em; }
   </style>
 </head>
 <body>
   <header>
-    <h1 style="font-size:2.2em;font-weight:bold;color:#2a4b7c;">Academic Allies</h1>
+    <h1 style="font-size:2.2em;color:var(--color-primary);margin:0;">Academic Allies</h1>
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Status Circle always top right -->
-  <div class="status-indicator" id="statusIndicator">
+  <div class="status-indicator">
     <div id="statusCircle" class="status-circle" tabindex="0" aria-label="Status Circle"></div>
-    <div id="messageIcon" class="message-icon" style="display:none;" aria-label="New message">💬</div>
+    <div id="messageIcon" class="status-circle message-icon" style="display:none;" aria-label="New message">💬</div>
   </div>
 
-  <!-- Mode Switcher -->
-  <div class="mode-switcher" aria-label="Mode Switcher" role="group">
-    <button class="mode-btn active" data-mode="normal" aria-label="Normal Mode">Normal</button>
-    <button class="mode-btn" data-mode="recovery" aria-label="Recovery Mode">Recovery</button>
-    <button class="mode-btn" data-mode="badbrain" aria-label="Bad Brain Day">Bad Brain Day</button>
-    <button class="mode-btn" data-mode="seminope" aria-label="Semi-Nope Day">Semi-Nope</button>
-    <button class="mode-btn" data-mode="nope" aria-label="Nope Day">Nope Day</button>
+  <div class="mode-switcher" role="group" aria-label="Mode Switcher">
+    <button class="mode-btn active" data-mode="normal">Normal</button>
+    <button class="mode-btn" data-mode="recovery">Recovery</button>
+    <button class="mode-btn" data-mode="badbrain">Bad Brain Day</button>
+    <button class="mode-btn" data-mode="seminope">Semi-Nope</button>
+    <button class="mode-btn" data-mode="nope">Nope Day</button>
   </div>
 
-  <!-- Student Controls -->
   <div class="student-controls" aria-label="Student Controls">
     <label><input type="checkbox" id="togglePie" checked> Pie Chart View</label>
-    <label><input type="checkbox" id="toggleEmoji"> Show Emoji in Status Circle</label>
-    <label><input type="checkbox" id="toggleCognitive"> Enable Cognitive Scale</label>
+    <label><input type="checkbox" id="toggleEmoji"> Show Emoji</label>
     <label><input type="checkbox" id="toggleAccessibility" checked> High Contrast</label>
   </div>
 
-  <!-- User Tier Panel -->
-  <div class="user-tiers-panel" aria-label="User Tiers">
+  <div class="user-tiers-panel" aria-label="Support Network">
     <h3>Support Network</h3>
-    <ul class="user-tier-list" id="userTierList">
-      <!-- Populated by JS -->
-    </ul>
-    <div>
-      <button id="addSupportBtn">Add Support</button>
-    </div>
+    <ul id="userTierList" class="user-tier-list"></ul>
+    <button id="addTierBtn">Add Member</button>
   </div>
 
-  <!-- Main Navigation -->
   <nav>
     <button class="nav-btn active" data-section="dashboard">Dashboard</button>
     <button class="nav-btn" data-section="checkins">Check-Ins</button>
@@ -265,321 +110,154 @@
     <button class="nav-btn" data-section="settings">Settings</button>
   </nav>
 
-  <!-- App Sections -->
   <section id="dashboard" class="active">
     <h2>Welcome back, <span id="userName">Mary</span>!</h2>
-    <p>Here's your daily overview. Use the navigation above to check in, review logs, or manage your support network.</p>
+    <p>Your daily overview is here. Use the nav above to navigate the app.</p>
   </section>
-  <section id="checkins">
-    <h2>Daily Check-Ins</h2>
-    <p>Complete your check-in to update your status and notify your support network.</p>
-  </section>
-  <section id="logs">
-    <h2>Logs &amp; History</h2>
-    <p>Review your recent check-ins, flags, and support activity.</p>
-  </section>
+  <section id="checkins"><h2>Daily Check-Ins</h2><p>Update your status now.</p></section>
+  <section id="logs"><h2>Logs &amp; History</h2><p>Review your recent activity.</p></section>
   <section id="admin">
     <h2>Admin Panel</h2>
-    <div class="perplexity-ai-panel" id="perplexity-ai-panel">
-      <h3>Perplexity AI Protocol Support Editor</h3>
-      <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>All changes are logged and visible to the student and Admins.</p>
-      <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or protocol update here..."></textarea>
-      <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
-      <div id="ai-response"></div>
+    <div class="perplexity-ai-panel">
+      <h3>Perplexity AI Protocol Editor</h3>
+      <textarea id="ai-input" rows="4" placeholder="Ask or update protocols..."></textarea>
+      <button id="ai-send">Send</button>
+      <div id="ai-response" class="ai-response"></div>
     </div>
   </section>
-  <section id="messages">
-    <h2>Messages</h2>
-    <div id="messageThread"><p>No new messages. In-app messaging coming soon.</p></div>
-  </section>
+  <section id="messages"><h2>Messages</h2><p>No new messages.</p></section>
   <section id="emergency">
-    <h2>Quick Emergency Contacts</h2>
-    <div class="contacts-grid" id="contactsGrid">
-      <div>
-        <h4>Accessibility Services</h4>
-        <p>208-496-9210<br>accessibility@byui.edu</p>
-        <button class="btn" onclick="callContact('2084969210')">Call</button>
-        <button class="btn" onclick="emailContact('accessibility@byui.edu')">Email</button>
-      </div>
-      <div>
-        <h4>Testing Center</h4>
-        <p>208-496-1750<br>testingcenter@byui.edu</p>
-        <button class="btn" onclick="callContact('2084961750')">Call</button>
-        <button class="btn" onclick="emailContact('testingcenter@byui.edu')">Email</button>
-      </div>
-      <div>
-        <h4>Counseling Center</h4>
-        <p>208-496-9370<br>counselingcenter@byui.edu</p>
-        <button class="btn" onclick="callContact('2084969370')">Call</button>
-        <button class="btn" onclick="emailContact('counselingcenter@byui.edu')">Email</button>
-      </div>
+    <h2>Emergency Contacts</h2>
+    <div class="contacts-grid">
+      <div><h4>Accessibility Services</h4><p>208-496-9210<br>accessibility@byui.edu</p><button class="btn" onclick="callContact('2084969210')">Call</button><button class="btn" onclick="emailContact('accessibility@byui.edu')">Email</button></div>
+      <div><h4>Testing Center</h4><p>208-496-1750<br>testingcenter@byui.edu</p><button class="btn" onclick="callContact('2084961750')">Call</button><button class="btn" onclick="emailContact('testingcenter@byui.edu')">Email</button></div>
+      <div><h4>Counseling Center</h4><p>208-496-9370<br>counselingcenter@byui.edu</p><button class="btn" onclick="callContact('2084969370')">Call</button><button class="btn" onclick="emailContact('counselingcenter@byui.edu')">Email</button></div>
     </div>
-    <button class="btn" onclick="addCustomContact()">Add Custom Contact</button>
+    <button class="btn" onclick="addCustomContact()">Add Contact</button>
   </section>
-  <section id="settings">
-    <h2>Settings</h2>
-    <p>Customize your experience, notification preferences, and accessibility options.</p>
-  </section>
+  <section id="settings"><h2>Settings</h2><p>Customize your experience.</p></section>
 
   <script>
-    // --- User Tier Logic ---
+    // User tiers
+    const currentUser = 'Mary';
     const userTiers = [
-      { name: "Mary", role: "Student", email: "students@email", canEdit: false },
-      { name: "Mom", role: "Family", email: "moms@email", canEdit: false },
-      { name: "Brinckmyster", role: "Admin", email: "your@email", canEdit: true },
-      { name: "Karen", role: "Support", email: "KarenBrinckFH@gmail.com", canEdit: true },
-      { name: "Nearby Help", role: "Nearby Help", email: "neighbor@email", canEdit: true }
+      {name:"Mary",role:"Student",email:"mbrinck90@gmail.com"},
+      {name:"Brinckmyster",role:"Admin",email:"Brinckmyster@gmail.com"},
+      {name:"Mom",role:"Family",email:"dorothy.brinck@gmail.com"},
+      {name:"Support test",role:"Support",email:"KarenBrinckFH@gmail.com"},
+      {name:"Nearby Help test",role:"Nearby Help",email:"KarenBrinck@gmail.com"}
     ];
     function renderUserTiers() {
-      const ul = document.getElementById('userTierList');
-      ul.innerHTML = '';
-      userTiers.forEach((u, i) => {
-        const li = document.createElement('li');
-        li.innerHTML = `<span>${u.name} <span class="user-tier-role">${u.role}</span> <span style="color:#626c71;font-size:0.95em;">${u.email}</span></span>`;
-        const controls = document.createElement('span');
-        controls.className = 'user-tier-controls';
-        if (u.role !== "Student") {
-          controls.innerHTML = `<button onclick="removeTier(${i})" aria-label="Remove ${u.name}">Remove</button>`;
+      const ul=document.getElementById('userTierList'); ul.innerHTML='';
+      userTiers.forEach((u,i)=>{
+        const li=document.createElement('li');
+        li.innerHTML=`<span>${u.name}<span class="user-tier-role">${u.role}</span>
+                      <span style="color:#626c71;font-size:0.95em;">${u.email}</span></span>`;
+        if(currentUser==='Mary'&&u.role!=='Student'){
+          const btn=document.createElement('button');
+          btn.textContent='Remove'; btn.onclick=()=>{userTiers.splice(i,1);renderUserTiers();};
+          li.appendChild(btn);
         }
-        li.appendChild(controls);
         ul.appendChild(li);
       });
     }
-    function removeTier(idx) {
-      if (userTiers[idx].role !== "Student") {
-        userTiers.splice(idx, 1);
-        renderUserTiers();
-      }
-    }
-    document.getElementById('addSupportBtn').onclick = function() {
-      const name = prompt('Support Name:');
-      if (!name) return;
-      const email = prompt('Email:');
-      if (!email) return;
-      userTiers.push({ name, role: "Support", email, canEdit: true });
-      renderUserTiers();
+    document.getElementById('addTierBtn').onclick=()=>{
+      if(currentUser!=='Mary')return;
+      const name=prompt('Name:'); if(!name)return;
+      const email=prompt('Email:'); if(!email)return;
+      const tier=prompt('Tier (Family, Support, Admin, Nearby Help):');
+      if(!tier||tier==='Student'){alert('Cannot add Student.');return;}
+      userTiers.push({name,role:tier,email}); renderUserTiers();
     };
     renderUserTiers();
 
-    // --- Mode Switcher Logic ---
-    let currentMode = 'normal';
-    document.querySelectorAll('.mode-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentMode = this.dataset.mode;
-        // Mode-specific logic here (UI simplification, etc.)
-        updateStatusCircle();
+    // Mode switcher
+    let currentMode='normal', currentView='pie', showEmoji=false;
+    document.querySelectorAll('.mode-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active'); currentMode=btn.dataset.mode; updateStatusCircle();
       });
     });
 
-    // --- Student Controls ---
-    document.getElementById('togglePie').addEventListener('change', function() {
-      currentView = this.checked ? 'pie' : 'single';
-      updateStatusCircle();
+    // Student controls
+    document.getElementById('togglePie').addEventListener('change',e=>{
+      currentView=e.target.checked?'pie':'single'; updateStatusCircle();
     });
-    document.getElementById('toggleEmoji').addEventListener('change', function() {
-      showEmoji = this.checked;
-      updateStatusCircle();
-    });
-    document.getElementById('toggleCognitive').addEventListener('change', function() {
-      enableCognitive = this.checked;
-      // Add cognitive scale logic if enabled
-    });
-    document.getElementById('toggleAccessibility').addEventListener('change', function() {
-      document.body.style.background = this.checked ? "#fcfcf9" : "#fff";
+    document.getElementById('toggleEmoji').addEventListener('change',e=>{
+      showEmoji=e.target.checked; updateStatusCircle();
     });
 
-    // --- Status Circle Logic (auto, ADA, weekend, bad brain day, message icon) ---
-    let currentView = 'pie'; // 'pie' or 'single'
-    let isBadBrainDay = false;
-    let newMessageWaiting = false;
-    let showEmoji = false;
-    let enableCognitive = false;
+    // Nav
+    document.querySelectorAll('nav button').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+        document.getElementById(btn.dataset.section).classList.add('active');
+      });
+    });
 
-    // Simulated status for demo; replace with real automation
-    const statusColors = {
-      mental:    'var(--color-mental)',
-      physical:  'var(--color-physical)',
-      spiritual: 'var(--color-spiritual)',
-      academic:  'var(--color-academic)',
-      social:    'var(--color-social)',
-      overall:   'var(--color-mental)' // Replace with real logic
-    };
-    const tooltips = {
-      mental:    'Mental status',
-      physical:  'Physical status',
-      spiritual: 'Spiritual status',
-      academic:  'Academic status',
-      academicSat: 'Academic Saturday status. No color showing.',
-      social:    'Social status',
-      sunday:    'Spiritual check-in only for Sunday.',
-      overall:   'Your overall status for the week.'
-    };
-
-    let tooltipDiv = null;
-    function showTooltip(e, text) {
-      hideTooltip();
-      tooltipDiv = document.createElement('div');
-      tooltipDiv.className = 'tooltip';
-      tooltipDiv.innerText = text;
-      document.body.appendChild(tooltipDiv);
-      const rect = e.target.getBoundingClientRect();
-      tooltipDiv.style.left = (rect.left + rect.width/2) + 'px';
-      tooltipDiv.style.top = (rect.bottom + 6) + 'px';
-      tooltipDiv.style.opacity = 1;
-    }
-    function hideTooltip() {
-      if (tooltipDiv) { tooltipDiv.remove(); tooltipDiv = null; }
-    }
-    window.addEventListener('scroll', hideTooltip);
-    window.addEventListener('click', hideTooltip);
-
-    function updateStatusCircle() {
-      const circle = document.getElementById('statusCircle');
-      const messageIcon = document.getElementById('messageIcon');
-      circle.innerHTML = '';
-      circle.className = 'status-circle';
-      circle.removeAttribute('aria-label');
-      messageIcon.style.display = 'none';
-
-      // Bad brain day logic: hide window unless new message triggers icon
-      if (currentMode === 'badbrain') {
-        circle.style.display = 'none';
-        if (newMessageWaiting) {
-          messageIcon.style.display = 'flex';
-        } else {
-          messageIcon.style.display = 'none';
-        }
-        return;
-      } else {
-        circle.style.display = 'flex';
-        messageIcon.style.display = 'none';
-      }
-
-      const today = new Date();
-      const dayOfWeek = today.getDay(); // 0 = Sunday, 6 = Saturday
-
-      // --- SEGMENTED PIE CHART VIEW ---
-      if (currentView === 'pie') {
-        // --- SATURDAY LOGIC ---
-        if (dayOfWeek === 6) {
+    // Status circle
+    const statusColors={mental:'var(--color-mental)',physical:'var(--color-physical)',spiritual:'var(--color-spiritual)',academic:'var(--color-academic)',social:'var(--color-social)',overall:'var(--color-mental)'};
+    const tooltips={mental:'Mental status',physical:'Physical status',spiritual:'Spiritual status',academic:'Academic status',academicSat:'Academic Saturday status. No color showing.',social:'Social status',sunday:'Spiritual check-in only for Sunday.',overall:'Your overall status for the week.'};
+    function updateStatusCircle(){
+      const circle=document.getElementById('statusCircle');
+      circle.innerHTML=''; circle.className='status-circle';
+      const d=new Date().getDay();
+      if(currentMode==='badbrain'){ circle.style.display='none';return; }
+      circle.style.display='flex';
+      if(currentView==='pie'){
+        if(d===6){
           circle.classList.add('segments');
-          const segments = [
-            { key: 'mental',    deg: 0,   color: statusColors.mental,    tooltip: tooltips.mental },
-            { key: 'physical',  deg: 72,  color: statusColors.physical,  tooltip: tooltips.physical },
-            { key: 'spiritual', deg: 144, color: statusColors.spiritual, tooltip: tooltips.spiritual },
-            { key: 'academic',  deg: 216, color: statusColors.academic,  tooltip: tooltips.academicSat },
-            { key: 'social',    deg: 288, color: statusColors.social,    tooltip: tooltips.social }
-          ];
-          segments.forEach(seg => {
-            const segment = document.createElement('div');
-            segment.className = `status-segment segment-${seg.key}`;
-            segment.style.background = seg.color;
-            segment.style.transform = `rotate(${seg.deg}deg) skewY(-54deg)`;
-            segment.setAttribute('aria-label', seg.tooltip);
-            if (seg.key === 'academic') {
-              segment.setAttribute('tabindex', '0');
-              segment.addEventListener('mouseenter', e => showTooltip(e, seg.tooltip));
-              segment.addEventListener('focus', e => showTooltip(e, seg.tooltip));
-              segment.addEventListener('mouseleave', hideTooltip);
-              segment.addEventListener('blur', hideTooltip);
-            } else {
-              segment.title = seg.tooltip;
-            }
-            circle.appendChild(segment);
+          [['mental',0],[ 'physical',72],['spiritual',144],['academic',216],['social',288]].forEach(([k,deg])=>{
+            const seg=document.createElement('div');
+            seg.className=`status-segment segment-${k}`;
+            seg.style.background=(k==='academic'?tooltips.academicSat:statusColors[k]);
+            seg.style.transform=`rotate(${deg}deg) skewY(-54deg)`;
+            circle.appendChild(seg);
           });
           return;
         }
-        // --- SUNDAY LOGIC ---
-        if (dayOfWeek === 0) {
-          circle.classList.remove('segments');
-          circle.style.background = statusColors.spiritual;
-          circle.setAttribute('tabindex', '0');
-          circle.setAttribute('aria-label', tooltips.sunday);
-          circle.title = tooltips.sunday;
+        if(d===0){
+          circle.style.background=statusColors.spiritual;
+          circle.setAttribute('aria-label',tooltips.sunday);
           return;
         }
-        // --- WEEKDAY LOGIC ---
         circle.classList.add('segments');
-        const segments = [
-          { key: 'mental',    deg: 0,   color: statusColors.mental,    tooltip: tooltips.mental },
-          { key: 'physical',  deg: 72,  color: statusColors.physical,  tooltip: tooltips.physical },
-          { key: 'spiritual', deg: 144, color: statusColors.spiritual, tooltip: tooltips.spiritual },
-          { key: 'academic',  deg: 216, color: statusColors.academic,  tooltip: tooltips.academic },
-          { key: 'social',    deg: 288, color: statusColors.social,    tooltip: tooltips.social }
-        ];
-        segments.forEach(seg => {
-          const segment = document.createElement('div');
-          segment.className = `status-segment segment-${seg.key}`;
-          segment.style.background = seg.color;
-          segment.style.transform = `rotate(${seg.deg}deg) skewY(-54deg)`;
-          segment.title = seg.tooltip;
-          circle.appendChild(segment);
+        [['mental',0],['physical',72],['spiritual',144],['academic',216],['social',288]].forEach(([k,deg])=>{
+          const seg=document.createElement('div');
+          seg.className=`status-segment segment-${k}`;
+          seg.style.background=statusColors[k];
+          seg.style.transform=`rotate(${deg}deg) skewY(-54deg)`;
+          circle.appendChild(seg);
         });
-        return;
-      }
-      // --- SINGLE COLOR OVERALL VIEW ---
-      circle.classList.remove('segments');
-      circle.style.background = statusColors.overall; // Replace with computed overall status
-      circle.setAttribute('tabindex', '0');
-      if (dayOfWeek === 0) {
-        circle.setAttribute('aria-label', tooltips.overall);
-        circle.title = tooltips.overall;
       } else {
-        circle.setAttribute('aria-label', 'Your overall status.');
-        circle.title = 'Your overall status.';
+        circle.style.background=statusColors.overall;
       }
     }
-
-    // Initialize on load
     updateStatusCircle();
 
-    // --- Navigation logic ---
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-        document.getElementById(this.dataset.section).classList.add('active');
-      });
-    });
-
-    // --- Emergency Contact Functions ---
-    function callContact(number) {
-      if (confirm(`Call ${number}? This will open your phone app.`)) {
-        window.location.href = `tel:${number}`;
-      }
-    }
-    function emailContact(email) {
-      if (confirm(`Send email to ${email}? This will open your email app.`)) {
-        window.location.href = `mailto:${email}?subject=Student Support Request`;
-      }
-    }
-    function addCustomContact() {
-      const name = prompt('Contact Name:');
-      if (!name) return;
-      const phone = prompt('Phone Number (optional):');
-      const email = prompt('Email (optional):');
-      const contactsGrid = document.getElementById('contactsGrid');
-      const div = document.createElement('div');
-      div.innerHTML = `<h4>${name}</h4>
-        <p>${phone ? phone + '<br>' : ''}${email ? email : ''}</p>
-        ${phone ? `<button class="btn" onclick="callContact('${phone}')">Call</button>` : ''}
-        ${email ? `<button class="btn" onclick="emailContact('${email}')">Email</button>` : ''}
+    // Emergency contacts
+    window.callContact=num=>confirm(`Call ${num}?`)&& (window.location=`tel:${num}`);
+    window.emailContact=em=>confirm(`Email ${em}?`)&& (window.location=`mailto:${em}`);
+    window.addCustomContact=()=>{
+      const name=prompt('Contact Name:'),phone=prompt('Phone:'),em=prompt('Email:');
+      if(!name) return;
+      const div=document.createElement('div');
+      div.innerHTML=`<h4>${name}</h4><p>${phone?phone+'<br>':''}${em||''}</p>
+        ${phone?`<button class="btn" onclick="callContact('${phone}')">Call</button>`:''}
+        ${em?`<button class="btn" onclick="emailContact('${em}')">Email</button>`:''}
         <button class="btn" onclick="this.parentElement.remove()">Remove</button>`;
-      contactsGrid.appendChild(div);
-    }
+      document.querySelector('.contacts-grid').appendChild(div);
+    };
 
-    // --- Perplexity AI Panel mockup ---
-    document.getElementById('ai-send').addEventListener('click', async function() {
-      const input = document.getElementById('ai-input').value.trim();
-      const responseDiv = document.getElementById('ai-response');
-      if (!input) { responseDiv.textContent = "Please enter a question or update."; return; }
-      responseDiv.textContent = "Thinking...";
-      setTimeout(() => {
-        responseDiv.textContent = "This is a mock response from Perplexity AI. Replace with real API integration.";
-      }, 1200);
+    // Perplexity AI mock
+    document.getElementById('ai-send').addEventListener('click',()=>{
+      const inpt=document.getElementById('ai-input'),out=document.getElementById('ai-response');
+      if(!inpt.value.trim()){out.textContent='Please enter text.';return;}
+      out.textContent='Thinking...';
+      setTimeout(()=>out.textContent='Mock response. Replace with real API.',1200);
     });
   </script>
 </body>

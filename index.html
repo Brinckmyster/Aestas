@@ -7,7 +7,7 @@
   <meta name="description" content="Academic Allies: Your disability accommodations and support network">
   <link rel="stylesheet" href="style.css">
 
-  <!-- 1. Load Google Identity Services -->
+  <!-- Load Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -17,15 +17,15 @@
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- 2. Google Sign-In Button Container -->
+  <!-- Google Sign-In Button Container -->
   <div id="googleSignInContainer" class="google-signin"></div>
 
-  <!-- 3. Day-Mode Status Circle -->
+  <!-- Day-Mode Status Circle -->
   <div class="status-indicator">
     <button id="statusCircle" class="status-circle" aria-label="Current status: normal"></button>
   </div>
 
-  <!-- 4. Main Navigation -->
+  <!-- Main Navigation -->
   <nav id="mainNav" class="nav-bar" role="navigation" aria-label="Main Navigation">
     <button data-sec="dashboard" class="nav-btn active">Dashboard</button>
     <button data-sec="checkins" class="nav-btn">Check-Ins</button>
@@ -64,7 +64,7 @@
 
     <!-- Logs -->
     <section id="logs">
-      <h2>Logs &amp; History</h2>
+      <h2>Logs & History</h2>
       <div id="logsList" class="logs-list">Loading…</div>
     </section>
 
@@ -90,7 +90,7 @@
       <label><input type="checkbox" id="segmentView"> Status Segment View</label>
     </section>
 
-    <!-- Admin -->
+    <!-- Admin Panel -->
     <section id="admin">
       <h2>Admin Panel</h2>
       <div id="perplexity-ai-panel">
@@ -102,7 +102,7 @@
     </section>
   </main>
 
-  <!-- 5. App Logic -->
+  <!-- Application Logic -->
   <script type="module" src="app.js" defer></script>
 </body>
 </html>

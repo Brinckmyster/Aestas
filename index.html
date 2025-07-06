@@ -4,260 +4,118 @@
   <meta charset="UTF-8">
   <title>Academic Allies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
   <style>
-    :root {
-      --color-mental: #22c55e;
-      --color-physical: #fbbf24;
-      --color-spiritual: #3b82f6;
-      --color-academic: #bdbdbd;
-      --color-social: #8b5cf6;
-      --color-grey: #e5e7eb;
-      --color-surface: #fff;
-      --color-text: #13343b;
-      --color-primary: #2a4b7c;
-      --color-primary-active: #1a6873;
-    }
-    body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fcfcf9; color:var(--color-text); }
-    header { text-align:center; margin:2em 0 1em; }
-    .tagline { font-size:1.15em; color:#4b6cb7; margin-top:0.5em; }
-    .status-indicator { position:fixed; top:24px; right:24px; z-index:1000; }
-    .status-circle {
-      width:80px; height:80px; border-radius:50%; border:2px solid var(--color-surface);
-      background:var(--color-grey); display:flex; align-items:center; justify-content:center;
-      position:relative; overflow:hidden; box-shadow:0 4px 6px rgba(0,0,0,0.04),0 2px 4px rgba(0,0,0,0.02);
-      transition:background 0.3s;
-    }
-    .status-circle.segments { background:transparent; }
-    .status-segment {
-      position:absolute; width:100%; height:100%; border-radius:50%;
-      clip-path:polygon(50% 50%,100% 0,100% 100%,0 100%,0 0);
-    }
-    .mode-switcher { display:flex; justify-content:center; gap:0.5em; margin:1em 0; }
-    .mode-btn {
-      padding:0.5em 1.2em; border:1px solid #4b6cb7; background:#f3f6fa; color:#2a4b7c;
-      border-radius:7px; font-weight:bold; cursor:pointer;
-    }
-    .mode-btn.active { background:var(--color-primary); color:#fff; }
-    .student-controls { display:flex; flex-wrap:wrap; gap:1em; justify-content:center; margin:1em 0; }
-    .student-controls label { font-size:1em; }
-    .user-tiers-panel {
-      background:#f3f6fa; padding:1em; border-radius:10px; max-width:700px;
-      margin:1em auto; box-shadow:0 1px 4px rgba(0,0,0,0.1);
-    }
-    .user-tier-list { list-style:none; padding:0; }
-    .user-tier-list li {
-      display:flex; justify-content:space-between; align-items:center; margin:0.5em 0;
-    }
-    .user-tier-role { font-weight:bold; margin-left:0.5em; color:#4b6cb7; }
-    .user-tier-list button {
-      background:#e5e7eb; border:none; padding:0.2em 0.8em; border-radius:6px;
-      cursor:pointer; color:#2a4b7c;
-    }
-    nav { display:flex; justify-content:center; gap:1em; margin:1em 0; }
-    nav button {
-      padding:0.5em 1.5em; border:none; border-radius:8px;
-      background:var(--color-primary); color:#fff; cursor:pointer;
-    }
-    nav button.active { background:var(--color-primary-active); }
-    section { display:none; max-width:700px; margin:0 auto; padding:2em; background:var(--color-surface); border-radius:16px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-    section.active { display:block; }
-    .contacts-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1em; }
-    .contacts-grid .btn { margin-top:0.5em; padding:0.3em 0.8em; border:none; border-radius:6px; background:var(--color-primary); color:#fff; cursor:pointer; }
-    .perplexity-ai-panel { margin-top:2em; }
-    .perplexity-ai-panel textarea { width:100%; border-radius:6px; padding:0.5em; }
-    .perplexity-ai-panel button { margin-top:0.5em; padding:0.5em 1em; border:none; border-radius:6px; background:var(--color-primary); color:#fff; cursor:pointer; }
-    .ai-response { margin-top:1em; background:#f3f6fa; padding:1em; border-radius:8px; min-height:2em; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fcfcf9; color: #13343b; margin: 0; }
+    header { text-align: center; margin-top: 2em; }
+    .tagline { font-size: 1.15em; color: #4b6cb7; margin-top: 0.5em; }
+    .google-signin { display: flex; justify-content: center; margin: 2em 0; }
+    .hidden { display: none !important; }
+    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
+    nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
+    nav button.active { background: #2a4b7c; }
+    section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+    section.active { display: block; }
+    .perplexity-ai-panel { margin-top: 2em; }
+    .ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em; }
   </style>
 </head>
 <body>
   <header>
-    <h1 style="font-size:2.2em;color:var(--color-primary);margin:0;">Academic Allies</h1>
+    <h1 style="font-size:2.2em;font-weight:bold;color:#2a4b7c;">Academic Allies</h1>
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <div class="status-indicator">
-    <div id="statusCircle" class="status-circle" tabindex="0" aria-label="Status Circle"></div>
-    <div id="messageIcon" class="status-circle message-icon" style="display:none;" aria-label="New message">💬</div>
+  <!-- Google Sign-In Button Centered, above dashboard -->
+  <div class="google-signin" id="googleSignInContainer">
+    <div id="g_id_onload"
+         data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false"></div>
+    <div id="g_id_signin"
+         class="g_id_signin"
+         data-type="standard"
+         data-shape="rectangular"
+         data-theme="outline"
+         data-text="signin_with"
+         data-size="large"
+         data-logo_alignment="left"></div>
   </div>
 
-  <div class="mode-switcher" role="group" aria-label="Mode Switcher">
-    <button class="mode-btn active" data-mode="normal">Normal</button>
-    <button class="mode-btn" data-mode="recovery">Recovery</button>
-    <button class="mode-btn" data-mode="badbrain">Bad Brain Day</button>
-    <button class="mode-btn" data-mode="seminope">Semi-Nope</button>
-    <button class="mode-btn" data-mode="nope">Nope Day</button>
-  </div>
+  <!-- Modular Status Circle (top right) -->
+  <div id="statusCircleContainer"></div>
+  <script>
+    fetch('components/status-circle.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('statusCircleContainer').innerHTML = html;
+      });
+  </script>
 
-  <div class="student-controls" aria-label="Student Controls">
-    <label><input type="checkbox" id="togglePie" checked> Pie Chart View</label>
-    <label><input type="checkbox" id="toggleEmoji"> Show Emoji</label>
-    <label><input type="checkbox" id="toggleAccessibility" checked> High Contrast</label>
-  </div>
-
-  <div class="user-tiers-panel" aria-label="Support Network">
-    <h3>Support Network</h3>
-    <ul id="userTierList" class="user-tier-list"></ul>
-    <button id="addTierBtn">Add Member</button>
-  </div>
-
+  <!-- Main Navigation -->
   <nav>
     <button class="nav-btn active" data-section="dashboard">Dashboard</button>
     <button class="nav-btn" data-section="checkins">Check-Ins</button>
     <button class="nav-btn" data-section="logs">Logs</button>
     <button class="nav-btn" data-section="admin">Admin Panel</button>
-    <button class="nav-btn" data-section="messages">Messages</button>
-    <button class="nav-btn" data-section="emergency">Emergency</button>
     <button class="nav-btn" data-section="settings">Settings</button>
   </nav>
 
+  <!-- App Sections -->
   <section id="dashboard" class="active">
     <h2>Welcome back, <span id="userName">Mary</span>!</h2>
-    <p>Your daily overview is here. Use the nav above to navigate the app.</p>
+    <p>Here's your daily overview. Use the navigation above to check in, review logs, or manage your support network.</p>
   </section>
-  <section id="checkins"><h2>Daily Check-Ins</h2><p>Update your status now.</p></section>
-  <section id="logs"><h2>Logs &amp; History</h2><p>Review your recent activity.</p></section>
+  <section id="checkins">
+    <h2>Daily Check-Ins</h2>
+    <p>Complete your check-in to update your status and notify your support network.</p>
+  </section>
+  <section id="logs">
+    <h2>Logs &amp; History</h2>
+    <p>Review your recent check-ins, flags, and support activity.</p>
+  </section>
   <section id="admin">
     <h2>Admin Panel</h2>
-    <div class="perplexity-ai-panel">
-      <h3>Perplexity AI Protocol Editor</h3>
-      <textarea id="ai-input" rows="4" placeholder="Ask or update protocols..."></textarea>
-      <button id="ai-send">Send</button>
+    <div class="perplexity-ai-panel" id="perplexity-ai-panel">
+      <h3>Perplexity AI Protocol Support Editor</h3>
+      <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>All changes are logged and visible to the student and Admins.</p>
+      <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or protocol update here..."></textarea>
+      <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
       <div id="ai-response" class="ai-response"></div>
     </div>
   </section>
-  <section id="messages"><h2>Messages</h2><p>No new messages.</p></section>
-  <section id="emergency">
-    <h2>Emergency Contacts</h2>
-    <div class="contacts-grid">
-      <div><h4>Accessibility Services</h4><p>208-496-9210<br>accessibility@byui.edu</p><button class="btn" onclick="callContact('2084969210')">Call</button><button class="btn" onclick="emailContact('accessibility@byui.edu')">Email</button></div>
-      <div><h4>Testing Center</h4><p>208-496-1750<br>testingcenter@byui.edu</p><button class="btn" onclick="callContact('2084961750')">Call</button><button class="btn" onclick="emailContact('testingcenter@byui.edu')">Email</button></div>
-      <div><h4>Counseling Center</h4><p>208-496-9370<br>counselingcenter@byui.edu</p><button class="btn" onclick="callContact('2084969370')">Call</button><button class="btn" onclick="emailContact('counselingcenter@byui.edu')">Email</button></div>
-    </div>
-    <button class="btn" onclick="addCustomContact()">Add Contact</button>
+  <section id="settings">
+    <h2>Settings</h2>
+    <p>Customize your experience, notification preferences, and accessibility options.</p>
   </section>
-  <section id="settings"><h2>Settings</h2><p>Customize your experience.</p></section>
 
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
-    // User tiers
-    const currentUser = 'Mary';
-    const userTiers = [
-      {name:"Mary",role:"Student",email:"mbrinck90@gmail.com"},
-      {name:"Brinckmyster",role:"Admin",email:"Brinckmyster@gmail.com"},
-      {name:"Mom",role:"Family",email:"dorothy.brinck@gmail.com"},
-      {name:"Support test",role:"Support",email:"KarenBrinckFH@gmail.com"},
-      {name:"Nearby Help test",role:"Nearby Help",email:"KarenBrinck@gmail.com"}
-    ];
-    function renderUserTiers() {
-      const ul=document.getElementById('userTierList'); ul.innerHTML='';
-      userTiers.forEach((u,i)=>{
-        const li=document.createElement('li');
-        li.innerHTML=`<span>${u.name}<span class="user-tier-role">${u.role}</span>
-                      <span style="color:#626c71;font-size:0.95em;">${u.email}</span></span>`;
-        if(currentUser==='Mary'&&u.role!=='Student'){
-          const btn=document.createElement('button');
-          btn.textContent='Remove'; btn.onclick=()=>{userTiers.splice(i,1);renderUserTiers();};
-          li.appendChild(btn);
-        }
-        ul.appendChild(li);
-      });
-    }
-    document.getElementById('addTierBtn').onclick=()=>{
-      if(currentUser!=='Mary')return;
-      const name=prompt('Name:'); if(!name)return;
-      const email=prompt('Email:'); if(!email)return;
-      const tier=prompt('Tier (Family, Support, Admin, Nearby Help):');
-      if(!tier||tier==='Student'){alert('Cannot add Student.');return;}
-      userTiers.push({name,role:tier,email}); renderUserTiers();
-    };
-    renderUserTiers();
-
-    // Mode switcher
-    let currentMode='normal', currentView='pie', showEmoji=false;
-    document.querySelectorAll('.mode-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active'); currentMode=btn.dataset.mode; updateStatusCircle();
-      });
-    });
-
-    // Student controls
-    document.getElementById('togglePie').addEventListener('change',e=>{
-      currentView=e.target.checked?'pie':'single'; updateStatusCircle();
-    });
-    document.getElementById('toggleEmoji').addEventListener('change',e=>{
-      showEmoji=e.target.checked; updateStatusCircle();
-    });
-
-    // Nav
-    document.querySelectorAll('nav button').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-        document.getElementById(btn.dataset.section).classList.add('active');
-      });
-    });
-
-    // Status circle
-    const statusColors={mental:'var(--color-mental)',physical:'var(--color-physical)',spiritual:'var(--color-spiritual)',academic:'var(--color-academic)',social:'var(--color-social)',overall:'var(--color-mental)'};
-    const tooltips={mental:'Mental status',physical:'Physical status',spiritual:'Spiritual status',academic:'Academic status',academicSat:'Academic Saturday status. No color showing.',social:'Social status',sunday:'Spiritual check-in only for Sunday.',overall:'Your overall status for the week.'};
-    function updateStatusCircle(){
-      const circle=document.getElementById('statusCircle');
-      circle.innerHTML=''; circle.className='status-circle';
-      const d=new Date().getDay();
-      if(currentMode==='badbrain'){ circle.style.display='none';return; }
-      circle.style.display='flex';
-      if(currentView==='pie'){
-        if(d===6){
-          circle.classList.add('segments');
-          [['mental',0],[ 'physical',72],['spiritual',144],['academic',216],['social',288]].forEach(([k,deg])=>{
-            const seg=document.createElement('div');
-            seg.className=`status-segment segment-${k}`;
-            seg.style.background=(k==='academic'?tooltips.academicSat:statusColors[k]);
-            seg.style.transform=`rotate(${deg}deg) skewY(-54deg)`;
-            circle.appendChild(seg);
-          });
-          return;
-        }
-        if(d===0){
-          circle.style.background=statusColors.spiritual;
-          circle.setAttribute('aria-label',tooltips.sunday);
-          return;
-        }
-        circle.classList.add('segments');
-        [['mental',0],['physical',72],['spiritual',144],['academic',216],['social',288]].forEach(([k,deg])=>{
-          const seg=document.createElement('div');
-          seg.className=`status-segment segment-${k}`;
-          seg.style.background=statusColors[k];
-          seg.style.transform=`rotate(${deg}deg) skewY(-54deg)`;
-          circle.appendChild(seg);
-        });
-      } else {
-        circle.style.background=statusColors.overall;
-      }
-    }
-    updateStatusCircle();
-
-    // Emergency contacts
-    window.callContact=num=>confirm(`Call ${num}?`)&& (window.location=`tel:${num}`);
-    window.emailContact=em=>confirm(`Email ${em}?`)&& (window.location=`mailto:${em}`);
-    window.addCustomContact=()=>{
-      const name=prompt('Contact Name:'),phone=prompt('Phone:'),em=prompt('Email:');
-      if(!name) return;
-      const div=document.createElement('div');
-      div.innerHTML=`<h4>${name}</h4><p>${phone?phone+'<br>':''}${em||''}</p>
-        ${phone?`<button class="btn" onclick="callContact('${phone}')">Call</button>`:''}
-        ${em?`<button class="btn" onclick="emailContact('${em}')">Email</button>`:''}
-        <button class="btn" onclick="this.parentElement.remove()">Remove</button>`;
-      document.querySelector('.contacts-grid').appendChild(div);
+    // Google Sign-In logic
+    window.handleCredentialResponse = function(response) {
+      document.getElementById('googleSignInContainer').classList.add('hidden');
+      document.getElementById('userName').textContent = "You"; // Optionally parse JWT for real name
     };
 
-    // Perplexity AI mock
-    document.getElementById('ai-send').addEventListener('click',()=>{
-      const inpt=document.getElementById('ai-input'),out=document.getElementById('ai-response');
-      if(!inpt.value.trim()){out.textContent='Please enter text.';return;}
-      out.textContent='Thinking...';
-      setTimeout(()=>out.textContent='Mock response. Replace with real API.',1200);
+    // Navigation logic
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(this.dataset.section).classList.add('active');
+      });
+    });
+
+    // Perplexity AI Panel mockup
+    document.getElementById('ai-send').addEventListener('click', async function() {
+      const input = document.getElementById('ai-input').value.trim();
+      const responseDiv = document.getElementById('ai-response');
+      if (!input) { responseDiv.textContent = "Please enter a question or update."; return; }
+      responseDiv.textContent = "Thinking...";
+      setTimeout(() => {
+        responseDiv.textContent = "This is a mock response from Perplexity AI. Replace with real API integration.";
+      }, 1200);
     });
   </script>
 </body>

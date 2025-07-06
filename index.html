@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <title>Academic Allies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
       --color-background: #fcfcf9;
@@ -36,9 +41,30 @@
       font-size: 0;
       min-width: 80px; min-height: 80px;
     }
-    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
+    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; flex-wrap: wrap; }
     nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
     nav button.active { background: #2a4b7c; }
+    .icon-btn {
+      padding: 0.5em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0.5em;
+    }
+    .icon-btn img {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+    .icon-btn:focus,
+    .icon-btn:hover {
+      background: rgba(33, 128, 141, 0.08);
+      border-radius: 6px;
+      outline: 2px solid #21808d;
+    }
     section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; }
     section.active { display: block; }
     .dashboard-summary { background: #fff; color: #1a2633; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; margin-top: 1.5em; }
@@ -86,9 +112,13 @@
          data-logo_alignment="left"></div>
   </div>
 
-  <!-- Main Navigation -->
+  <!-- Main Navigation with Home Icon -->
   <nav>
-    <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+    <!-- Home icon button -->
+    <button class="nav-btn icon-btn" aria-label="Home" onclick="showSection('dashboard')">
+      <img src="academic-allies.png" alt="" />
+    </button>
+    <button class="nav-btn" data-section="dashboard">Dashboard</button>
     <button class="nav-btn" data-section="checkins">Check-Ins</button>
     <button class="nav-btn" data-section="logs">Logs</button>
     <button class="nav-btn" data-section="admin">Admin Panel</button>
@@ -185,7 +215,6 @@
     <p>Customize your experience, notification preferences, and accessibility options.</p>
   </section>
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
     // Navigation logic
     document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -195,6 +224,14 @@
         document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
         document.getElementById(this.dataset.section).classList.add('active');
       });
+    });
+
+    // Home icon always returns to Dashboard
+    document.querySelector('.icon-btn').addEventListener('click', function() {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-section="dashboard"]').classList.add('active');
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById('dashboard').classList.add('active');
     });
 
     // Google Sign-In logic
@@ -208,7 +245,6 @@
       const statusCircle = document.getElementById('statusCircle');
       statusCircle.innerHTML = '';
       statusCircle.className = 'status-circle';
-      // Pie chart for 5 segments, dyslexia/migraine-friendly colors
       statusCircle.style.background = "conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
       statusCircle.setAttribute('aria-label', 'Status Circle: Mental, Physical, Spiritual, Academic, Social');
       statusCircle.title = 'Status: Mental, Physical, Spiritual, Academic, Social';

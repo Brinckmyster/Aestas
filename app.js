@@ -1,158 +1,117 @@
-// Imports
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithCredential,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  orderBy,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+// --- Status Circle Logic ---
+let currentView = localStorage.getItem('statusCircleView') || 'single';
+let showEmoji = localStorage.getItem('showEmoji') !== 'false';
+const statusCircle = document.getElementById('statusCircle');
+const banner = document.getElementById('banner');
 
-// 1. Initialize Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
-  authDomain: "academic-allies-464901.firebaseapp.com",
-  projectId: "academic-allies-464901",
-  storageBucket: "academic-allies-464901.firebasestorage.app",
-  messagingSenderId: "93996985456",
-  appId: "1:93996985456:web:c697df7623bbceeb1d18b5"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
-
-// 2. Google Sign-In Setup
-window.onload = () => {
-  google.accounts.id.initialize({
-    client_id: "93996985456-ftjjd.apps.googleusercontent.com", // Academic Allies Web Client ID
-    callback: async resp => {
-      const cred = GoogleAuthProvider.credential(resp.credential);
-      await signInWithCredential(auth, cred);
+function updateStatusCircle(view = currentView) {
+  currentView = view;
+  localStorage.setItem('statusCircleView', view);
+  statusCircle.innerHTML = '';
+  let segmentCount = 0, colorClass = '', bannerText = '';
+  if (view === 'single') {
+    segmentCount = 1; colorClass = 'segment-1';
+  } else if (view === 'pie') {
+    segmentCount = 5; colorClass = 'segment-1';
+  } else if (view === 'custom') {
+    segmentCount = 2; colorClass = 'segment-4';
+    bannerText = 'Status circle is currently showing auto-detected metric';
+    // In a real app, send alert to Admin here
+    console.log('Admin alert: Custom view selected');
+  }
+  if (segmentCount > 1) {
+    statusCircle.classList.add('segments');
+    for (let i = 0; i < segmentCount; i++) {
+      const segment = document.createElement('div');
+      segment.className = `status-segment ${colorClass}`;
+      segment.style.transform = `rotate(${i * 360 / segmentCount}deg)`;
+      segment.style.clipPath = 'polygon(50% 50%, 50% 0%, 0% 0%)';
+      statusCircle.appendChild(segment);
     }
-  });
-  google.accounts.id.renderButton(
-    document.getElementById("googleSignInContainer"),
-    { theme: "outline", size: "large" }
-  );
-};
+  } else {
+    statusCircle.classList.remove('segments');
+    const segment = document.createElement('div');
+    segment.className = `status-segment ${colorClass}`;
+    statusCircle.appendChild(segment);
+  }
+  if (showEmoji) {
+    const emoji = document.createElement('div');
+    emoji.style.fontSize = '24px';
+    emoji.style.zIndex = 2;
+    emoji.textContent = '😊';
+    statusCircle.appendChild(emoji);
+  }
+  if (view === 'custom') {
+    banner.textContent = bannerText;
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+function toggleDefaultView() {
+  currentView = currentView === 'single' ? 'pie' : 'single';
+  updateStatusCircle(currentView);
+}
+function toggleEmoji() {
+  showEmoji = document.getElementById('showEmoji').checked;
+  localStorage.setItem('showEmoji', showEmoji);
+  updateStatusCircle(currentView);
+}
+document.getElementById('showEmoji').checked = showEmoji;
+updateStatusCircle(currentView);
 
-// 3. Auth State Listener
-onAuthStateChanged(auth, user => {
-  document.getElementById("userName").textContent =
-    user ? (user.displayName || user.email) : "Guest";
-  document.getElementById("googleSignInContainer").style.display =
-    user ? "none" : "flex";
-  renderAll();
+// --- Perplexity AI Integration ---
+document.getElementById('ai-send').addEventListener('click', async () => {
+  const input = document.getElementById('ai-input').value.trim();
+  const responseDiv = document.getElementById('ai-response');
+  if (!input) {
+    responseDiv.textContent = 'Please enter a question or update.';
+    return;
+  }
+  responseDiv.textContent = 'Thinking...';
+  try {
+    // Replace with your real Perplexity AI endpoint and API key
+    const res = await fetch('https://api.perplexity.ai/v1/your-endpoint', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer YOUR_API_KEY',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ prompt: input })
+    });
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    responseDiv.textContent = data.result || 'No response from Perplexity AI.';
+  } catch (e) {
+    responseDiv.textContent = 'There was an error reaching Perplexity AI.';
+  }
 });
-
-// 4. Navigation Functionality
-function show(id) {
-  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
-  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  document.querySelector(`.nav-btn[data-sec="${id}"]`).classList.add("active");
-  renderAll();
-}
-document.getElementById("homeBtn").addEventListener("click", () => show("dashboard"));
-document.querySelectorAll(".nav-btn").forEach(btn =>
-  btn.addEventListener("click", () => show(btn.dataset.sec))
-);
-
-// 5. Day-Mode (“Check-Ins”) Logic
-let appStatus = "normal";
-const statusCircle = document.getElementById("statusCircle");
-function updateStatusCircle() {
-  statusCircle.style.background = `var(--color-${appStatus})`;
-  statusCircle.setAttribute("aria-label", `Current status: ${appStatus}`);
-}
-statusCircle.addEventListener("click", () => {
-  document.getElementById("segmentView").checked =
-    !document.getElementById("segmentView").checked;
-  updateStatusCircle();
-});
-document.getElementById("statusSelect").addEventListener("change", e => {
-  appStatus = e.target.value;
-  updateStatusCircle();
-  saveCheckIn();
-});
-
-// 6. Save Check-In to Firestore
-async function saveCheckIn() {
-  if (!auth.currentUser) return;
-  await addDoc(collection(db, "checkins"), {
-    userId: auth.currentUser.uid,
-    status: appStatus,
-    timestamp: serverTimestamp()
-  });
-  renderLogs();
+function showAdminPanel() {
+  document.getElementById('ai-panel').style.display = 'block';
 }
 
-// 7. Render Logs from Firestore
-async function renderLogs() {
-  const list = document.getElementById("logsList");
-  const q = query(collection(db, "checkins"), orderBy("timestamp", "desc"));
-  const snap = await getDocs(q);
-  list.innerHTML = snap.empty
-    ? "<p>No logs yet.</p>"
-    : snap.docs.map(d => {
-        const dt = d.data();
-        return `<p>${new Date(dt.timestamp.toDate()).toLocaleString()}: ${dt.status}</p>`;
-      }).join("");
+// --- Health Connect/HealthKit Integration (pseudo, replace with real plugin/API) ---
+async function fetchHealthData() {
+  // Replace with real Health Connect/HealthKit API calls
+  document.getElementById('heartRate').textContent = Math.floor(Math.random() * 40) + 60;
+  document.getElementById('sleepHours').textContent = (Math.random() * 3 + 5).toFixed(1);
 }
 
-// 8. Messaging Functionality
-async function sendMessage() {
-  if (!auth.currentUser) return;
-  const txt = document.getElementById("messageInput").value.trim();
-  if (!txt) return;
-  await addDoc(collection(db, "messages"), {
-    userId: auth.currentUser.uid,
-    message: txt,
-    timestamp: serverTimestamp()
-  });
-  document.getElementById("messageInput").value = "";
-  renderMessages();
+// --- Google Calendar Integration ---
+function googleSignIn() {
+  // Replace with real Google OAuth2 flow
+  alert('Google Calendar integration requires OAuth2 setup. See README for instructions.');
+  // After successful OAuth, fetch and display events:
+  // fetchCalendarEvents();
 }
-async function renderMessages() {
-  const grid = document.getElementById("contactGrid");
-  const snap = await getDocs(collection(db, "messages"));
-  grid.innerHTML = snap.empty
-    ? "<p>No messages yet.</p>"
-    : snap.docs.map(d => {
-        const m = d.data();
-        return `<p>${new Date(m.timestamp.toDate()).toLocaleString()}: ${m.message}</p>`;
-      }).join("");
+function fetchCalendarEvents() {
+  // Example: fetch events and display in #calendarEvents
+  document.getElementById('calendarEvents').innerHTML = '<ul><li>Sample Event 1</li><li>Sample Event 2</li></ul>';
 }
 
-// 9. Emergency Contacts Rendering
-function renderEmergencyContacts() {
-  document.getElementById("emergencyContacts").innerHTML = `
-    <p>Mom: <a href="tel:+1234567890">Call</a> | <a href="mailto:mom@example.com">Email</a></p>
-    <p>You: <a href="tel:+1234567891">Call</a></p>
-  `;
+// --- PWA Service Worker Registration ---
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(() => console.log('Service Worker registered'))
+    .catch(err => console.log('Service Worker failed', err));
 }
-
-// 10. Full UI Refresh
-function renderAll() {
-  updateStatusCircle();
-  renderLogs();
-  renderMessages();
-  renderEmergencyContacts();
-  document.getElementById("perplexity-ai-panel").style.display =
-    auth.currentUser?.email === "your-admin-email@example.com"
-      ? "block"
-      : "none";
-}
-
-// 11. AI Panel Hook (Optional)
-document.getElementById("ai-send")?.addEventListener("click", async () => {
-  /* existing Perplexity AI integration code */
-});

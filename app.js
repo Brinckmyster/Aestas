@@ -1,4 +1,4 @@
-// 1. Imports
+// Imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import {
   getAuth,
@@ -16,7 +16,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-// 2. Firebase Initialization
+// 1. Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
   authDomain: "academic-allies-464901.firebaseapp.com",
@@ -29,11 +29,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// 3. Google Sign-In Setup
+// 2. Google Sign-In Setup
 window.onload = () => {
   google.accounts.id.initialize({
-    client_id: "93996985456-ftjjd.apps.googleusercontent.com", //  <-- use your “Academic Allies” client ID
-    callback: async (resp) => {
+    client_id: "93996985456-ftjjd.apps.googleusercontent.com", // Academic Allies Web Client ID
+    callback: async resp => {
       const cred = GoogleAuthProvider.credential(resp.credential);
       await signInWithCredential(auth, cred);
     }
@@ -44,7 +44,7 @@ window.onload = () => {
   );
 };
 
-// 4. Auth State Listener
+// 3. Auth State Listener
 onAuthStateChanged(auth, user => {
   document.getElementById("userName").textContent =
     user ? (user.displayName || user.email) : "Guest";
@@ -53,7 +53,7 @@ onAuthStateChanged(auth, user => {
   renderAll();
 });
 
-// 5. Navigation
+// 4. Navigation Functionality
 function show(id) {
   document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
   document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
@@ -61,15 +61,14 @@ function show(id) {
   document.querySelector(`.nav-btn[data-sec="${id}"]`).classList.add("active");
   renderAll();
 }
-document.getElementById("homeBtn")
-  .addEventListener("click", () => show("dashboard"));
-document.querySelectorAll(".nav-btn")
-  .forEach(btn => btn.addEventListener("click", () => show(btn.dataset.sec)));
+document.getElementById("homeBtn").addEventListener("click", () => show("dashboard"));
+document.querySelectorAll(".nav-btn").forEach(btn =>
+  btn.addEventListener("click", () => show(btn.dataset.sec))
+);
 
-// 6. Day-Mode Logic
+// 5. Day-Mode (“Check-Ins”) Logic
 let appStatus = "normal";
 const statusCircle = document.getElementById("statusCircle");
-
 function updateStatusCircle() {
   statusCircle.style.background = `var(--color-${appStatus})`;
   statusCircle.setAttribute("aria-label", `Current status: ${appStatus}`);
@@ -79,14 +78,13 @@ statusCircle.addEventListener("click", () => {
     !document.getElementById("segmentView").checked;
   updateStatusCircle();
 });
-document.getElementById("statusSelect")
-  .addEventListener("change", e => {
-    appStatus = e.target.value;
-    updateStatusCircle();
-    saveCheckIn();
-  });
+document.getElementById("statusSelect").addEventListener("change", e => {
+  appStatus = e.target.value;
+  updateStatusCircle();
+  saveCheckIn();
+});
 
-// 7. Save Check-In
+// 6. Save Check-In to Firestore
 async function saveCheckIn() {
   if (!auth.currentUser) return;
   await addDoc(collection(db, "checkins"), {
@@ -97,7 +95,7 @@ async function saveCheckIn() {
   renderLogs();
 }
 
-// 8. Render Logs
+// 7. Render Logs from Firestore
 async function renderLogs() {
   const list = document.getElementById("logsList");
   const q = query(collection(db, "checkins"), orderBy("timestamp", "desc"));
@@ -110,7 +108,7 @@ async function renderLogs() {
       }).join("");
 }
 
-// 9. Messaging
+// 8. Messaging Functionality
 async function sendMessage() {
   if (!auth.currentUser) return;
   const txt = document.getElementById("messageInput").value.trim();
@@ -134,7 +132,7 @@ async function renderMessages() {
       }).join("");
 }
 
-// 10. Emergency Contacts
+// 9. Emergency Contacts Rendering
 function renderEmergencyContacts() {
   document.getElementById("emergencyContacts").innerHTML = `
     <p>Mom: <a href="tel:+1234567890">Call</a> | <a href="mailto:mom@example.com">Email</a></p>
@@ -142,7 +140,7 @@ function renderEmergencyContacts() {
   `;
 }
 
-// 11. Full UI Refresh
+// 10. Full UI Refresh
 function renderAll() {
   updateStatusCircle();
   renderLogs();
@@ -154,7 +152,7 @@ function renderAll() {
       : "none";
 }
 
-// 12. AI Panel (optional)
+// 11. AI Panel Hook (Optional)
 document.getElementById("ai-send")?.addEventListener("click", async () => {
-  /* existing AI integration code */
+  /* existing Perplexity AI integration code */
 });

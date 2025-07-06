@@ -1,158 +1,51 @@
-<!-- STATUS CIRCLE: Overlay/Replace in your HTML -->
-<div class="status-indicator" id="statusIndicator">
-  <div class="status-circle" id="statusCircle" tabindex="0" aria-label="Status Circle"></div>
-</div>
-
-<!-- Place this in your <style> block or style.css -->
-<style>
-.status-indicator {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  z-index: 1000;
-}
-.status-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #e5e7eb;
-  border: 2px solid #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
-  transition: background 0.3s;
-  font-size: 0;
-}
-.status-segment {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  clip-path: polygon(50% 50%, 100% 0, 100% 100%, 0 100%, 0 0);
-}
-.segment-mental    { background: #22c55e; } /* Green */
-.segment-physical  { background: #fbbf24; } /* Yellow */
-.segment-spiritual { background: #3b82f6; } /* Blue */
-.segment-academic  { background: #bdbdbd; } /* Grey */
-.segment-social    { background: #8b5cf6; } /* Purple */
-.segment-academic.saturday {
-  background: #bdbdbd !important;
-  cursor: pointer;
-}
-.status-segment.sunday {
-  background: var(--spiritual-color, #3b82f6) !important;
-}
-.status-segment[aria-label] {
-  outline: none;
-}
-.status-segment:focus::after,
-.status-segment:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 50%;
-  top: 110%;
-  transform: translateX(-50%);
-  background: #222;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 1em;
-  white-space: pre-line;
-  z-index: 2000;
-  pointer-events: none;
-}
-</style>
-
-<!-- Place this in your <script> block or app.js -->
-<script>
-// --- Status Circle Logic: Saturday & Sunday Protocol ---
-function updateStatusCircle() {
-  const circle = document.getElementById('statusCircle');
-  circle.innerHTML = '';
-  circle.className = 'status-circle';
-
-  const now = new Date();
-  const dayOfWeek = now.getDay(); // 0=Sunday, 6=Saturday
-
-  // Example: get current status for each segment
-  // Replace with your real status logic
-  const status = {
-    mental:    'good',   // green
-    physical:  'moderate', // yellow
-    spiritual: 'good',   // blue
-    academic:  'moderate', // grey on Saturday
-    social:    'good'    // purple
-  };
-  // Map status to color
-  const colorMap = {
-    good:     '#22c55e',
-    moderate: '#fbbf24',
-    bad:      '#ef4444',
-    default:  '#bdbdbd'
-  };
-
-  // --- SATURDAY LOGIC ---
-  if (dayOfWeek === 6) {
-    // Five segments, but Academic is always grey with special tooltip
-    const segments = [
-      { key: 'mental',    color: colorMap[status.mental],    label: 'Mental status' },
-      { key: 'physical',  color: colorMap[status.physical],  label: 'Physical status' },
-      { key: 'spiritual', color: colorMap[status.spiritual], label: 'Spiritual status' },
-      { key: 'academic',  color: '#bdbdbd',                  label: 'Academic Saturday', tooltip: 'Grey no school today. Still tracking.' },
-      { key: 'social',    color: colorMap[status.social],    label: 'Social status' }
-    ];
-    const degrees = [0, 72, 144, 216, 288];
-    segments.forEach((seg, i) => {
-      const segment = document.createElement('div');
-      segment.className = `status-segment segment-${seg.key}` + (seg.key === 'academic' ? ' saturday' : '');
-      segment.style.background = seg.color;
-      segment.style.transform = `rotate(${degrees[i]}deg) skewY(-54deg)`;
-      segment.setAttribute('aria-label', seg.label);
-      if (seg.key === 'academic') {
-        segment.setAttribute('tabindex', '0');
-        segment.setAttribute('data-tooltip', seg.tooltip);
-      }
-      circle.appendChild(segment);
-    });
-    return;
-  }
-
-  // --- SUNDAY LOGIC ---
-  if (dayOfWeek === 0) {
-    // One segment, only Spiritual, color matches spiritual status
-    const segment = document.createElement('div');
-    segment.className = 'status-segment sunday segment-spiritual';
-    // Use the color for spiritual status
-    segment.style.background = colorMap[status.spiritual];
-    segment.setAttribute('aria-label', 'Spiritual status');
-    segment.setAttribute('tabindex', '0');
-    segment.setAttribute('data-tooltip', 'Sunday Only spiritual check today. Others paused.');
-    circle.appendChild(segment);
-    return;
-  }
-
-  // --- WEEKDAY LOGIC (default: 5 segments, all colored by status) ---
-  const segments = [
-    { key: 'mental',    color: colorMap[status.mental],    label: 'Mental status' },
-    { key: 'physical',  color: colorMap[status.physical],  label: 'Physical status' },
-    { key: 'spiritual', color: colorMap[status.spiritual], label: 'Spiritual status' },
-    { key: 'academic',  color: colorMap[status.academic],  label: 'Academic status' },
-    { key: 'social',    color: colorMap[status.social],    label: 'Social status' }
-  ];
-  const degrees = [0, 72, 144, 216, 288];
-  segments.forEach((seg, i) => {
-    const segment = document.createElement('div');
-    segment.className = `status-segment segment-${seg.key}`;
-    segment.style.background = seg.color;
-    segment.style.transform = `rotate(${degrees[i]}deg) skewY(-54deg)`;
-    segment.setAttribute('aria-label', seg.label);
-    circle.appendChild(segment);
-  });
-}
-
-// Call this function on page load and whenever the day/status changes
-document.addEventListener('DOMContentLoaded', updateStatusCircle);
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Status Circle Component</title>
+  <style>
+    :root {
+      --color-mental:    #22c55e;
+      --color-physical:  #fbbf24;
+      --color-spiritual: #3b82f6;
+      --color-academic:  #bdbdbd;
+      --color-social:    #8b5cf6;
+    }
+    .status-indicator {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+    .status-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02);
+      background: var(--status-gradient);
+      transition: background 0.3s;
+      position: relative;
+    }
+    .status-circle[aria-label] {
+      outline: none;
+    }
+    .status-circle:focus::after,
+    .status-circle:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 50%;
+      top: 110%;
+      transform: translateX(-50%);
+      background: #222;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.9em;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 2000;
+    }
+  </style>
+</head>
+<body>

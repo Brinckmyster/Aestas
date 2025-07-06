@@ -216,6 +216,42 @@
   </section>
 
   <script>
+    // Firebase config (your real config, no edits needed)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
+      authDomain: "academic-allies-464901.firebaseapp.com",
+      projectId: "academic-allies-464901",
+      storageBucket: "academic-allies-464901.appspot.com",
+      messagingSenderId: "93996985456",
+      appId: "1:93996985456:web:c697df7623bbceeb1d18b5"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Google Sign-In callback: link GIS to Firebase Auth
+    window.handleCredentialResponse = function(response) {
+      const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
+      auth.signInWithCredential(credential)
+        .then(() => {
+          // UI will update via onAuthStateChanged
+        })
+        .catch((error) => {
+          alert("Sign-in failed: " + error.message);
+        });
+    };
+
+    // Auth state listener: persistent sign-in and UI update
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        document.getElementById('googleSignInContainer').classList.add('hidden');
+        document.getElementById('userName').textContent = user.displayName || "You";
+      } else {
+        document.getElementById('googleSignInContainer').classList.remove('hidden');
+        document.getElementById('userName').textContent = "Mary";
+      }
+    });
+
     // Navigation logic
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.addEventListener('click', function() {
@@ -233,12 +269,6 @@
       document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
       document.getElementById('dashboard').classList.add('active');
     });
-
-    // Google Sign-In logic
-    window.handleCredentialResponse = function(response) {
-      document.getElementById('googleSignInContainer').classList.add('hidden');
-      document.getElementById('userName').textContent = "You";
-    };
 
     // Status Circle logic (pie chart, accessible, migraine/dyslexia-friendly)
     function updateStatusCircle() {
@@ -259,7 +289,7 @@
     }
     updateDateTime();
 
-    // Check-in logic (UI only, no backend)
+    // Check-in logic (writes to Firestore)
     function submitCheckin(answer) {
       if (answer === 'yes') {
         document.getElementById('symptomChecklist').style.display = 'block';
@@ -268,12 +298,43 @@
         document.getElementById('symptomChecklist').style.display = 'none';
         document.getElementById('checkinStatus').textContent =
           answer === 'no' ? "Logged: No significant symptoms today." : "Skipped today's check-in.";
+        if (auth.currentUser) {
+          db.collection('checkins').add({
+            user: auth.currentUser.email,
+            answer: answer,
+            timestamp: new Date()
+          });
+        }
       }
     }
     function submitChecklist() {
       document.getElementById('checkinStatus').textContent = "Symptoms logged. Support notified if needed.";
       document.getElementById('symptomChecklist').style.display = 'none';
+      if (auth.currentUser) {
+        db.collection('checkins').add({
+          user: auth.currentUser.email,
+          answer: "symptoms",
+          symptoms: Array.from(document.querySelectorAll('#symptomChecklist input:checked')).map(i=>i.parentElement.textContent.trim()),
+          timestamp: new Date()
+        });
+      }
     }
+
+    // Logs logic (reads from Firestore)
+    function loadLogs() {
+      if (!auth.currentUser) return;
+      db.collection('checkins').where('user', '==', auth.currentUser.email).orderBy('timestamp','desc').limit(10).get().then(snapshot => {
+        const logsList = document.getElementById('logsList');
+        logsList.innerHTML = '';
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          const li = document.createElement('li');
+          li.textContent = `${d.timestamp.toDate().toLocaleString()}: ${d.answer}${d.symptoms ? ' ('+d.symptoms.join(', ')+')' : ''}`;
+          logsList.appendChild(li);
+        });
+      });
+    }
+    auth.onAuthStateChanged(loadLogs);
 
     // Perplexity AI Panel mockup
     document.getElementById('ai-send').addEventListener('click', async function() {

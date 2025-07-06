@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Status Circle - Academic Allies</title>
+  <style>
+    :root {
+      --color-mental: #22c55e;
+      --color-physical: #fbbf24;
+      --color-spiritual: #3b82f6;
+      --color-academic: #bdbdbd;
+      --color-social: #8b5cf6;
+      --color-grey: #e5e7eb;
+      --color-surface: #fff;
+      --color-text: #13343b;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #fcfcf9;
+      color: var(--color-text);
+      margin: 0; padding: 0;
+    }
+    .status-indicator {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+    .status-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--color-grey);
+      border: 2px solid var(--color-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
+      transition: background 0.3s;
+    }
+    .status-circle.segments { background: transparent; }
+    .status-segment {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(50% 50%, 50% 0%, 0% 0%);
+    }
+    .segment-mental { background: var(--color-mental); }
+    .segment-physical { background: var(--color-physical); }
+    .segment-spiritual { background: var(--color-spiritual); }
+    .segment-academic { background: var(--color-academic); }
+    .segment-social { background: var(--color-social); }
+    .tooltip {
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      transform: translateX(-50%);
+      background: #222;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      white-space: nowrap;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .status-segment:focus-visible,
+    .status-segment:hover { outline: 2px solid #333; }
+  </style>
+</head>
+<body>
+  <div class="status-indicator">
+    <div id="statusCircle" class="status-circle" tabindex="0" aria-label="Status Circle"></div>
+  </div>
+  <script>
+    // --- Configurable demo data for segment colors ---
+    function getStatusColor(segment) {
+      // Replace with your real status logic as needed
+      switch(segment) {
+        case 'mental': return 'var(--color-mental)';
+        case 'physical': return 'var(--color-physical)';
+        case 'spiritual': return 'var(--color-spiritual)';
+        case 'academic': return 'var(--color-academic)';
+        case 'social': return 'var(--color-social)';
+        default: return 'var(--color-grey)';
+      }
+    }
+
+    // --- Tooltip helpers ---
+    let tooltipDiv = null;
+    function showTooltip(e, text) {
+      hideTooltip();
+      tooltipDiv = document.createElement('div');
+      tooltipDiv.className = 'tooltip';
+      tooltipDiv.innerText = text;
+      document.body.appendChild(tooltipDiv);
+      const rect = e.target.getBoundingClientRect();
+      tooltipDiv.style.left = (rect.left + rect.width / 2) + 'px';
+      tooltipDiv.style.top = (rect.bottom + 6) + 'px';
+      tooltipDiv.style.opacity = '1';
+    }
+    function hideTooltip() {
+      if (tooltipDiv) {
+        tooltipDiv.remove();
+        tooltipDiv = null;
+      }
+    }
+
+    // --- Main logic for status circle ---
+    function updateStatusCircle(view = 'pie') {
+      const circle = document.getElementById('statusCircle');
+      circle.innerHTML = '';
+      circle.className = 'status-circle';
+      const dayOfWeek = new Date().getDay(); // 0 = Sunday, 6 = Saturday
+
+      // --- SUNDAY: Only Spiritual, fills full circle ---
+      if (dayOfWeek === 0 && view === 'pie') {
+        circle.style.background = getStatusColor('spiritual');
+        circle.setAttribute('aria-label', 'Spiritual check-in only for Sunday.');
+        circle.title = 'Spiritual check-in only for Sunday.';
+        circle.tabIndex = 0;
+        return;
+      }
+
+      // --- SATURDAY: All segments, Academic is grey with tooltip ---
+      if (dayOfWeek === 6 && view === 'pie') {
+        circle.classList.add('segments');
+        const segments = [
+          { key: 'mental', deg: 0, tooltip: 'Mental status' },
+          { key: 'physical', deg: 72, tooltip: 'Physical status' },
+          { key: 'spiritual', deg: 144, tooltip: 'Spiritual status' },
+          { key: 'academic', deg: 216, tooltip: 'Grey = no school today. Still tracking.' },
+          { key: 'social', deg: 288, tooltip: 'Social status' }
+        ];
+        segments.forEach(seg => {
+          const segment = document.createElement('div');
+          segment.className = `status-segment segment-${seg.key}`;
+          segment.style.background = getStatusColor(seg.key);
+          segment.style.transform = `rotate(${seg.deg}deg)`;
+          if (seg.key === 'academic') {
+            segment.setAttribute('tabindex', '0');
+            segment.setAttribute('aria-label', seg.tooltip);
+            segment.addEventListener('mouseenter', e => showTooltip(e, seg.tooltip));
+            segment.addEventListener('focus', e => showTooltip(e, seg.tooltip));
+            segment.addEventListener('mouseleave', hideTooltip);
+            segment.addEventListener('blur', hideTooltip);
+          } else {
+            segment.title = seg.tooltip;
+          }
+          circle.appendChild(segment);
+        });
+        return;
+      }
+
+      // --- WEEKDAYS: All segments, all colored by status ---
+      if (view === 'pie') {
+        circle.classList.add('segments');
+        const segments = [
+          { key: 'mental', deg: 0, tooltip: 'Mental status' },
+          { key: 'physical', deg: 72, tooltip: 'Physical status' },
+          { key: 'spiritual', deg: 144, tooltip: 'Spiritual status' },
+          { key: 'academic', deg: 216, tooltip: 'Academic status' },
+          { key: 'social', deg: 288, tooltip: 'Social status' }
+        ];
+        segments.forEach(seg => {
+          const segment = document.createElement('div');
+          segment.className = `status-segment segment-${seg.key}`;
+          segment.style.background = getStatusColor(seg.key);
+          segment.style.transform = `rotate(${seg.deg}deg)`;
+          segment.title = seg.tooltip;
+          circle.appendChild(segment);
+        });
+        return;
+      }
+
+      // --- SINGLE COLOR (overall) view: Always shows rolling 7-day status ---
+      circle.classList.remove('segments');
+      circle.style.background = getStatusColor('mental'); // Replace with real overall status color
+      if (dayOfWeek === 0) {
+        circle.setAttribute('aria-label', 'Your overall status for the week.');
+        circle.title = 'Your overall status for the week.';
+      } else {
+        circle.setAttribute('aria-label', 'Your overall status.');
+        circle.title = 'Your overall status.';
+      }
+    }
+
+    // --- Initialize on load ---
+    updateStatusCircle();
+
+    // --- Accessibility: remove tooltip on scroll or click elsewhere ---
+    window.addEventListener('scroll', hideTooltip);
+    window.addEventListener('click', hideTooltip);
+  </script>
+</body>
+</html>

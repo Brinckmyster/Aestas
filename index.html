@@ -1,108 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Academic Allies</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Academic Allies: Your disability accommodations and support network">
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Load Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <meta name="description" content="Your disability accommodations and support network" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <button id="homeBtn" class="icon-btn" aria-label="Go to Dashboard">🏠</button>
-    <h1>Academic Allies</h1>
-    <p class="tagline">Your disability accommodations and support network</p>
-  </header>
-
-  <!-- Google Sign-In Button Container -->
-  <div id="googleSignInContainer" class="google-signin"></div>
-
-  <!-- Day-Mode Status Circle -->
-  <div class="status-indicator">
-    <button id="statusCircle" class="status-circle" aria-label="Current status: normal"></button>
-  </div>
-
-  <!-- Main Navigation -->
-  <nav id="mainNav" class="nav-bar" role="navigation" aria-label="Main Navigation">
-    <button data-sec="dashboard" class="nav-btn active">Dashboard</button>
-    <button data-sec="checkins" class="nav-btn">Check-Ins</button>
-    <button data-sec="logs" class="nav-btn">Logs</button>
-    <button data-sec="messages" class="nav-btn">Messages</button>
-    <button data-sec="emergency" class="nav-btn">Emergency</button>
-    <button data-sec="settings" class="nav-btn">Settings</button>
-    <button data-sec="admin" class="nav-btn">Admin</button>
-  </nav>
-
-  <main>
-    <!-- Dashboard -->
-    <section id="dashboard" class="active">
-      <h2>Welcome, <span id="userName">Guest</span>!</h2>
-      <p>Your daily overview. Check in to update your status or manage your support network.</p>
-      <div class="quick-actions">
-        <button class="btn" onclick="show('checkins')">Quick Check-In</button>
-        <button class="btn" onclick="show('messages')">Send Message</button>
+  <div class="dashboard">
+    <!-- Status Circle top right -->
+    <div class="status-indicator">
+      <div id="statusCircle" class="status-circle"></div>
+    </div>
+    <div id="banner" class="banner" style="display:none;"></div>
+    <!-- Dashboard content -->
+    <div class="dashboard-content">
+      <h1>Academic Allies</h1>
+      <p class="tagline">Your disability accommodations and support network</p>
+      <div class="btn-container">
+        <button class="btn" onclick="toggleDefaultView()">Toggle Default View</button>
+        <button class="btn" onclick="showAdminPanel()">Admin Panel</button>
       </div>
-      <div id="calendarPreview" class="calendar-preview">Loading…</div>
-    </section>
-
-    <!-- Check-Ins -->
-    <section id="checkins">
-      <h2>Daily Check-Ins</h2>
-      <label for="statusSelect">Select status:</label>
-      <select id="statusSelect">
-        <option value="normal">Normal</option>
-        <option value="semi-nope">Semi-Nope</option>
-        <option value="nope">Nope</option>
-        <option value="bad-brain">Bad Brain</option>
-        <option value="recovery">Recovery</option>
-      </select>
-      <button class="btn" onclick="saveCheckIn()">Submit</button>
-    </section>
-
-    <!-- Logs -->
-    <section id="logs">
-      <h2>Logs & History</h2>
-      <div id="logsList" class="logs-list">Loading…</div>
-    </section>
-
-    <!-- Messages -->
-    <section id="messages">
-      <h2>Messages</h2>
-      <div id="contactGrid" class="contact-grid">Loading…</div>
-      <label for="messageInput">New message:</label>
-      <textarea id="messageInput" rows="3" placeholder="Type your message…"></textarea>
-      <button class="btn" onclick="sendMessage()">Send</button>
-    </section>
-
-    <!-- Emergency -->
-    <section id="emergency">
-      <h2>Emergency Contacts</h2>
-      <div id="emergencyContacts" class="contact-grid"></div>
-    </section>
-
-    <!-- Settings -->
-    <section id="settings">
+      <p>Dashboard content here.</p>
+    </div>
+    <!-- Settings section for custom views -->
+    <div class="settings-section" id="settingsSection">
       <h2>Settings</h2>
-      <label><input type="checkbox" id="minimalUIMode"> Minimal UI Mode</label>
-      <label><input type="checkbox" id="segmentView"> Status Segment View</label>
-    </section>
-
-    <!-- Admin Panel -->
-    <section id="admin">
-      <h2>Admin Panel</h2>
-      <div id="perplexity-ai-panel">
-        <h3>Perplexity AI Protocol Editor</h3>
-        <textarea id="ai-input" rows="4" placeholder="Type your question or protocol update…"></textarea>
-        <button id="ai-send" class="btn">Send to AI</button>
-        <div id="ai-response"></div>
+      <div class="settings-option">
+        <label>Status Circle View</label>
+        <div class="radio-group">
+          <label><input type="radio" name="circleView" value="single" checked onclick="updateStatusCircle('single')" /> Single Color</label>
+          <label><input type="radio" name="circleView" value="pie" onclick="updateStatusCircle('pie')" /> Pie Chart (5 Segments)</label>
+          <label><input type="radio" name="circleView" value="custom" onclick="updateStatusCircle('custom')" /> Auto-Detected Metric</label>
+        </div>
       </div>
-    </section>
-  </main>
-
-  <!-- Application Logic -->
-  <script type="module" src="app.js" defer></script>
+      <div class="settings-option">
+        <label><input type="checkbox" id="showEmoji" onchange="toggleEmoji()" /> Show Emoji</label>
+      </div>
+    </div>
+    <!-- Perplexity AI Admin Panel -->
+    <div id="ai-panel" style="display:none; margin-top:2em;">
+      <h2>Perplexity AI Protocol Support Editor</h2>
+      <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings. All changes are logged and visible to the student and Admins.</p>
+      <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or update..."></textarea>
+      <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
+      <div id="ai-response" style="margin-top:1em;background:#f3f6fa;padding:1em;border-radius:8px;"></div>
+    </div>
+    <!-- Health and Calendar Data -->
+    <div style="margin-top:2em;">
+      <h2>Health Data</h2>
+      <div>Heart Rate: <span id="heartRate">--</span> bpm</div>
+      <div>Sleep Hours: <span id="sleepHours">--</span> hrs</div>
+      <button onclick="fetchHealthData()">Refresh Health Data</button>
+    </div>
+    <div style="margin-top:2em;">
+      <h2>Calendar</h2>
+      <button onclick="googleSignIn()">Sync Google Calendar</button>
+      <div id="calendarEvents"></div>
+    </div>
+  </div>
+  <script src="app.js"></script>
 </body>
 </html>

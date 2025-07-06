@@ -4,29 +4,79 @@
   <meta charset="UTF-8">
   <title>Academic Allies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fcfcf9; color: #13343b; margin: 0; }
-    header { text-align: center; margin-top: 2em; }
-    .tagline { font-size: 1.15em; color: #4b6cb7; margin-top: 0.5em; }
-    .google-signin { display: flex; justify-content: center; margin: 2em 0; }
-    .hidden { display: none !important; }
-    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; }
-    nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
-    nav button.active { background: #2a4b7c; }
-    section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; }
-    section.active { display: block; }
-    .perplexity-ai-panel { margin-top: 2em; }
-    .ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em; }
+    :root {
+      --color-background: #fcfcf9;
+      --color-surface: #fffdfd;
+      --color-text: #13343b;
+      --color-primary: #21808d;
+      --color-academic: #bdbdbd;
+      --color-social: #8b5cf6;
+      --color-success: #22c55e;
+      --color-warning: #fbbf24;
+      --color-info: #3b82f6;
+      --radius: 8px;
+      --space: 16px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
+    }
+    body { font-family: Arial, sans-serif; background: var(--color-background); color: var(--color-text); margin: 0; padding: var(--space);}
+    header { text-align: center; margin-bottom: var(--space);}
+    .tagline { color: var(--color-primary); margin-bottom: var(--space);}
+    .google-signin { display: flex; justify-content: center; margin: var(--space) 0;}
+    .status-indicator { position: fixed; top: var(--space); right: var(--space); z-index: 1000;}
+    .status-circle {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: var(--color-success);
+      border: 2px solid var(--color-academic);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow);
+      transition: background 0.3s;
+    }
+    .status-circle.segments {
+      background: conic-gradient(
+        var(--color-success) 0% 20%,
+        var(--color-warning) 20% 40%,
+        var(--color-info) 40% 60%,
+        var(--color-academic) 60% 80%,
+        var(--color-social) 80% 100%
+      );
+    }
+    nav { display: flex; justify-content: center; gap: 1em; margin: var(--space) 0; flex-wrap: wrap;}
+    nav button { background: var(--color-primary); color: #fff; border: none; padding: 0.5em 1em; border-radius: var(--radius); cursor: pointer; min-width: 100px;}
+    nav button.active { background: #1a6873;}
+    section { display: none; max-width: 720px; margin: 0 auto var(--space); background: var(--color-surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: var(--space);}
+    section.active { display: block;}
+    .btn { background: var(--color-primary); color: #fff; border: none; padding: 0.5em 1em; border-radius: var(--radius); cursor: pointer; margin: 0.5em 0; min-width: 120px;}
+    .btn:hover { background: #1d7480;}
+    .support-list { list-style: none; padding: 0;}
+    .support-list li { margin: 0.5em 0;}
+    .role-desc { color: #626c71; font-size: 0.9em; margin-left: 0.5em;}
+    .perplexity-ai-panel { margin-top: 2em;}
+    .ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em;}
+    .hidden { display: none !important;}
+    .dashboard-summary { background: var(--color-surface); color: var(--color-text); border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; margin-top: 1.5em;}
+    .status-grid { display: flex; gap: 2em; margin: 1em 0;}
+    .status-item .label { font-weight: bold;}
+    .quick-actions { margin: 1.5em 0;}
+    .quick-actions button { margin-right: 1em; margin-bottom: 0.5em;}
+    .calendar-preview { margin: 1em 0;}
+    .calendar-preview label { margin-right: 1em;}
+    .shortcuts-panel { margin-top: 1em; color: #4b6cb7;}
   </style>
 </head>
 <body>
   <header>
-    <h1 style="font-size:2.2em;font-weight:bold;color:#2a4b7c;">Academic Allies</h1>
+    <h1>Academic Allies</h1>
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Google Sign-In Button Centered, above dashboard -->
+  <!-- Google Sign-In Button Centered above dashboard -->
   <div class="google-signin" id="googleSignInContainer">
     <div id="g_id_onload"
          data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
@@ -42,15 +92,10 @@
          data-logo_alignment="left"></div>
   </div>
 
-  <!-- Modular Status Circle (top right) -->
-  <div id="statusCircleContainer"></div>
-  <script>
-    fetch('components/status-circle.html')
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById('statusCircleContainer').innerHTML = html;
-      });
-  </script>
+  <!-- Status Circle (top right) -->
+  <div class="status-indicator">
+    <div class="status-circle segments" id="statusCircle" tabindex="0" aria-label="Status Circle"></div>
+  </div>
 
   <!-- Main Navigation -->
   <nav>
@@ -58,24 +103,80 @@
     <button class="nav-btn" data-section="checkins">Check-Ins</button>
     <button class="nav-btn" data-section="logs">Logs</button>
     <button class="nav-btn" data-section="admin">Admin Panel</button>
+    <button class="nav-btn" data-section="messages">Messages</button>
     <button class="nav-btn" data-section="settings">Settings</button>
   </nav>
 
   <!-- App Sections -->
   <section id="dashboard" class="active">
-    <h2>Welcome back, <span id="userName">Mary</span>!</h2>
-    <p>Here's your daily overview. Use the navigation above to check in, review logs, or manage your support network.</p>
+    <div class="dashboard-summary">
+      <h2>Welcome back, <span id="userName">Mary</span>!</h2>
+      <p class="date-time" id="dateTime"></p>
+      <div class="status-grid">
+        <div class="status-item"><span class="label">Brain Fog</span> <span class="value" id="fogLevel">Moderate</span></div>
+        <div class="status-item"><span class="label">Cognitive</span> <span class="value" id="cognitiveScore">3/5</span></div>
+        <div class="status-item"><span class="label">Checklist</span> <span class="value" id="checklistProgress">4/6</span></div>
+      </div>
+      <div class="quick-actions">
+        <button onclick="showSection('checkins')" class="btn">Start Check-In</button>
+        <button onclick="showSection('logs')" class="btn">See Logs</button>
+        <button onclick="showSection('messages')" class="btn">Send Message</button>
+        <button onclick="showSection('emergency')" class="btn">Quick Emergency Contacts</button>
+      </div>
+      <div class="calendar-preview">
+        <strong>Calendar</strong>
+        <label><input type="checkbox" checked> Google</label>
+        <label><input type="checkbox"> BYU-I</label>
+        <label><input type="checkbox"> Health</label>
+        <ul id="todaysEvents"><li>9:30 AM BIO 101 Exam (BYU-I Academic)</li><li>1:00 PM Doctor Appointment (Health)</li></ul>
+      </div>
+      <div class="shortcuts-panel">
+        <small>Shortcuts: Alt+1 Dashboard, Alt+2 Check-Ins, ...</small>
+      </div>
+    </div>
   </section>
   <section id="checkins">
     <h2>Daily Check-Ins</h2>
-    <p>Complete your check-in to update your status and notify your support network.</p>
+    <div class="checkin-reassurance">
+      <p>No need to answer if you're not sure. Academic Allies already checks for signs of pain, fatigue, or brain fog in the background using your typing and heart rate patterns. No action is needed from you unless you want to add more details.</p>
+    </div>
+    <p>Did you experience any significant pain, fatigue, or brain fog today?</p>
+    <div class="checkin-options">
+      <button class="btn" onclick="submitCheckin('no')">No</button>
+      <button class="btn" onclick="submitCheckin('yes')">Yes</button>
+      <button class="btn" onclick="submitCheckin('skip')">Skip for today</button>
+    </div>
+    <div id="symptomChecklist" style="display:none; margin-top:1em;">
+      <label><input type="checkbox"> Headache</label>
+      <label><input type="checkbox"> Muscle pain</label>
+      <label><input type="checkbox"> Joint pain</label>
+      <label><input type="checkbox"> Fatigue</label>
+      <label><input type="checkbox"> Brain fog</label>
+      <label><input type="checkbox"> Dizziness</label>
+      <label><input type="checkbox"> Nausea</label>
+      <label><input type="checkbox"> Other</label>
+      <button class="btn" style="display:block; margin-top:1em;" onclick="submitChecklist()">Submit Symptoms</button>
+    </div>
+    <div id="checkinStatus" style="margin-top:12px;font-size:1em;color:#21808d"></div>
   </section>
   <section id="logs">
     <h2>Logs &amp; History</h2>
     <p>Review your recent check-ins, flags, and support activity.</p>
+    <ul id="logsList"></ul>
   </section>
   <section id="admin">
     <h2>Admin Panel</h2>
+    <div id="supportNetwork" style="margin-top:2em;">
+      <h3>Support Network</h3>
+      <ul class="support-list">
+        <li>Mary <strong>Student</strong></li>
+        <li>Brinckmyster <strong>Admin</strong></li>
+        <li>Mom <strong>Family</strong></li>
+        <li>Support test <strong>Support</strong> <span class="role-desc">KarenBrinckFH@gmail.com</span></li>
+        <li>Nearby Help test <strong>Nearby Help</strong> <span class="role-desc">KarenBrinck@gmail.com</span></li>
+      </ul>
+    </div>
+    <!-- Perplexity AI Panel -->
     <div class="perplexity-ai-panel" id="perplexity-ai-panel">
       <h3>Perplexity AI Protocol Support Editor</h3>
       <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>All changes are logged and visible to the student and Admins.</p>
@@ -84,17 +185,34 @@
       <div id="ai-response" class="ai-response"></div>
     </div>
   </section>
+  <section id="messages">
+    <h2>Messages</h2>
+    <button class="btn" onclick="composeMessage()">Compose</button>
+    <div id="messageThread"></div>
+  </section>
   <section id="settings">
     <h2>Settings</h2>
-    <p>Customize your experience, notification preferences, and accessibility options.</p>
+    <p>Accessibility and encouragement options coming soon.</p>
   </section>
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
-    // Google Sign-In logic
+    // Firebase config (your real config, no edits needed)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
+      authDomain: "academic-allies-464901.firebaseapp.com",
+      projectId: "academic-allies-464901",
+      storageBucket: "academic-allies-464901.appspot.com",
+      messagingSenderId: "93996985456",
+      appId: "1:93996985456:web:c697df7623bbceeb1d18b5"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Google Sign-In callback
     window.handleCredentialResponse = function(response) {
       document.getElementById('googleSignInContainer').classList.add('hidden');
-      document.getElementById('userName').textContent = "You"; // Optionally parse JWT for real name
+      document.getElementById('userName').textContent = "You";
     };
 
     // Navigation logic
@@ -107,7 +225,82 @@
       });
     });
 
-    // Perplexity AI Panel mockup
+    // Status circle logic (pie chart, Sat/Sun logic)
+    function updateStatusCircle() {
+      const circle = document.getElementById('statusCircle');
+      const day = new Date().getDay(); // 0=Sun,6=Sat
+      if (day === 6) {
+        circle.style.background = "conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
+      } else if (day === 0) {
+        circle.style.background = "conic-gradient(#3b82f6 0% 100%)";
+      } else {
+        circle.style.background = "conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      updateStatusCircle();
+      updateDateTime();
+      loadLogs();
+      loadMessages();
+    });
+
+    // Set today's date and time in dashboard
+    function updateDateTime() {
+      const dateTimeElem = document.getElementById('dateTime');
+      const now = new Date();
+      dateTimeElem.textContent = now.toLocaleString(undefined, {weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"});
+    }
+
+    // Check-in logic (writes to Firestore)
+    function submitCheckin(answer) {
+      if (answer === 'yes') {
+        document.getElementById('symptomChecklist').style.display = 'block';
+        document.getElementById('checkinStatus').textContent = '';
+      } else {
+        document.getElementById('symptomChecklist').style.display = 'none';
+        document.getElementById('checkinStatus').textContent =
+          answer === 'no' ? "Logged: No significant symptoms today." : "Skipped today's check-in.";
+        db.collection('checkins').add({
+          user: auth.currentUser ? auth.currentUser.email : "anon",
+          answer: answer,
+          timestamp: new Date()
+        });
+      }
+    }
+    function submitChecklist() {
+      document.getElementById('checkinStatus').textContent = "Symptoms logged. Support notified if needed.";
+      document.getElementById('symptomChecklist').style.display = 'none';
+      db.collection('checkins').add({
+        user: auth.currentUser ? auth.currentUser.email : "anon",
+        answer: "symptoms",
+        symptoms: Array.from(document.querySelectorAll('#symptomChecklist input:checked')).map(i=>i.parentElement.textContent.trim()),
+        timestamp: new Date()
+      });
+    }
+
+    // Logs logic (reads from Firestore)
+    function loadLogs() {
+      db.collection('checkins').orderBy('timestamp','desc').limit(10).get().then(snapshot => {
+        const logsList = document.getElementById('logsList');
+        logsList.innerHTML = '';
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          const li = document.createElement('li');
+          li.textContent = `${d.timestamp.toDate().toLocaleString()}: ${d.answer}${d.symptoms ? ' ('+d.symptoms.join(', ')+')' : ''}`;
+          logsList.appendChild(li);
+        });
+      });
+    }
+
+    // Messaging logic (stub, integration needed)
+    function loadMessages() {
+      document.getElementById('messageThread').innerHTML = '<p>Integration Needed: Connect to Firestore or serverless backend for persistent messaging.</p>';
+    }
+    function composeMessage() {
+      alert("Integration Needed: Connect to Firestore or serverless backend for persistent messaging.");
+    }
+
+    // Perplexity AI Panel (mocked; replace with real fetch to your API if/when ready)
     document.getElementById('ai-send').addEventListener('click', async function() {
       const input = document.getElementById('ai-input').value.trim();
       const responseDiv = document.getElementById('ai-response');
@@ -117,6 +310,12 @@
         responseDiv.textContent = "This is a mock response from Perplexity AI. Replace with real API integration.";
       }, 1200);
     });
+
+    // Section navigation helpers
+    function showSection(sectionId) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+    }
   </script>
 </body>
 </html>

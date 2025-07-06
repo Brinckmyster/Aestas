@@ -1,0 +1,24 @@
+// Use Google's client library
+gapi.load('client:auth2', () => {
+  gapi.client.init({
+    apiKey: 'YOUR_API_KEY',
+    clientId: 'YOUR_CLIENT_ID',
+    discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
+    scope: "https://www.googleapis.com/auth/calendar.readonly"
+  }).then(() => {
+    // Sign in and fetch events
+    gapi.auth2.getAuthInstance().signIn().then(() => {
+      gapi.client.calendar.events.list({
+        'calendarId': 'primary',
+        'timeMin': (new Date()).toISOString(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 10,
+        'orderBy': 'startTime'
+      }).then(response => {
+        const events = response.result.items;
+        // Render events in your calendar section
+      });
+    });
+  });
+});

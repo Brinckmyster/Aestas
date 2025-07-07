@@ -1,61 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Academic Allies</title>
-  <link rel="icon" href="icons/academic-allies.png" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <img src="icons/academic-allies.png" alt="Academic Allies Logo" width="64" height="64" />
-    <h1>Academic Allies</h1>
-    <nav>
-      <ul>
-        <li><a href="#dashboard">Dashboard</a></li>
-        <li><a href="#resources">Resources</a></li>
-        <li><a href="#support">Support Network</a></li>
-      </ul>
-    </nav>
-  </header>
+  <!-- Status Circle (fixed, always visible) -->
+  <div id="statusCircle" class="status-circle"></div>
+  <div id="banner" class="banner" style="display: none;"></div>
 
-  <main>
-    <!-- Status Circle Component -->
-    <section id="status-circle-container">
-      <!-- Import or include your status-circle component here -->
-      <!-- Example: -->
-      <!-- <link rel="import" href="components/status-circle/status-circle.html" /> -->
-      <!-- Or use JS to inject it -->
-    </section>
+  <!-- Modes Switcher -->
+  <section id="modes-root" aria-label="App Mode Switcher">
+    <div data-include="components/modes/modes.html"></div>
+  </section>
 
-    <!-- Main Content -->
-    <section id="dashboard">
-      <h2>Your Dashboard</h2>
-      <div id="user-info"></div>
-      <div id="tasks"></div>
-    </section>
+  <!-- Google Integration (Sign-In, Calendar, Firebase) -->
+  <section id="google-integration-root" aria-label="Google Integration">
+    <div data-include="components/google-integration/google-integration.html"></div>
+  </section>
 
-    <section id="resources">
-      <h2>Student Resources</h2>
-      <ul>
-        <li><a href="assets/guide.pdf" target="_blank">Download Guide</a></li>
-        <li><a href="#more-resources">See More</a></li>
-      </ul>
-    </section>
+  <!-- User Tiers Panel -->
+  <section id="user-tiers-root" aria-label="User Roles and Permissions">
+    <div data-include="components/user-tiers/user-tiers.html"></div>
+  </section>
 
-    <section id="support">
-      <h2>Your Support Network</h2>
-      <div id="support-list"></div>
-    </section>
-  </main>
+  <!-- Spoon Planner -->
+  <section id="spoon-planner-root" aria-label="Daily Spoon Planner">
+    <div data-include="components/spoon-planner/spoon-planner.html"></div>
+  </section>
 
-  <footer>
-    <p>&copy; 2025 Academic Allies. All rights reserved.</p>
-  </footer>
+  <!-- Meal Planner -->
+  <section id="meal-planner-root" aria-label="Meal Planner">
+    <div data-include="components/meal-planner/meal-planner.html"></div>
+  </section>
 
-  <script src="js/app.js" defer></script>
-  <!-- Add more <script> tags as needed for additional JS files -->
+  <!-- Message System -->
+  <section id="message-system-root" aria-label="Support Messages">
+    <div data-include="components/message-system/message-system.html"></div>
+  </section>
+
+  <!-- Main App JS -->
+  <script src="js/app.js"></script>
+  <!-- Loader: Injects HTML from each component file -->
+  <script>
+    document.querySelectorAll('[data-include]').forEach(async (el) => {
+      const file = el.getAttribute('data-include');
+      const res = await fetch(file);
+      if (res.ok) el.innerHTML = await res.text();
+    });
+  </script>
 </body>
 </html>

@@ -10,6 +10,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
   <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link rel="stylesheet" href="style.css">
   <style>
     :root {
       --color-background: #fcfcf9;
@@ -30,17 +31,6 @@
     header { text-align: center; margin-top: 2em; }
     .tagline { font-size: 1.15em; color: #4b6cb7; margin-top: 0.5em; }
     .status-indicator { position: fixed; top: 24px; right: 24px; z-index: 1000; }
-    .status-circle {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: var(--color-grey);
-      border: 2px solid var(--color-surface);
-      display: flex; align-items: center; justify-content: center;
-      position: relative; overflow: hidden;
-      box-shadow: var(--shadow-md);
-      transition: background 0.3s;
-      font-size: 0;
-      min-width: 80px; min-height: 80px;
-    }
     nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; flex-wrap: wrap; }
     nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
     nav button.active { background: #2a4b7c; }
@@ -91,12 +81,15 @@
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Status Circle always top right -->
-  <div class="status-indicator" id="statusIndicator">
-    <div class="status-circle" id="statusCircle" tabindex="0" aria-label="Status Circle"></div>
-  </div>
+  <!-- Status Circle always top right, loaded from modular file -->
+  <div class="status-indicator" id="statusIndicator"></div>
+  <script>
+    fetch('status-circle.html')
+      .then(res => res.text())
+      .then(html => { document.getElementById('statusIndicator').innerHTML = html; });
+  </script>
 
-  <!-- Google Sign-In Button (no edits needed) -->
+  <!-- Google Sign-In Button (centered above dashboard) -->
   <div class="google-signin" id="googleSignInContainer">
     <div id="g_id_onload"
          data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
@@ -233,12 +226,8 @@
     window.handleCredentialResponse = function(response) {
       const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
       auth.signInWithCredential(credential)
-        .then(() => {
-          // UI will update via onAuthStateChanged
-        })
-        .catch((error) => {
-          alert("Sign-in failed: " + error.message);
-        });
+        .then(() => { /* UI will update via onAuthStateChanged */ })
+        .catch((error) => { alert("Sign-in failed: " + error.message); });
     };
 
     // Auth state listener: persistent sign-in and UI update
@@ -270,16 +259,8 @@
       document.getElementById('dashboard').classList.add('active');
     });
 
-    // Status Circle logic (pie chart, accessible, migraine/dyslexia-friendly)
-    function updateStatusCircle() {
-      const statusCircle = document.getElementById('statusCircle');
-      statusCircle.innerHTML = '';
-      statusCircle.className = 'status-circle';
-      statusCircle.style.background = "conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
-      statusCircle.setAttribute('aria-label', 'Status Circle: Mental, Physical, Spiritual, Academic, Social');
-      statusCircle.title = 'Status: Mental, Physical, Spiritual, Academic, Social';
-    }
-    updateStatusCircle();
+    // Status Circle logic: loaded from modular file (status-circle.html)
+    // No need to duplicate logic here; all logic is in the modular component.
 
     // Set today's date and time in dashboard
     function updateDateTime() {

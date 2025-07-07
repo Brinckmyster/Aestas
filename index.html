@@ -1,174 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Academic Allies</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
-
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-  <!-- PWA Icons & Manifest -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="icons/academic-allies.png">
-  <link rel="manifest" href="manifest.webmanifest">
-
-  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="icons/academic-allies.png" />
+  <link rel="apple-touch-icon" href="icons/academic-allies.png" />
   <style>
-    :root {
-      --bg: #fcfcf9; --surface: #fff; --text: #13343b;
-      --success: #22c55e; --warning: #fbbf24; --primary: #3b82f6;
-      --grey: #bdbdbd; --space: 16px; --radius: 12px;
-      --shadow: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02);
-      --font: Atkinson Hyperlegible, OpenDyslexic, Arial, sans-serif;
-    }
-    body { margin:0; padding:var(--space); font-family:var(--font); background:var(--bg); color:var(--text); }
-    header { text-align:center; margin-top:2em; }
-    .tagline { color:var(--primary); margin-top:.5em; }
-    .status-circle { position:fixed; top:var(--space); right:var(--space); width:80px; height:80px; border-radius:50%; box-shadow:var(--shadow);
-      background:grey; display:flex; align-items:center; justify-content:center; }
-    nav { display:flex; justify-content:center; gap:1em; flex-wrap:wrap; margin:2em 0 1em; }
-    .nav-btn, .icon-btn { border:none; background:var(--primary); color:#fff; padding:.5em 1em; border-radius:var(--radius); font-size:1em; cursor:pointer; }
-    .nav-btn.active { background:#2a4b7c }
-    .icon-btn { background:none; padding:.25em; }
-    .icon-btn img { width:32px; height:32px; }
-    section { display:none; max-width:700px; margin:0 auto var(--space); background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); padding:var(--space); }
-    section.active { display:block }
-    .quick-actions button { margin:.5em .5em 0 0; }
-    .google-signin { display:flex; justify-content:center; margin:2em 0; }
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f5f7fa; }
+    header { display: flex; align-items: center; background: #2d3a4a; color: #fff; padding: 1rem; }
+    .logo { width: 40px; height: 40px; margin-right: 1rem; }
+    nav { display: flex; gap: 1rem; margin-left: auto; }
+    .nav-btn { background: none; border: none; color: #fff; font-size: 1rem; cursor: pointer; padding: 0.5rem 1rem; border-radius: 5px; transition: background 0.2s; }
+    .nav-btn.active, .nav-btn:focus { background: #4f6d7a; outline: none; }
+    main { max-width: 600px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
+    section { display: none; }
+    section.active { display: block; }
+    .status-circle { width: 18px; height: 18px; border-radius: 50%; display: inline-block; margin-left: 0.5rem; border: 2px solid #888; vertical-align: middle; }
+    .google-btn { background: #fff; border: 1px solid #888; color: #333; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; margin-top: 1rem; }
+    .google-btn:hover { background: #f0f0f0; }
+    .user-info { margin-top: 1rem; }
   </style>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 </head>
 <body>
   <header>
-    <h1>Academic Allies</h1>
-    <p class="tagline">Your disability accommodations and support network</p>
+    <img src="icons/academic-allies.png" alt="Academic Allies Logo" class="logo" />
+    <h1 style="font-size:1.5rem; margin:0;">Academic Allies</h1>
+    <nav>
+      <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+      <button class="nav-btn" data-section="support">Support</button>
+      <button class="nav-btn" data-section="settings">Settings</button>
+    </nav>
   </header>
-
-  <div class="status-circle" id="statusCircle" aria-label="Status Circle"></div>
-
-  <div class="google-signin" id="googleSignInContainer">
-    <div id="g_id_onload"
-      data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
-      data-callback="handleCredentialResponse"
-      data-auto_prompt="false"></div>
-    <div id="g_id_signin" class="g_id_signin"
-      data-type="standard" data-shape="rectangular"
-      data-theme="outline" data-text="signin_with"
-      data-size="large" data-logo_alignment="left"></div>
-  </div>
-
-  <nav>
-    <button class="icon-btn" aria-label="Home" onclick="showSection('dashboard')">
-      <img src="icons/academic-allies.png" alt="">
-    </button>
-    <button class="nav-btn active" data-section="dashboard">Dashboard</button>
-    <button class="nav-btn" data-section="checkins">Check-Ins</button>
-    <button class="nav-btn" data-section="logs">Logs</button>
-    <button class="nav-btn" data-section="admin">Admin Panel</button>
-    <button class="nav-btn" data-section="settings">Settings</button>
-  </nav>
-
-  <section id="dashboard" class="active">
-    <h2>Welcome back, <span id="userName">Mary</span>!</h2>
-    <p id="dateTime"></p>
-  </section>
-
-  <section id="checkins">
-    <h2>Daily Check-Ins</h2>
-  </section>
-
-  <section id="logs">
-    <h2>Logs & History</h2>
-  </section>
-
-  <section id="admin">
-    <h2>Admin Panel</h2>
-  </section>
-
-  <section id="settings">
-    <h2>Settings</h2>
-  </section>
-
+  <main>
+    <section id="dashboard" class="active">
+      <h2>Dashboard <span class="status-circle" id="statusCircle"></span></h2>
+      <p>Welcome! Here’s your daily overview.</p>
+    </section>
+    <section id="support">
+      <h2>Support Network</h2>
+      <p>Your support contacts and resources appear here.</p>
+    </section>
+    <section id="settings">
+      <h2>Settings</h2>
+      <div id="authSection">
+        <button class="google-btn" id="signInBtn">Sign in with Google</button>
+        <button class="google-btn" id="signOutBtn" style="display:none;">Sign out</button>
+        <div class="user-info" id="userInfo"></div>
+      </div>
+    </section>
+  </main>
   <script>
-    // Firebase init
+    // --- Firebase Config: Academic Allies Project ---
     const firebaseConfig = {
-      apiKey:"AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
-      authDomain:"academic-allies-464901.firebaseapp.com",
-      projectId:"academic-allies-464901",
-      storageBucket:"academic-allies-464901.appspot.com",
-      messagingSenderId:"93996985456",
-      appId:"1:93996985456:web:c697df7623bbceeb1d18b5"
+      apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
+      authDomain: "academic-allies-464901.firebaseapp.com",
+      projectId: "academic-allies-464901",
+      storageBucket: "academic-allies-464901.firebasestorage.app",
+      messagingSenderId: "93996985456",
+      appId: "1:93996985456:web:c697df7623bbceeb1d18b5"
     };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth(), db = firebase.firestore();
+    const auth = firebase.auth();
 
-    document.addEventListener('DOMContentLoaded',()=>{
-      // Sign-in callback
-      window.handleCredentialResponse = resp=>{
-        const cred = firebase.auth.GoogleAuthProvider.credential(resp.credential);
-        auth.signInWithCredential(cred).catch(e=>alert(e.message));
-      };
-
-      // Auth listener
-      auth.onAuthStateChanged(user=>{
-        const container=document.getElementById('googleSignInContainer');
-        if(user){
-          container.classList.add('hidden');
-          document.getElementById('userName').textContent = user.displayName || "You";
-          loadLogs();
-        } else {
-          container.classList.remove('hidden');
-          document.getElementById('userName').textContent = "Mary";
-        }
+    // --- Navigation Logic: Panels Switch ---
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(this.dataset.section).classList.add('active');
       });
-
-      // Nav logic
-      document.querySelectorAll('.nav-btn').forEach(btn=>{
-        btn.addEventListener('click',function(){
-          document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-          this.classList.add('active');
-          document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-          document.getElementById(this.dataset.section).classList.add('active');
-        });
-      });
-      document.querySelector('.icon-btn').addEventListener('click',()=>{
-        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-        document.querySelector('[data-section="dashboard"]').classList.add('active');
-        document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-        document.getElementById('dashboard').classList.add('active');
-      });
-
-      // Status circle
-      function updateStatus(){
-        const c=document.getElementById('statusCircle'),d=new Date().getDay();
-        if(d===6) c.style.background="conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
-        else if(d===0) c.style.background="conic-gradient(#3b82f6 0% 100%)";
-        else c.style.background="conic-gradient(#22c55e 0%20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
-      }
-      updateStatus();
-
-      // Date/time
-      document.getElementById('dateTime').textContent = new Date().toLocaleString();
-
-      // Logs loader
-      function loadLogs(){
-        if(!auth.currentUser) return;
-        db.collection('checkins').where('user','==',auth.currentUser.email)
-          .orderBy('timestamp','desc').limit(10).get().then(snap=>{
-            const ul=document.getElementById('logs'),list=document.createElement('ul');
-            snap.forEach(doc=>{
-              const d=doc.data(),li=document.createElement('li');
-              li.textContent=`${d.timestamp.toDate().toLocaleString()}: ${d.answer}`; list.append(li);
-            });
-            ul.innerHTML=''; ul.append(list);
-          });
-      }
     });
+
+    // --- Status Circle Logic ---
+    function updateStatusCircle() {
+      const circle = document.getElementById('statusCircle');
+      if (auth.currentUser) {
+        circle.style.background = '#2ecc40';
+        circle.title = "Signed in";
+      } else {
+        circle.style.background = '#ff4136';
+        circle.title = "Not signed in";
+      }
+    }
+
+    // --- Google Sign-In Persistent Auth ---
+    const signInBtn = document.getElementById('signInBtn');
+    const signOutBtn = document.getElementById('signOutBtn');
+    const userInfo = document.getElementById('userInfo');
+
+    function showUser(user) {
+      if (user) {
+        userInfo.textContent = `Signed in as ${user.displayName || user.email}`;
+        signInBtn.style.display = 'none';
+        signOutBtn.style.display = '';
+      } else {
+        userInfo.textContent = '';
+        signInBtn.style.display = '';
+        signOutBtn.style.display = 'none';
+      }
+      updateStatusCircle();
+    }
+
+    auth.onAuthStateChanged(user => {
+      showUser(user);
+    });
+
+    signInBtn.addEventListener('click', () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider).catch(err => alert("Sign-in error: " + err.message));
+    });
+
+    signOutBtn.addEventListener('click', () => {
+      auth.signOut();
+    });
+
+    // --- Ensure Status Circle Updates on Load ---
+    window.addEventListener('DOMContentLoaded', updateStatusCircle);
   </script>
 </body>
 </html>

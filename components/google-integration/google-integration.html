@@ -1,4 +1,4 @@
-<!-- Google Integration Component for Academic Allies -->
+<!-- Full Google + Firebase + Calendar Integration for Academic Allies -->
 <section id="google-integration" class="google-integration" aria-label="Google Sign-In and Calendar">
   <h2>Google Integration</h2>
   <div class="google-signin">
@@ -17,80 +17,134 @@
     <button id="calendar-disconnect-btn" class="calendar-btn" style="display:none;" aria-label="Disconnect Google Calendar">
       Disconnect Calendar
     </button>
-    <span id="calendar-status" class="calendar-status"></span>
+    <pre id="calendar-status" class="calendar-status" style="white-space: pre-wrap;"></pre>
   </div>
   <div class="firebase-status" style="margin-top:1.5em;">
-    <span id="firebase-status-label">Firebase: <strong>Not Connected</strong></span>
+    <span id="firebase-status-label">Firebase: <strong id="firebase-status-text">Connecting...</strong></span>
   </div>
   <style>
-    .google-integration { background: #f8fafc; border-radius: 1rem; padding: 1.5rem; max-width: 500px; margin: 2rem auto; box-shadow: 0 2px 8px rgba(0,0,0,0.07);}
-    .google-integration h2 { font-size: 1.5rem; margin-bottom: 1rem; color: #22223b;}
-    .google-btn, .calendar-btn { background: #3b82f6; color: #fff; border: none; border-radius: 0.5em; padding: 0.6em 1.4em; font-size: 1em; cursor: pointer; transition: background 0.2s; margin-right: 0.5em;}
-    .google-btn:focus, .calendar-btn:focus { outline: 2px solid #6366f1;}
-    .google-icon { display: inline-block; width: 1.2em; height: 1.2em; background: url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center/contain; vertical-align: middle; margin-right: 0.5em;}
-    .google-user { margin-left: 1em; font-weight: 600; color: #22223b;}
-    .calendar-status { margin-left: 1em; font-weight: 600; color: #3b82f6;}
-    .firebase-status { font-size: 1em; color: #4b5563;}
+    .google-integration { background: #f8fafc; border-radius:1rem; padding:1.5rem; max-width:500px; margin:2rem auto; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
+    .google-btn, .calendar-btn { background: #3b82f6; color:#fff; border:none; border-radius:0.5em; padding:0.6em 1.4em; font-size:1em; cursor:pointer; transition:background 0.2s; margin-right:0.5em; }
+    .google-btn:disabled, .calendar-btn:disabled { background:#9ca3af; cursor:not-allowed; }
+    .google-btn:focus, .calendar-btn:focus { outline:2px solid #6366f1; }
+    .google-icon { display:inline-block; width:1.2em; height:1.2em; background:url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center/contain; vertical-align:middle; margin-right:0.5em; }
+    .google-user { margin-left:1em; font-weight:600; color:#22223b; }
+    .calendar-status { margin-top:1em; font-weight:600; color:#3b82f6; }
+    .firebase-status { font-size:1em; color:#4b5563; }
+    .firebase-status .connected { color:#22c55e; }
+    .firebase-status .error { color:#ef4444; }
   </style>
 </section>
 
-<!-- Google Identity Services Script -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- SDKs and Client Libraries -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+<script src="https://apis.google.com/js/api.js" async defer onload="gapiOnLoad()"></script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="gisOnLoad()"></script>
 
 <script>
-  // Google OAuth2 Client ID (do not edit)
+  // ----- Configurations -----
+  const firebaseConfig = {
+    apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGHbFGH",
+    authDomain: "academic-allies-464901.firebaseapp.com",
+    projectId: "academic-allies-464901",
+    storageBucket: "academic-allies-464901.appspot.com",
+    messagingSenderId: "123456789012",
+    appId: "1:123456789012:web:abcdef123456789012345678"
+  };
   const GOOGLE_CLIENT_ID = "93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com";
+  const CAL_SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
 
-  // Sign-In Button Handler
-  document.getElementById('google-signin-btn').addEventListener('click', function() {
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: handleCredentialResponse,
-    });
-    google.accounts.id.prompt();
+  // ----- Firebase Initialization -----
+  const app = firebase.initializeApp(firebaseConfig);
+  const auth = firebase.getAuth(app);
+  updateFirebaseStatus("Connected", "connected");
+  firebase.onAuthStateChanged(auth, user => {
+    updateFirebaseStatus(user ? "Authenticated" : "Connected (Not Authenticated)", "connected");
   });
 
-  // Handle Google Sign-In Response
-  function handleCredentialResponse(response) {
-    const user = parseJwt(response.credential);
-    document.getElementById('google-user').textContent = user.name || user.email || "Signed in";
+  function updateFirebaseStatus(text, cls) {
+    const el = document.getElementById('firebase-status-text');
+    el.textContent = text;
+    el.className = cls;
+  }
+
+  // ----- Google Sign-In -----
+  document.getElementById('google-signin-btn').onclick = () => {
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
+    google.accounts.id.prompt();
+  };
+  async function handleCredentialResponse(resp) {
+    const userInfo = parseJwt(resp.credential);
+    document.getElementById('google-user').textContent = userInfo.name || userInfo.email;
     document.getElementById('google-user').style.display = 'inline';
     document.getElementById('google-signin-btn').style.display = 'none';
     document.getElementById('google-signout-btn').style.display = 'inline';
     document.getElementById('calendar-connect-btn').disabled = false;
+    try {
+      const cred = firebase.GoogleAuthProvider.credential(resp.credential);
+      await firebase.signInWithCredential(auth, cred);
+    } catch(e) {
+      console.error(e);
+      updateFirebaseStatus("Auth Failed","error");
+    }
   }
-
-  // Parse JWT to extract user info
-  function parseJwt(token) {
-    if (!token) return {};
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(jsonPayload);
+  function parseJwt(t) {
+    try {
+      const p = t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+      return JSON.parse(decodeURIComponent(atob(p).split('').map(c=>'%' + ('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+    } catch { return {}; }
   }
-
-  // Sign-Out Button Handler
-  document.getElementById('google-signout-btn').addEventListener('click', function() {
+  document.getElementById('google-signout-btn').onclick = async () => {
+    await firebase.signOut(auth);
     document.getElementById('google-user').style.display = 'none';
     document.getElementById('google-signin-btn').style.display = 'inline';
     document.getElementById('google-signout-btn').style.display = 'none';
     document.getElementById('calendar-connect-btn').disabled = true;
-    // Optionally revoke token here for extra security
-  });
+    document.getElementById('calendar-status').textContent = '';
+    updateFirebaseStatus("Connected (Not Authenticated)","connected");
+  };
 
-  // Calendar Connect Button Handler (placeholder)
-  document.getElementById('calendar-connect-btn').addEventListener('click', function() {
-    document.getElementById('calendar-status').textContent = "Calendar connected! (integration coming soon)";
+  // ----- Google Calendar Integration -----
+  let gapiInited = false, gisInited = false, tokenClient;
+  window.gapiOnLoad = async () => {
+    await gapi.client.init({ discoveryDocs:['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'] });
+    gapiInited = true;
+  };
+  window.gisOnLoad = () => {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID, scope: CAL_SCOPES,
+      callback: async resp => {
+        if (resp.error) {
+          document.getElementById('calendar-status').textContent = 'Calendar auth failed';
+          return;
+        }
+        const now = new Date().toISOString();
+        const res = await gapi.client.calendar.events.list({
+          calendarId:'primary', timeMin:now, showDeleted:false,
+          singleEvents:true, maxResults:10, orderBy:'startTime'
+        });
+        const items = res.result.items||[];
+        document.getElementById('calendar-status').textContent =
+          items.length
+            ? items.map(e=>`${e.summary} (${e.start.dateTime||e.start.date})`).join('\n')
+            : 'No upcoming events.';
+      }
+    });
+    gisInited = true;
+  };
+  document.getElementById('calendar-connect-btn').onclick = () => {
+    if (!gapiInited || !gisInited) {
+      document.getElementById('calendar-status').textContent = 'Loading…';
+      return;
+    }
+    tokenClient.requestAccessToken({ prompt:'consent' });
     document.getElementById('calendar-connect-btn').style.display = 'none';
     document.getElementById('calendar-disconnect-btn').style.display = 'inline';
-  });
-
-  // Calendar Disconnect Button Handler (placeholder)
-  document.getElementById('calendar-disconnect-btn').addEventListener('click', function() {
-    document.getElementById('calendar-status').textContent = "";
+  };
+  document.getElementById('calendar-disconnect-btn').onclick = () => {
+    document.getElementById('calendar-status').textContent = '';
     document.getElementById('calendar-connect-btn').style.display = 'inline';
     document.getElementById('calendar-disconnect-btn').style.display = 'none';
-  });
+  };
 </script>

@@ -14,7 +14,7 @@
     nav { display: flex; gap: 1rem; margin-left: auto; }
     .nav-btn { background: none; border: none; color: #fff; font-size: 1rem; cursor: pointer; padding: 0.5rem 1rem; border-radius: 5px; transition: background 0.2s; }
     .nav-btn.active, .nav-btn:focus { background: #4f6d7a; outline: none; }
-    main { max-width: 800px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
+    main { max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
     section { display: none; }
     section.active { display: block; }
     .status-circle { width: 18px; height: 18px; border-radius: 50%; display: inline-block; margin-left: 0.5rem; border: 2px solid #888; vertical-align: middle; }
@@ -35,8 +35,9 @@
     .msg-input-box button:disabled { background: #aaa; }
     .tier-list { margin: 1rem 0; }
     .tier-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
-    .tier-row select { min-width: 80px; }
+    .tier-row select { min-width: 100px; }
     .tier-row button { padding: 0.2rem 0.7rem; }
+    .tier-desc { font-size: 0.92em; color: #555; margin-left: 0.5em; }
   </style>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -45,7 +46,7 @@
 </head>
 <body>
   <header>
-    <img src="icons/academic-allies.png" alt="Academic Allies Logo" class="logo" id="homeIcon" />
+    <img src="icons/academic-allies.png" alt="Academic Allies Logo" class="logo" id="homeIcon" title="Go to Dashboard" />
     <h1 style="font-size:1.5rem; margin:0;">Academic Allies</h1>
     <nav>
       <button class="nav-btn active" data-section="dashboard">Dashboard</button>
@@ -57,7 +58,7 @@
   <main>
     <!-- Dashboard Section -->
     <section id="dashboard" class="active">
-      <h2>Dashboard <span class="status-circle" id="statusCircle"></span></h2>
+      <h2>Dashboard <span class="status-circle" id="statusCircle" aria-label="Sign-in Status"></span></h2>
       <div>
         <h3>Google Calendar Events</h3>
         <div>
@@ -73,8 +74,8 @@
       <h2>Messages</h2>
       <div class="message-list" id="messageList"></div>
       <div class="msg-input-box" id="msgInputBox">
-        <select id="recipientSelect"></select>
-        <input type="text" id="messageInput" placeholder="Type your message..." autocomplete="off" />
+        <select id="recipientSelect" aria-label="Message Recipient"></select>
+        <input type="text" id="messageInput" placeholder="Type your message..." autocomplete="off" aria-label="Message Text" />
         <button id="sendMessageBtn">Send</button>
       </div>
     </section>
@@ -87,15 +88,17 @@
         <h3>Manage Supporters & Tiers</h3>
         <div class="tier-list" id="tierList"></div>
         <div>
-          <input type="email" id="newSupporterEmail" placeholder="Supporter email" />
-          <select id="newSupporterTier">
-            <option value="tier1">Tier 1</option>
-            <option value="tier2">Tier 2</option>
-            <option value="tier3">Tier 3</option>
+          <input type="email" id="newSupporterEmail" placeholder="Supporter email" aria-label="Add Supporter Email" />
+          <select id="newSupporterTier" aria-label="Assign Tier">
+            <option value="tier1">Tier 1 – Family</option>
+            <option value="tier2">Tier 2 – Support</option>
+            <option value="tier3">Tier 3 – Admin</option>
+            <option value="tier4">Tier 4 – Nearby Help</option>
+            <option value="tier5">Tier 5 – General</option>
           </select>
           <button id="addSupporterBtn">Add Supporter</button>
         </div>
-        <div style="margin-top:1rem;">
+        <div style="margin-top:1rem;" id="maryOverrideBox" class="hidden">
           <label>
             <input type="checkbox" id="maryOverride" />
             Mary controls all admin rights (if checked, only Mary is admin)
@@ -127,6 +130,22 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+
+    // --- Tier System Definitions ---
+    const TIER_LABELS = {
+      "tier1": "Family",
+      "tier2": "Support",
+      "tier3": "Admin",
+      "tier4": "Nearby Help",
+      "tier5": "General"
+    };
+    const TIER_DESCRIPTIONS = {
+      "tier1": "Trusted family members",
+      "tier2": "Friends, mentors, optionally staff",
+      "tier3": "Designated adult (parent/guardian/trusted)",
+      "tier4": "Roommates, classmates, RAs, in-person help",
+      "tier5": "General supporters"
+    };
 
     // --- Navigation Logic: Panels Switch & Home Icon ---
     document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -249,6 +268,12 @@
           updateCalendarUI();
           listUpcomingEvents();
         }
+        gapi.auth2.getAuthInstance().isSignedIn.listen(isSignedIn => {
+          calendarAuthed = isSignedIn;
+          updateCalendarUI();
+          if (isSignedIn) listUpcomingEvents();
+          else document.getElementById('calendarEvents').innerHTML = '';
+        });
       });
     }
 
@@ -295,10 +320,13 @@
         row.className = "tier-row";
         row.innerHTML = `<span>${sup.email}</span>
           <select>
-            <option value="tier1" ${sup.tier === "tier1" ? "selected" : ""}>Tier 1</option>
-            <option value="tier2" ${sup.tier === "tier2" ? "selected" : ""}>Tier 2</option>
-            <option value="tier3" ${sup.tier === "tier3" ? "selected" : ""}>Tier 3</option>
+            <option value="tier1" ${sup.tier === "tier1" ? "selected" : ""}>Tier 1 – Family</option>
+            <option value="tier2" ${sup.tier === "tier2" ? "selected" : ""}>Tier 2 – Support</option>
+            <option value="tier3" ${sup.tier === "tier3" ? "selected" : ""}>Tier 3 – Admin</option>
+            <option value="tier4" ${sup.tier === "tier4" ? "selected" : ""}>Tier 4 – Nearby Help</option>
+            <option value="tier5" ${sup.tier === "tier5" ? "selected" : ""}>Tier 5 – General</option>
           </select>
+          <span class="tier-desc">${TIER_DESCRIPTIONS[sup.tier]}</span>
           <button>Remove</button>`;
         row.querySelector('select').onchange = function() {
           db.collection("supporters").doc(sup.email).set({email: sup.email, tier: this.value});
@@ -318,13 +346,19 @@
       }
     };
 
-    // --- Admin Panel & Mary Override ---
+    // --- Admin Panel & Mary Override (only visible to Mary) ---
     const adminEmailsBase = ["brinckmyster@gmail.com", "mbrinck90@gmail.com"];
     function setupAdminPanel(user) {
       let adminEmails = [...adminEmailsBase];
-      const maryOverride = document.getElementById('maryOverride');
-      if (maryOverride && maryOverride.checked) {
-        adminEmails = ["mbrinck90@gmail.com"];
+      const maryOverrideBox = document.getElementById('maryOverrideBox');
+      if (user && user.email === "mbrinck90@gmail.com") {
+        maryOverrideBox.classList.remove('hidden');
+        const maryOverride = document.getElementById('maryOverride');
+        if (maryOverride && maryOverride.checked) {
+          adminEmails = ["mbrinck90@gmail.com"];
+        }
+      } else {
+        maryOverrideBox.classList.add('hidden');
       }
       const isAdmin = user && adminEmails.includes(user.email);
       document.getElementById('adminPanel').style.display = isAdmin ? '' : 'none';
@@ -334,9 +368,12 @@
         renderTierList();
       }
     }
-    document.getElementById('maryOverride').onchange = function() {
-      setupAdminPanel(auth.currentUser);
-    };
+    const maryOverride = document.getElementById('maryOverride');
+    if (maryOverride) {
+      maryOverride.onchange = function() {
+        setupAdminPanel(auth.currentUser);
+      };
+    }
 
     // --- Logs ---
     function loadLogs() {
@@ -362,7 +399,7 @@
       else logAction("Signed out");
     });
 
-    // --- Messaging: Mary Sees All, Supporters Can Mail Each Other ---
+    // --- Messaging: Five-Tier Routing, Mary Sees All, Supporters See Only Their Messages ---
     const messageList = document.getElementById('messageList');
     const messageInput = document.getElementById('messageInput');
     const sendMessageBtn = document.getElementById('sendMessageBtn');
@@ -374,21 +411,26 @@
       const isMary = user.email === "mbrinck90@gmail.com";
       if (isMary) {
         recipientSelect.innerHTML += `<option value="all">All Supporters</option>`;
-        ["tier1", "tier2", "tier3"].forEach(tier => {
-          recipientSelect.innerHTML += `<option value="${tier}">Tier: ${tier}</option>`;
+        Object.keys(TIER_LABELS).forEach(tier => {
+          recipientSelect.innerHTML += `<option value="${tier}">Tier: ${TIER_LABELS[tier]}</option>`;
         });
         supporters.forEach(sup => {
-          recipientSelect.innerHTML += `<option value="user:${sup.email}">${sup.email}</option>`;
+          recipientSelect.innerHTML += `<option value="user:${sup.email}">${sup.email} (${TIER_LABELS[sup.tier]})</option>`;
         });
       } else {
         // Supporters can message Mary and other supporters
         recipientSelect.innerHTML += `<option value="user:mbrinck90@gmail.com">Mary (Student)</option>`;
         supporters.forEach(sup => {
           if (sup.email !== user.email) {
-            recipientSelect.innerHTML += `<option value="user:${sup.email}">${sup.email}</option>`;
+            recipientSelect.innerHTML += `<option value="user:${sup.email}">${sup.email} (${TIER_LABELS[sup.tier]})</option>`;
           }
         });
       }
+    }
+
+    function getUserTier(email) {
+      const s = supporters.find(s => s.email === email);
+      return s ? s.tier : null;
     }
 
     function loadMessages() {
@@ -401,13 +443,12 @@
           messageList.innerHTML = '';
           snapshot.forEach(doc => {
             const msg = doc.data();
+            // Mary sees all messages
             if (
               user.email === "mbrinck90@gmail.com" ||
               (msg.recipients && (
                 msg.recipients.includes("all") ||
-                (msg.recipients.includes("tier1") && getUserTier(user.email) === "tier1") ||
-                (msg.recipients.includes("tier2") && getUserTier(user.email) === "tier2") ||
-                (msg.recipients.includes("tier3") && getUserTier(user.email) === "tier3") ||
+                Object.keys(TIER_LABELS).some(tier => msg.recipients.includes(tier) && getUserTier(user.email) === tier) ||
                 msg.recipients.includes(`user:${user.email}`)
               ))
             ) {
@@ -419,11 +460,6 @@
       });
     }
 
-    function getUserTier(email) {
-      const s = supporters.find(s => s.email === email);
-      return s ? s.tier : null;
-    }
-
     sendMessageBtn.onclick = () => {
       const user = auth.currentUser;
       const text = messageInput.value.trim();
@@ -432,7 +468,7 @@
       let recipients = [];
       if (recipient === "all") {
         recipients = ["all"];
-      } else if (recipient.startsWith("tier")) {
+      } else if (Object.keys(TIER_LABELS).includes(recipient)) {
         recipients = [recipient];
       } else if (recipient.startsWith("user:")) {
         recipients = [recipient];

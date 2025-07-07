@@ -10,11 +10,11 @@
   <style>
     body { font-family: system-ui, sans-serif; margin: 0; background: #f5f7fa; }
     header { display: flex; align-items: center; background: #2d3a4a; color: #fff; padding: 1rem; }
-    .logo { width: 40px; height: 40px; margin-right: 1rem; }
+    .logo { width: 40px; height: 40px; margin-right: 1rem; cursor: pointer; }
     nav { display: flex; gap: 1rem; margin-left: auto; }
     .nav-btn { background: none; border: none; color: #fff; font-size: 1rem; cursor: pointer; padding: 0.5rem 1rem; border-radius: 5px; transition: background 0.2s; }
     .nav-btn.active, .nav-btn:focus { background: #4f6d7a; outline: none; }
-    main { max-width: 700px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
+    main { max-width: 800px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
     section { display: none; }
     section.active { display: block; }
     .status-circle { width: 18px; height: 18px; border-radius: 50%; display: inline-block; margin-left: 0.5rem; border: 2px solid #888; vertical-align: middle; }
@@ -30,9 +30,13 @@
     .admin-panel { background: #f5f7fa; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
     .hidden { display: none; }
     .msg-input-box { display: flex; gap: 0.5rem; }
-    .msg-input-box input { flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid #aaa; }
+    .msg-input-box input, .msg-input-box select { flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid #aaa; }
     .msg-input-box button { padding: 0.5rem 1rem; border-radius: 4px; border: none; background: #4f6d7a; color: #fff; cursor: pointer; }
     .msg-input-box button:disabled { background: #aaa; }
+    .tier-list { margin: 1rem 0; }
+    .tier-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+    .tier-row select { min-width: 80px; }
+    .tier-row button { padding: 0.2rem 0.7rem; }
   </style>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -41,7 +45,7 @@
 </head>
 <body>
   <header>
-    <img src="icons/academic-allies.png" alt="Academic Allies Logo" class="logo" />
+    <img src="icons/academic-allies.png" alt="Academic Allies Logo" class="logo" id="homeIcon" />
     <h1 style="font-size:1.5rem; margin:0;">Academic Allies</h1>
     <nav>
       <button class="nav-btn active" data-section="dashboard">Dashboard</button>
@@ -61,13 +65,15 @@
           <button id="calendarSignOutBtn" class="google-btn" style="display:none;">Disconnect Calendar</button>
         </div>
         <div class="calendar-list" id="calendarEvents"></div>
+        <div id="calendarError" style="color:#c00;"></div>
       </div>
     </section>
     <!-- Messages Section -->
     <section id="messages">
       <h2>Messages</h2>
       <div class="message-list" id="messageList"></div>
-      <div class="msg-input-box">
+      <div class="msg-input-box" id="msgInputBox">
+        <select id="recipientSelect"></select>
         <input type="text" id="messageInput" placeholder="Type your message..." autocomplete="off" />
         <button id="sendMessageBtn">Send</button>
       </div>
@@ -78,6 +84,23 @@
       <div class="admin-panel" id="adminPanel" style="display:none;">
         <h3>User Logs</h3>
         <div class="log-list" id="logList"></div>
+        <h3>Manage Supporters & Tiers</h3>
+        <div class="tier-list" id="tierList"></div>
+        <div>
+          <input type="email" id="newSupporterEmail" placeholder="Supporter email" />
+          <select id="newSupporterTier">
+            <option value="tier1">Tier 1</option>
+            <option value="tier2">Tier 2</option>
+            <option value="tier3">Tier 3</option>
+          </select>
+          <button id="addSupporterBtn">Add Supporter</button>
+        </div>
+        <div style="margin-top:1rem;">
+          <label>
+            <input type="checkbox" id="maryOverride" />
+            Mary controls all admin rights (if checked, only Mary is admin)
+          </label>
+        </div>
       </div>
       <div id="notAdminMsg" class="hidden">You do not have admin privileges.</div>
     </section>
@@ -105,7 +128,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // --- Navigation Logic: Panels Switch ---
+    // --- Navigation Logic: Panels Switch & Home Icon ---
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -114,6 +137,12 @@
         document.getElementById(this.dataset.section).classList.add('active');
       });
     });
+    document.getElementById('homeIcon').onclick = function() {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.nav-btn[data-section="dashboard"]').classList.add('active');
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById('dashboard').classList.add('active');
+    };
 
     // --- Status Circle Logic ---
     function updateStatusCircle() {
@@ -150,6 +179,8 @@
       setupAdminPanel(user);
       loadMessages();
       loadLogs();
+      loadSupporters();
+      setupRecipientOptions(user);
     });
 
     signInBtn.addEventListener('click', () => {
@@ -196,6 +227,8 @@
             eventsDiv.innerHTML += `<div class="calendar-event"><strong>${event.summary || '(No title)'}</strong><br/><span>${when}</span></div>`;
           });
         }
+      }, function(error) {
+        document.getElementById('calendarError').textContent = "Failed to load calendar events.";
       });
     }
 
@@ -236,49 +269,76 @@
         document.getElementById('calendarEvents').innerHTML = '';
       });
     };
-    // Load gapi on page load
     window.onload = function() {
       gapiLoaded();
     };
 
-    // --- Messaging Feature (Firebase Firestore) ---
-    const messageList = document.getElementById('messageList');
-    const messageInput = document.getElementById('messageInput');
-    const sendMessageBtn = document.getElementById('sendMessageBtn');
-
-    function loadMessages() {
-      db.collection("messages").orderBy("timestamp", "asc").onSnapshot(snapshot => {
-        messageList.innerHTML = '';
+    // --- Supporters & Tiers Management ---
+    let supporters = [];
+    function loadSupporters() {
+      db.collection("supporters").onSnapshot(snapshot => {
+        supporters = [];
         snapshot.forEach(doc => {
-          const msg = doc.data();
-          messageList.innerHTML += `<div class="message-entry"><strong>${msg.user || 'Anon'}:</strong> ${msg.text}</div>`;
+          let data = doc.data();
+          supporters.push({email: data.email, tier: data.tier});
         });
-        messageList.scrollTop = messageList.scrollHeight;
+        renderTierList();
+        setupRecipientOptions(auth.currentUser);
       });
     }
 
-    sendMessageBtn.onclick = () => {
-      const user = auth.currentUser;
-      const text = messageInput.value.trim();
-      if (!user || !text) return;
-      db.collection("messages").add({
-        user: user.displayName || user.email || "Anon",
-        text: text,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    function renderTierList() {
+      const tierListDiv = document.getElementById('tierList');
+      tierListDiv.innerHTML = '';
+      supporters.forEach(sup => {
+        const row = document.createElement('div');
+        row.className = "tier-row";
+        row.innerHTML = `<span>${sup.email}</span>
+          <select>
+            <option value="tier1" ${sup.tier === "tier1" ? "selected" : ""}>Tier 1</option>
+            <option value="tier2" ${sup.tier === "tier2" ? "selected" : ""}>Tier 2</option>
+            <option value="tier3" ${sup.tier === "tier3" ? "selected" : ""}>Tier 3</option>
+          </select>
+          <button>Remove</button>`;
+        row.querySelector('select').onchange = function() {
+          db.collection("supporters").doc(sup.email).set({email: sup.email, tier: this.value});
+        };
+        row.querySelector('button').onclick = function() {
+          db.collection("supporters").doc(sup.email).delete();
+        };
+        tierListDiv.appendChild(row);
       });
-      messageInput.value = '';
+    }
+    document.getElementById('addSupporterBtn').onclick = function() {
+      const email = document.getElementById('newSupporterEmail').value.trim();
+      const tier = document.getElementById('newSupporterTier').value;
+      if (email) {
+        db.collection("supporters").doc(email).set({email, tier});
+        document.getElementById('newSupporterEmail').value = '';
+      }
     };
 
-    // --- Admin Panel & Logs ---
-    const adminEmails = ["brinckmyster@gmail.com"]; // Add admin emails here
-
+    // --- Admin Panel & Mary Override ---
+    const adminEmailsBase = ["brinckmyster@gmail.com", "mbrinck90@gmail.com"];
     function setupAdminPanel(user) {
+      let adminEmails = [...adminEmailsBase];
+      const maryOverride = document.getElementById('maryOverride');
+      if (maryOverride && maryOverride.checked) {
+        adminEmails = ["mbrinck90@gmail.com"];
+      }
       const isAdmin = user && adminEmails.includes(user.email);
       document.getElementById('adminPanel').style.display = isAdmin ? '' : 'none';
       document.getElementById('notAdminMsg').classList.toggle('hidden', isAdmin);
-      if (isAdmin) loadLogs();
+      if (isAdmin) {
+        loadLogs();
+        renderTierList();
+      }
     }
+    document.getElementById('maryOverride').onchange = function() {
+      setupAdminPanel(auth.currentUser);
+    };
 
+    // --- Logs ---
     function loadLogs() {
       const logList = document.getElementById('logList');
       db.collection("logs").orderBy("timestamp", "desc").limit(50).onSnapshot(snapshot => {
@@ -289,8 +349,6 @@
         });
       });
     }
-
-    // --- Log User Actions ---
     function logAction(message) {
       const user = auth.currentUser;
       db.collection("logs").add({
@@ -299,19 +357,95 @@
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
-
-    // Example: Log sign-in/sign-out actions
     auth.onAuthStateChanged(user => {
       if (user) logAction("Signed in");
       else logAction("Signed out");
     });
 
-    // Log message sends
-    sendMessageBtn.addEventListener('click', () => {
-      if (auth.currentUser && messageInput.value.trim()) {
-        logAction("Sent a message");
+    // --- Messaging: Mary Sees All, Supporters Can Mail Each Other ---
+    const messageList = document.getElementById('messageList');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+    const recipientSelect = document.getElementById('recipientSelect');
+
+    function setupRecipientOptions(user) {
+      recipientSelect.innerHTML = '';
+      if (!user) return;
+      const isMary = user.email === "mbrinck90@gmail.com";
+      if (isMary) {
+        recipientSelect.innerHTML += `<option value="all">All Supporters</option>`;
+        ["tier1", "tier2", "tier3"].forEach(tier => {
+          recipientSelect.innerHTML += `<option value="${tier}">Tier: ${tier}</option>`;
+        });
+        supporters.forEach(sup => {
+          recipientSelect.innerHTML += `<option value="user:${sup.email}">${sup.email}</option>`;
+        });
+      } else {
+        // Supporters can message Mary and other supporters
+        recipientSelect.innerHTML += `<option value="user:mbrinck90@gmail.com">Mary (Student)</option>`;
+        supporters.forEach(sup => {
+          if (sup.email !== user.email) {
+            recipientSelect.innerHTML += `<option value="user:${sup.email}">${sup.email}</option>`;
+          }
+        });
       }
-    });
+    }
+
+    function loadMessages() {
+      auth.onAuthStateChanged(user => {
+        if (!user) {
+          messageList.innerHTML = '<div>Please sign in to view messages.</div>';
+          return;
+        }
+        db.collection("messages").orderBy("timestamp", "asc").onSnapshot(snapshot => {
+          messageList.innerHTML = '';
+          snapshot.forEach(doc => {
+            const msg = doc.data();
+            if (
+              user.email === "mbrinck90@gmail.com" ||
+              (msg.recipients && (
+                msg.recipients.includes("all") ||
+                (msg.recipients.includes("tier1") && getUserTier(user.email) === "tier1") ||
+                (msg.recipients.includes("tier2") && getUserTier(user.email) === "tier2") ||
+                (msg.recipients.includes("tier3") && getUserTier(user.email) === "tier3") ||
+                msg.recipients.includes(`user:${user.email}`)
+              ))
+            ) {
+              messageList.innerHTML += `<div class="message-entry"><strong>${msg.user || 'Anon'}:</strong> ${msg.text}</div>`;
+            }
+          });
+          messageList.scrollTop = messageList.scrollHeight;
+        });
+      });
+    }
+
+    function getUserTier(email) {
+      const s = supporters.find(s => s.email === email);
+      return s ? s.tier : null;
+    }
+
+    sendMessageBtn.onclick = () => {
+      const user = auth.currentUser;
+      const text = messageInput.value.trim();
+      const recipient = recipientSelect.value;
+      if (!user || !text || !recipient) return;
+      let recipients = [];
+      if (recipient === "all") {
+        recipients = ["all"];
+      } else if (recipient.startsWith("tier")) {
+        recipients = [recipient];
+      } else if (recipient.startsWith("user:")) {
+        recipients = [recipient];
+      }
+      db.collection("messages").add({
+        user: user.displayName || user.email || "Anon",
+        text: text,
+        recipients: recipients,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      messageInput.value = '';
+      logAction("Sent a message");
+    };
   </script>
 </body>
 </html>

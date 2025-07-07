@@ -31,6 +31,16 @@
     header { text-align: center; margin-top: 2em; }
     .tagline { font-size: 1.15em; color: #4b6cb7; margin-top: 0.5em; }
     .status-indicator { position: fixed; top: 24px; right: 24px; z-index: 1000; }
+    .status-circle {
+      width: 80px; height: 80px; border-radius: 50%;
+      border: 2px solid var(--color-surface);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-md);
+      transition: background 0.3s;
+      font-size: 0;
+      min-width: 80px; min-height: 80px;
+      background: var(--color-grey);
+    }
     nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; flex-wrap: wrap; }
     nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
     nav button.active { background: #2a4b7c; }
@@ -81,13 +91,10 @@
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Status Circle always top right, loaded from modular file -->
-  <div class="status-indicator" id="statusIndicator"></div>
-  <script>
-    fetch('status-circle.html')
-      .then(res => res.text())
-      .then(html => { document.getElementById('statusIndicator').innerHTML = html; });
-  </script>
+  <!-- Status Circle always top right -->
+  <div class="status-indicator" id="statusIndicator">
+    <div class="status-circle" id="statusCircle" tabindex="0" aria-label="Status Circle"></div>
+  </div>
 
   <!-- Google Sign-In Button (centered above dashboard) -->
   <div class="google-signin" id="googleSignInContainer">
@@ -107,7 +114,6 @@
 
   <!-- Main Navigation with Home Icon -->
   <nav>
-    <!-- Home icon button -->
     <button class="nav-btn icon-btn" aria-label="Home" onclick="showSection('dashboard')">
       <img src="academic-allies.png" alt="" />
     </button>
@@ -235,32 +241,50 @@
       if (user) {
         document.getElementById('googleSignInContainer').classList.add('hidden');
         document.getElementById('userName').textContent = user.displayName || "You";
+        updateStatusCircle();
+        loadLogs();
       } else {
         document.getElementById('googleSignInContainer').classList.remove('hidden');
         document.getElementById('userName').textContent = "Mary";
+        updateStatusCircle();
+        document.getElementById('logsList').innerHTML = '';
       }
     });
 
     // Navigation logic
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-        document.getElementById(this.dataset.section).classList.add('active');
+    function attachNavListeners() {
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+          document.getElementById(this.dataset.section).classList.add('active');
+        });
       });
-    });
+      document.querySelector('.icon-btn').addEventListener('click', function() {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('[data-section="dashboard"]').classList.add('active');
+        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById('dashboard').classList.add('active');
+      });
+    }
+    attachNavListeners();
 
-    // Home icon always returns to Dashboard
-    document.querySelector('.icon-btn').addEventListener('click', function() {
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.querySelector('[data-section="dashboard"]').classList.add('active');
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById('dashboard').classList.add('active');
-    });
-
-    // Status Circle logic: loaded from modular file (status-circle.html)
-    // No need to duplicate logic here; all logic is in the modular component.
+    // Status Circle logic (pie chart, accessible, migraine/dyslexia-friendly)
+    function updateStatusCircle() {
+      const statusCircle = document.getElementById('statusCircle');
+      const day = new Date().getDay(); // 0=Sun,6=Sat
+      if (day === 6) {
+        statusCircle.style.background = "conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
+      } else if (day === 0) {
+        statusCircle.style.background = "conic-gradient(#3b82f6 0% 100%)";
+      } else {
+        statusCircle.style.background = "conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
+      }
+      statusCircle.setAttribute('aria-label', 'Status Circle: Mental, Physical, Spiritual, Academic, Social');
+      statusCircle.title = 'Status: Mental, Physical, Spiritual, Academic, Social';
+    }
+    updateStatusCircle();
 
     // Set today's date and time in dashboard
     function updateDateTime() {
@@ -285,6 +309,7 @@
             answer: answer,
             timestamp: new Date()
           });
+          loadLogs();
         }
       }
     }
@@ -298,6 +323,7 @@
           symptoms: Array.from(document.querySelectorAll('#symptomChecklist input:checked')).map(i=>i.parentElement.textContent.trim()),
           timestamp: new Date()
         });
+        loadLogs();
       }
     }
 
@@ -315,7 +341,6 @@
         });
       });
     }
-    auth.onAuthStateChanged(loadLogs);
 
     // Perplexity AI Panel mockup
     document.getElementById('ai-send').addEventListener('click', async function() {

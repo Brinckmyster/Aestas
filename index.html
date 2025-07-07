@@ -14,16 +14,30 @@
     nav { display: flex; gap: 1rem; margin-left: auto; }
     .nav-btn { background: none; border: none; color: #fff; font-size: 1rem; cursor: pointer; padding: 0.5rem 1rem; border-radius: 5px; transition: background 0.2s; }
     .nav-btn.active, .nav-btn:focus { background: #4f6d7a; outline: none; }
-    main { max-width: 600px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
+    main { max-width: 700px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
     section { display: none; }
     section.active { display: block; }
     .status-circle { width: 18px; height: 18px; border-radius: 50%; display: inline-block; margin-left: 0.5rem; border: 2px solid #888; vertical-align: middle; }
     .google-btn { background: #fff; border: 1px solid #888; color: #333; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; margin-top: 1rem; }
     .google-btn:hover { background: #f0f0f0; }
     .user-info { margin-top: 1rem; }
+    .calendar-list { margin: 1rem 0; }
+    .calendar-event { border-bottom: 1px solid #eee; padding: 0.5rem 0; }
+    .log-list { max-height: 200px; overflow-y: auto; background: #f9f9f9; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; }
+    .log-entry { font-size: 0.95rem; color: #333; margin-bottom: 0.5rem; }
+    .message-list { max-height: 200px; overflow-y: auto; background: #f9f9f9; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; }
+    .message-entry { margin-bottom: 0.5rem; }
+    .admin-panel { background: #f5f7fa; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+    .hidden { display: none; }
+    .msg-input-box { display: flex; gap: 0.5rem; }
+    .msg-input-box input { flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid #aaa; }
+    .msg-input-box button { padding: 0.5rem 1rem; border-radius: 4px; border: none; background: #4f6d7a; color: #fff; cursor: pointer; }
+    .msg-input-box button:disabled { background: #aaa; }
   </style>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
   <header>
@@ -31,19 +45,43 @@
     <h1 style="font-size:1.5rem; margin:0;">Academic Allies</h1>
     <nav>
       <button class="nav-btn active" data-section="dashboard">Dashboard</button>
-      <button class="nav-btn" data-section="support">Support</button>
+      <button class="nav-btn" data-section="messages">Messages</button>
+      <button class="nav-btn" data-section="admin">Admin Panel</button>
       <button class="nav-btn" data-section="settings">Settings</button>
     </nav>
   </header>
   <main>
+    <!-- Dashboard Section -->
     <section id="dashboard" class="active">
       <h2>Dashboard <span class="status-circle" id="statusCircle"></span></h2>
-      <p>Welcome! Here’s your daily overview.</p>
+      <div>
+        <h3>Google Calendar Events</h3>
+        <div>
+          <button id="calendarAuthBtn" class="google-btn">Connect Google Calendar</button>
+          <button id="calendarSignOutBtn" class="google-btn" style="display:none;">Disconnect Calendar</button>
+        </div>
+        <div class="calendar-list" id="calendarEvents"></div>
+      </div>
     </section>
-    <section id="support">
-      <h2>Support Network</h2>
-      <p>Your support contacts and resources appear here.</p>
+    <!-- Messages Section -->
+    <section id="messages">
+      <h2>Messages</h2>
+      <div class="message-list" id="messageList"></div>
+      <div class="msg-input-box">
+        <input type="text" id="messageInput" placeholder="Type your message..." autocomplete="off" />
+        <button id="sendMessageBtn">Send</button>
+      </div>
     </section>
+    <!-- Admin Panel Section -->
+    <section id="admin">
+      <h2>Admin Panel</h2>
+      <div class="admin-panel" id="adminPanel" style="display:none;">
+        <h3>User Logs</h3>
+        <div class="log-list" id="logList"></div>
+      </div>
+      <div id="notAdminMsg" class="hidden">You do not have admin privileges.</div>
+    </section>
+    <!-- Settings Section -->
     <section id="settings">
       <h2>Settings</h2>
       <div id="authSection">
@@ -65,6 +103,7 @@
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const db = firebase.firestore();
 
     // --- Navigation Logic: Panels Switch ---
     document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -108,6 +147,9 @@
 
     auth.onAuthStateChanged(user => {
       showUser(user);
+      setupAdminPanel(user);
+      loadMessages();
+      loadLogs();
     });
 
     signInBtn.addEventListener('click', () => {
@@ -119,8 +161,157 @@
       auth.signOut();
     });
 
-    // --- Ensure Status Circle Updates on Load ---
     window.addEventListener('DOMContentLoaded', updateStatusCircle);
+
+    // --- Google Calendar Integration ---
+    const CLIENT_ID = "93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com";
+    const API_KEY = "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE";
+    const DISCOVERY_DOC = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
+    const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+    let gapiInited = false;
+    let calendarAuthed = false;
+
+    function updateCalendarUI() {
+      document.getElementById('calendarAuthBtn').style.display = calendarAuthed ? 'none' : '';
+      document.getElementById('calendarSignOutBtn').style.display = calendarAuthed ? '' : 'none';
+    }
+
+    function listUpcomingEvents() {
+      gapi.client.calendar.events.list({
+        'calendarId': 'primary',
+        'timeMin': (new Date()).toISOString(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 5,
+        'orderBy': 'startTime'
+      }).then(function(response) {
+        const events = response.result.items;
+        const eventsDiv = document.getElementById('calendarEvents');
+        eventsDiv.innerHTML = '';
+        if (events.length === 0) {
+          eventsDiv.innerHTML = '<div>No upcoming events found.</div>';
+        } else {
+          events.forEach(event => {
+            let when = event.start.dateTime || event.start.date;
+            eventsDiv.innerHTML += `<div class="calendar-event"><strong>${event.summary || '(No title)'}</strong><br/><span>${when}</span></div>`;
+          });
+        }
+      });
+    }
+
+    function gapiLoaded() {
+      gapi.load('client:auth2', initializeGapiClient);
+    }
+
+    function initializeGapiClient() {
+      gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        discoveryDocs: [DISCOVERY_DOC],
+        scope: SCOPES
+      }).then(() => {
+        gapiInited = true;
+        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+          calendarAuthed = true;
+          updateCalendarUI();
+          listUpcomingEvents();
+        }
+      });
+    }
+
+    document.getElementById('calendarAuthBtn').onclick = () => {
+      if (!gapiInited) {
+        gapiLoaded();
+      }
+      gapi.auth2.getAuthInstance().signIn().then(() => {
+        calendarAuthed = true;
+        updateCalendarUI();
+        listUpcomingEvents();
+      });
+    };
+    document.getElementById('calendarSignOutBtn').onclick = () => {
+      gapi.auth2.getAuthInstance().signOut().then(() => {
+        calendarAuthed = false;
+        updateCalendarUI();
+        document.getElementById('calendarEvents').innerHTML = '';
+      });
+    };
+    // Load gapi on page load
+    window.onload = function() {
+      gapiLoaded();
+    };
+
+    // --- Messaging Feature (Firebase Firestore) ---
+    const messageList = document.getElementById('messageList');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+    function loadMessages() {
+      db.collection("messages").orderBy("timestamp", "asc").onSnapshot(snapshot => {
+        messageList.innerHTML = '';
+        snapshot.forEach(doc => {
+          const msg = doc.data();
+          messageList.innerHTML += `<div class="message-entry"><strong>${msg.user || 'Anon'}:</strong> ${msg.text}</div>`;
+        });
+        messageList.scrollTop = messageList.scrollHeight;
+      });
+    }
+
+    sendMessageBtn.onclick = () => {
+      const user = auth.currentUser;
+      const text = messageInput.value.trim();
+      if (!user || !text) return;
+      db.collection("messages").add({
+        user: user.displayName || user.email || "Anon",
+        text: text,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      messageInput.value = '';
+    };
+
+    // --- Admin Panel & Logs ---
+    const adminEmails = ["brinckmyster@gmail.com"]; // Add admin emails here
+
+    function setupAdminPanel(user) {
+      const isAdmin = user && adminEmails.includes(user.email);
+      document.getElementById('adminPanel').style.display = isAdmin ? '' : 'none';
+      document.getElementById('notAdminMsg').classList.toggle('hidden', isAdmin);
+      if (isAdmin) loadLogs();
+    }
+
+    function loadLogs() {
+      const logList = document.getElementById('logList');
+      db.collection("logs").orderBy("timestamp", "desc").limit(50).onSnapshot(snapshot => {
+        logList.innerHTML = '';
+        snapshot.forEach(doc => {
+          const log = doc.data();
+          logList.innerHTML += `<div class="log-entry">${log.timestamp ? log.timestamp.toDate().toLocaleString() : ''} — ${log.message}</div>`;
+        });
+      });
+    }
+
+    // --- Log User Actions ---
+    function logAction(message) {
+      const user = auth.currentUser;
+      db.collection("logs").add({
+        user: user ? (user.displayName || user.email) : "Anon",
+        message: message,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    // Example: Log sign-in/sign-out actions
+    auth.onAuthStateChanged(user => {
+      if (user) logAction("Signed in");
+      else logAction("Signed out");
+    });
+
+    // Log message sends
+    sendMessageBtn.addEventListener('click', () => {
+      if (auth.currentUser && messageInput.value.trim()) {
+        logAction("Sent a message");
+      }
+    });
   </script>
 </body>
 </html>

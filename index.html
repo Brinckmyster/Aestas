@@ -4,17 +4,13 @@
   <meta charset="UTF-8">
   <title>Academic Allies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Main CSS -->
   <link rel="stylesheet" href="css/style.css">
-  <!-- Favicon suppression to prevent 404 errors -->
   <link rel="icon" href="data:,">
 </head>
 <body>
-  <!-- Status Circle (fixed, always visible) -->
   <div id="statusCircle" class="status-circle"></div>
   <div id="banner" class="banner" style="display: none;"></div>
 
-  <!-- Settings: Emoji Toggle (needed by app.js) -->
   <section id="settings-root" aria-label="App Settings">
     <form id="settings-form" class="settings-form">
       <label for="showEmoji">
@@ -24,39 +20,37 @@
     </form>
   </section>
 
-  <!-- Modes Switcher -->
   <section id="modes-root" aria-label="App Mode Switcher">
     <div data-include="components/modes/modes.html"></div>
   </section>
 
-  <!-- Google Integration (Sign-In, Calendar, Firebase) -->
   <section id="google-integration-root" aria-label="Google Integration">
     <div data-include="components/google-integration/google-integration.html"></div>
   </section>
 
-  <!-- User Tiers Panel -->
   <section id="user-tiers-root" aria-label="User Roles and Permissions">
     <div data-include="components/user-tiers/user-tiers.html"></div>
   </section>
 
-  <!-- Spoon Planner -->
   <section id="spoon-planner-root" aria-label="Daily Spoon Planner">
     <div data-include="components/spoon-planner/spoon-planner.html"></div>
   </section>
 
-  <!-- Meal Planner -->
   <section id="meal-planner-root" aria-label="Meal Planner">
     <div data-include="components/meal-planner/meal-planner.html"></div>
   </section>
 
-  <!-- Message System -->
   <section id="message-system-root" aria-label="Support Messages">
     <div data-include="components/message-system/message-system.html"></div>
   </section>
 
-  <!-- Main App JS -->
   <script src="js/app.js"></script>
-  <!-- Loader: Injects HTML from each component file -->
+  <script src="js/modes.js"></script>
+  <script src="js/google-integration.js"></script>
+  <script src="js/user-tiers.js"></script>
+  <script src="js/spoon-planner.js"></script>
+  <script src="js/meal-planner.js"></script>
+  <script src="js/message-system.js"></script>
   <script>
     document.querySelectorAll('[data-include]').forEach(async (el) => {
       const file = el.getAttribute('data-include');

@@ -1,1 +1,179 @@
-minimal
+<!-- User Tiers Component for Academic Allies -->
+<!-- Place this file in components/user-tiers/user-tiers.html -->
+
+<section id="user-tiers-panel" class="user-tiers-panel" aria-label="User Roles and Permissions">
+  <h2>User Tiers</h2>
+  <table class="tiers-table" aria-describedby="tiers-desc">
+    <caption id="tiers-desc">
+      Manage and view all user roles in your Academic Allies support network.
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Tier</th>
+        <th scope="col">Role Description</th>
+        <th scope="col">Permissions</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Student</strong></td>
+        <td>Primary app user (Mary). Full control of all settings and roles.</td>
+        <td>
+          <ul>
+            <li>All access</li>
+            <li>Assign/revoke roles</li>
+            <li>View/edit data</li>
+          </ul>
+        </td>
+        <td>
+          <button type="button" disabled aria-disabled="true" class="action-btn">Owner</button>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Family</strong></td>
+        <td>Trusted family (e.g., Mom). Support, view logs, cannot override privacy.</td>
+        <td>
+          <ul>
+            <li>View logs</li>
+            <li>Send messages</li>
+            <li>Limited support actions</li>
+          </ul>
+        </td>
+        <td>
+          <button type="button" class="action-btn" aria-label="Revoke Family Role">Revoke</button>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Support</strong></td>
+        <td>School staff, counselors. Read-only unless expanded by Student/Admin.</td>
+        <td>
+          <ul>
+            <li>View support data</li>
+            <li>Send encouragement</li>
+          </ul>
+        </td>
+        <td>
+          <button type="button" class="action-btn" aria-label="Revoke Support Role">Revoke</button>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Admin</strong></td>
+        <td>Trusted technical/admin support. Can help manage support, not override privacy.</td>
+        <td>
+          <ul>
+            <li>Manage support staff</li>
+            <li>View audit logs</li>
+          </ul>
+        </td>
+        <td>
+          <button type="button" class="action-btn" aria-label="Revoke Admin Role">Revoke</button>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Nearby Help</strong></td>
+        <td>Local friends, neighbors, or emergency contacts. Limited, event-based access.</td>
+        <td>
+          <ul>
+            <li>Receive alerts</li>
+            <li>Contact in emergencies</li>
+          </ul>
+        </td>
+        <td>
+          <button type="button" class="action-btn" aria-label="Revoke Nearby Help Role">Revoke</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<style>
+.user-tiers-panel {
+  background: #f8fafc;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  max-width: 800px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.user-tiers-panel h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #22223b;
+}
+
+.tiers-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.tiers-table caption {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5em;
+  text-align: left;
+}
+
+.tiers-table th,
+.tiers-table td {
+  border: 1px solid #bdbdbd;
+  padding: 0.75em 1em;
+  text-align: left;
+  vertical-align: top;
+}
+
+.tiers-table th {
+  background: #e0e7ff;
+  font-weight: 700;
+}
+
+.tiers-table tr:nth-child(even) td {
+  background: #f1f5f9;
+}
+
+.action-btn {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 0.5em;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.action-btn[disabled],
+.action-btn[aria-disabled="true"] {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+.action-btn:focus {
+  outline: 2px solid #6366f1;
+}
+</style>
+
+<script>
+// User Tiers Component Logic
+// Handles role revocation and accessibility feedback.
+
+document.addEventListener('DOMContentLoaded', function () {
+  const table = document.querySelector('.tiers-table');
+  table.addEventListener('click', function (e) {
+    if (e.target.classList.contains('action-btn') && !e.target.disabled) {
+      const row = e.target.closest('tr');
+      const role = row.querySelector('td strong').textContent;
+      if (confirm(`Are you sure you want to revoke the "${role}" role?`)) {
+        // Simulate role revocation (replace with real logic)
+        e.target.textContent = 'Revoked';
+        e.target.disabled = true;
+        e.target.setAttribute('aria-disabled', 'true');
+        row.style.opacity = 0.5;
+        // Optionally dispatch a custom event for app integration
+        const revokeEvent = new CustomEvent('roleRevoked', { detail: { role } });
+        document.dispatchEvent(revokeEvent);
+      }
+    }
+  });
+});
+</script>

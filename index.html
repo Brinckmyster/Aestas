@@ -6,11 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Main CSS -->
   <link rel="stylesheet" href="css/style.css">
+  <!-- Favicon suppression to prevent 404 errors -->
+  <link rel="icon" href="data:,">
 </head>
 <body>
   <!-- Status Circle (fixed, always visible) -->
   <div id="statusCircle" class="status-circle"></div>
   <div id="banner" class="banner" style="display: none;"></div>
+
+  <!-- Settings: Emoji Toggle (needed by app.js) -->
+  <section id="settings-root" aria-label="App Settings">
+    <form id="settings-form" class="settings-form">
+      <label for="showEmoji">
+        <input type="checkbox" id="showEmoji" name="showEmoji">
+        Enable Emoji in Status Circle
+      </label>
+    </form>
+  </section>
 
   <!-- Modes Switcher -->
   <section id="modes-root" aria-label="App Mode Switcher">

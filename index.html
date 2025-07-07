@@ -4,85 +4,43 @@
   <meta charset="UTF-8">
   <title>Academic Allies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+
   <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- PWA Icons & Manifest -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="icons/academic-allies.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
   <link rel="stylesheet" href="style.css">
   <style>
     :root {
-      --color-background: #fcfcf9;
-      --color-surface: #fff;
-      --color-text: #13343b;
-      --color-success: #22c55e;
-      --color-warning: #fbbf24;
-      --color-error: #ef4444;
-      --color-primary: #3b82f6;
-      --color-info: #8b5cf6;
-      --color-grey: #bdbdbd;
-      --radius-base: 12px;
-      --space-16: 16px;
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02);
-      --font-main: Atkinson Hyperlegible, OpenDyslexic, Arial, Helvetica, sans-serif;
+      --bg: #fcfcf9; --surface: #fff; --text: #13343b;
+      --success: #22c55e; --warning: #fbbf24; --primary: #3b82f6;
+      --grey: #bdbdbd; --space: 16px; --radius: 12px;
+      --shadow: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02);
+      --font: Atkinson Hyperlegible, OpenDyslexic, Arial, sans-serif;
     }
-    body { font-family: var(--font-main); background: var(--color-background); color: var(--color-text); margin: 0; padding: var(--space-16);}
-    header { text-align: center; margin-top: 2em; }
-    .tagline { font-size: 1.15em; color: #4b6cb7; margin-top: 0.5em; }
-    .status-indicator { position: fixed; top: 24px; right: 24px; z-index: 1000; }
-    .status-circle {
-      width: 80px; height: 80px; border-radius: 50%;
-      border: 2px solid var(--color-surface);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: var(--shadow-md);
-      transition: background 0.3s;
-      font-size: 0;
-      min-width: 80px; min-height: 80px;
-      background: var(--color-grey);
-    }
-    nav { display: flex; justify-content: center; gap: 1em; margin: 2em 0 1em 0; flex-wrap: wrap; }
-    nav button { font-size: 1.1em; padding: 0.5em 1.5em; border-radius: 8px; border: none; background: #4b6cb7; color: #fff; cursor: pointer; }
-    nav button.active { background: #2a4b7c; }
-    .icon-btn {
-      padding: 0.5em;
-      background: none;
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 0.5em;
-    }
-    .icon-btn img {
-      width: 32px;
-      height: 32px;
-      display: block;
-    }
-    .icon-btn:focus,
-    .icon-btn:hover {
-      background: rgba(33, 128, 141, 0.08);
-      border-radius: 6px;
-      outline: 2px solid #21808d;
-    }
-    section { display: none; max-width: 700px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; }
-    section.active { display: block; }
-    .dashboard-summary { background: #fff; color: #1a2633; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 2em; margin-top: 1.5em; }
-    .dashboard-summary h2, .dashboard-summary p, .dashboard-summary .status-grid, .dashboard-summary .date-time { color: #1a2633 !important; }
-    .status-grid { display: flex; gap: 2em; margin: 1em 0; }
-    .status-item .label { font-weight: bold; }
-    .quick-actions { margin: 1.5em 0; }
-    .quick-actions button { margin-right: 1em; margin-bottom: 0.5em; padding: 0.7em 1.2em; border-radius: 8px; background: #4b6cb7; color: #fff; border: none; font-size: 1em; cursor: pointer; }
-    .calendar-preview { margin: 1em 0; }
-    .calendar-preview label { margin-right: 1em; }
-    .shortcuts-panel { margin-top: 1em; color: #4b6cb7; }
-    .google-signin { display: flex; justify-content: center; margin: 2em 0; }
-    .hidden { display: none !important; }
-    .perplexity-ai-panel { margin-top: 2em; }
-    .ai-response { margin-top: 1em; background: #f3f6fa; padding: 1em; border-radius: 8px; min-height: 2em; }
-    .support-list { padding-left: 1.2em; }
-    .support-list li { margin-bottom: 0.5em; font-size: 1.08em; }
-    .role-desc { color: #626c71; font-size: 0.95em; margin-left: 0.5em; }
+    body { margin:0; padding:var(--space); font-family:var(--font); background:var(--bg); color:var(--text); }
+    header { text-align:center; margin-top:2em; }
+    .tagline { color:var(--primary); margin-top:.5em; }
+    .status-circle { position:fixed; top:var(--space); right:var(--space); width:80px; height:80px; border-radius:50%; box-shadow:var(--shadow);
+      background:grey; display:flex; align-items:center; justify-content:center; }
+    nav { display:flex; justify-content:center; gap:1em; flex-wrap:wrap; margin:2em 0 1em; }
+    .nav-btn, .icon-btn { border:none; background:var(--primary); color:#fff; padding:.5em 1em; border-radius:var(--radius); font-size:1em; cursor:pointer; }
+    .nav-btn.active { background:#2a4b7c }
+    .icon-btn { background:none; padding:.25em; }
+    .icon-btn img { width:32px; height:32px; }
+    section { display:none; max-width:700px; margin:0 auto var(--space); background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); padding:var(--space); }
+    section.active { display:block }
+    .quick-actions button { margin:.5em .5em 0 0; }
+    .google-signin { display:flex; justify-content:center; margin:2em 0; }
   </style>
 </head>
 <body>
@@ -91,281 +49,125 @@
     <p class="tagline">Your disability accommodations and support network</p>
   </header>
 
-  <!-- Status Circle always top right -->
-  <div class="status-indicator" id="statusIndicator">
-    <div class="status-circle" id="statusCircle" tabindex="0" aria-label="Status Circle"></div>
-  </div>
+  <div class="status-circle" id="statusCircle" aria-label="Status Circle"></div>
 
-  <!-- Google Sign-In Button (centered above dashboard) -->
   <div class="google-signin" id="googleSignInContainer">
     <div id="g_id_onload"
-         data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse"
-         data-auto_prompt="false"></div>
-    <div id="g_id_signin"
-         class="g_id_signin"
-         data-type="standard"
-         data-shape="rectangular"
-         data-theme="outline"
-         data-text="signin_with"
-         data-size="large"
-         data-logo_alignment="left"></div>
+      data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
+      data-callback="handleCredentialResponse"
+      data-auto_prompt="false"></div>
+    <div id="g_id_signin" class="g_id_signin"
+      data-type="standard" data-shape="rectangular"
+      data-theme="outline" data-text="signin_with"
+      data-size="large" data-logo_alignment="left"></div>
   </div>
 
-  <!-- Main Navigation with Home Icon -->
   <nav>
-    <button class="nav-btn icon-btn" aria-label="Home" onclick="showSection('dashboard')">
-      <img src="icons/academic-allies.png" alt="" />
+    <button class="icon-btn" aria-label="Home" onclick="showSection('dashboard')">
+      <img src="icons/academic-allies.png" alt="">
     </button>
-    <button class="nav-btn" data-section="dashboard">Dashboard</button>
+    <button class="nav-btn active" data-section="dashboard">Dashboard</button>
     <button class="nav-btn" data-section="checkins">Check-Ins</button>
     <button class="nav-btn" data-section="logs">Logs</button>
     <button class="nav-btn" data-section="admin">Admin Panel</button>
     <button class="nav-btn" data-section="settings">Settings</button>
   </nav>
 
-  <!-- Dashboard Section -->
   <section id="dashboard" class="active">
-    <div class="dashboard-summary">
-      <h2>Welcome back, <span id="userName">Mary</span>!</h2>
-      <p class="date-time" id="dateTime"></p>
-      <div class="status-grid">
-        <div class="status-item"><span class="label">Brain Fog</span> <span class="value" id="fogLevel">Moderate</span></div>
-        <div class="status-item"><span class="label">Cognitive</span> <span class="value" id="cognitiveScore">3/5</span></div>
-        <div class="status-item"><span class="label">Checklist</span> <span class="value" id="checklistProgress">4/6</span></div>
-      </div>
-      <div class="quick-actions">
-        <button onclick="showSection('checkins')">Start Check-In</button>
-        <button onclick="showSection('logs')">See Logs</button>
-        <button onclick="showSection('admin')">Admin Panel</button>
-        <button onclick="showSection('settings')">Settings</button>
-      </div>
-      <div class="calendar-preview">
-        <strong>Calendar</strong>
-        <label><input type="checkbox" checked> Google</label>
-        <label><input type="checkbox"> BYU-I</label>
-        <label><input type="checkbox"> Health</label>
-        <ul><li>9:30 AM BIO 101 Exam (BYU-I Academic)</li><li>1:00 PM Doctor Appointment (Health)</li></ul>
-      </div>
-      <div class="shortcuts-panel">
-        <small>Shortcuts: Alt+1 Dashboard, Alt+2 Check-Ins, ...</small>
-      </div>
-    </div>
+    <h2>Welcome back, <span id="userName">Mary</span>!</h2>
+    <p id="dateTime"></p>
   </section>
 
-  <!-- Check-Ins Section -->
   <section id="checkins">
     <h2>Daily Check-Ins</h2>
-    <div class="checkin-reassurance">
-      <p>No need to answer if you're not sure. Academic Allies already checks for signs of pain, fatigue, or brain fog in the background using your typing and heart rate patterns. No action is needed from you unless you want to add more details.</p>
-    </div>
-    <p>Did you experience any significant pain, fatigue, or brain fog today?</p>
-    <div class="checkin-options">
-      <button class="btn" onclick="submitCheckin('no')">No</button>
-      <button class="btn" onclick="submitCheckin('yes')">Yes</button>
-      <button class="btn" onclick="submitCheckin('skip')">Skip for today</button>
-    </div>
-    <div id="symptomChecklist" style="display:none; margin-top:1em;">
-      <label><input type="checkbox"> Headache</label>
-      <label><input type="checkbox"> Muscle pain</label>
-      <label><input type="checkbox"> Joint pain</label>
-      <label><input type="checkbox"> Fatigue</label>
-      <label><input type="checkbox"> Brain fog</label>
-      <label><input type="checkbox"> Dizziness</label>
-      <label><input type="checkbox"> Nausea</label>
-      <label><input type="checkbox"> Other</label>
-      <button class="btn" style="display:block; margin-top:1em;" onclick="submitChecklist()">Submit Symptoms</button>
-    </div>
-    <div id="checkinStatus" style="margin-top:12px;font-size:1em;color:#21808d"></div>
   </section>
 
-  <!-- Logs Section -->
   <section id="logs">
-    <h2>Logs &amp; History</h2>
-    <p>Review your recent check-ins, flags, and support activity.</p>
-    <ul id="logsList"></ul>
+    <h2>Logs & History</h2>
   </section>
 
-  <!-- Admin Panel Section -->
   <section id="admin">
     <h2>Admin Panel</h2>
-    <div id="supportNetwork" style="margin-top:2em;">
-      <h3>Support Network</h3>
-      <ul class="support-list">
-        <li>Mary <strong>Student</strong></li>
-        <li>Brinckmyster <strong>Admin</strong></li>
-        <li>Mom <strong>Family</strong></li>
-        <li>Support test <strong>Support</strong> <span class="role-desc">KarenBrinckFH@gmail.com</span></li>
-        <li>Nearby Help test <strong>Nearby Help</strong> <span class="role-desc">KarenBrinck@gmail.com</span></li>
-      </ul>
-    </div>
-    <div class="perplexity-ai-panel" id="perplexity-ai-panel">
-      <h3>Perplexity AI Protocol Support Editor</h3>
-      <p>Only Admins with Perplexity AI access can use this tool to update protocols, triggers, and support settings.<br>All changes are logged and visible to the student and Admins.</p>
-      <textarea id="ai-input" rows="4" style="width:100%;" placeholder="Type your question or protocol update here..."></textarea>
-      <button id="ai-send" style="margin-top:0.5em;">Send to Perplexity AI</button>
-      <div id="ai-response" class="ai-response"></div>
-    </div>
   </section>
 
-  <!-- Settings Section -->
   <section id="settings">
     <h2>Settings</h2>
-    <p>Customize your experience, notification preferences, and accessibility options.</p>
   </section>
 
   <script>
-    // Firebase config (your real config, no edits needed)
+    // Firebase init
     const firebaseConfig = {
-      apiKey: "AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
-      authDomain: "academic-allies-464901.firebaseapp.com",
-      projectId: "academic-allies-464901",
-      storageBucket: "academic-allies-464901.appspot.com",
-      messagingSenderId: "93996985456",
-      appId: "1:93996985456:web:c697df7623bbceeb1d18b5"
+      apiKey:"AIzaSyDk9mwSZgk9I65RpYlus7by9mB8tN_oskE",
+      authDomain:"academic-allies-464901.firebaseapp.com",
+      projectId:"academic-allies-464901",
+      storageBucket:"academic-allies-464901.appspot.com",
+      messagingSenderId:"93996985456",
+      appId:"1:93996985456:web:c697df7623bbceeb1d18b5"
     };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    const auth = firebase.auth(), db = firebase.firestore();
 
-    // Wait for DOM to be fully loaded before attaching event listeners
-    document.addEventListener('DOMContentLoaded', function() {
-      // Google Sign-In callback: link GIS to Firebase Auth
-      window.handleCredentialResponse = function(response) {
-        const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
-        auth.signInWithCredential(credential)
-          .then(() => { /* UI will update via onAuthStateChanged */ })
-          .catch((error) => { alert("Sign-in failed: " + error.message); });
+    document.addEventListener('DOMContentLoaded',()=>{
+      // Sign-in callback
+      window.handleCredentialResponse = resp=>{
+        const cred = firebase.auth.GoogleAuthProvider.credential(resp.credential);
+        auth.signInWithCredential(cred).catch(e=>alert(e.message));
       };
 
-      // Auth state listener: persistent sign-in and UI update
-      auth.onAuthStateChanged(function(user) {
-        if (user) {
-          document.getElementById('googleSignInContainer').classList.add('hidden');
+      // Auth listener
+      auth.onAuthStateChanged(user=>{
+        const container=document.getElementById('googleSignInContainer');
+        if(user){
+          container.classList.add('hidden');
           document.getElementById('userName').textContent = user.displayName || "You";
-          updateStatusCircle();
           loadLogs();
         } else {
-          document.getElementById('googleSignInContainer').classList.remove('hidden');
+          container.classList.remove('hidden');
           document.getElementById('userName').textContent = "Mary";
-          updateStatusCircle();
-          document.getElementById('logsList').innerHTML = '';
         }
       });
 
-      // Navigation logic
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          if (this.dataset.section) {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(this.dataset.section).classList.add('active');
-          }
+      // Nav logic
+      document.querySelectorAll('.nav-btn').forEach(btn=>{
+        btn.addEventListener('click',function(){
+          document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+          this.classList.add('active');
+          document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+          document.getElementById(this.dataset.section).classList.add('active');
         });
       });
-
-      // Home icon click handler
-      document.querySelector('.icon-btn').addEventListener('click', function() {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.icon-btn').addEventListener('click',()=>{
+        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
         document.querySelector('[data-section="dashboard"]').classList.add('active');
-        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
         document.getElementById('dashboard').classList.add('active');
       });
 
-      // Status Circle logic (pie chart, accessible, migraine/dyslexia-friendly)
-      function updateStatusCircle() {
-        const statusCircle = document.getElementById('statusCircle');
-        const day = new Date().getDay(); // 0=Sun,6=Sat
-        if (day === 6) {
-          statusCircle.style.background = "conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
-        } else if (day === 0) {
-          statusCircle.style.background = "conic-gradient(#3b82f6 0% 100%)";
-        } else {
-          statusCircle.style.background = "conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
-        }
-        statusCircle.setAttribute('aria-label', 'Status Circle: Mental, Physical, Spiritual, Academic, Social');
-        statusCircle.title = 'Status: Mental, Physical, Spiritual, Academic, Social';
+      // Status circle
+      function updateStatus(){
+        const c=document.getElementById('statusCircle'),d=new Date().getDay();
+        if(d===6) c.style.background="conic-gradient(#22c55e 0% 20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
+        else if(d===0) c.style.background="conic-gradient(#3b82f6 0% 100%)";
+        else c.style.background="conic-gradient(#22c55e 0%20%,#fbbf24 20% 40%,#3b82f6 40% 60%,#bdbdbd 60% 80%,#8b5cf6 80% 100%)";
       }
+      updateStatus();
 
-      // Set today's date and time in dashboard
-      function updateDateTime() {
-        const dateTimeElem = document.getElementById('dateTime');
-        const now = new Date();
-        dateTimeElem.textContent = now.toLocaleString(undefined, {weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"});
-      }
+      // Date/time
+      document.getElementById('dateTime').textContent = new Date().toLocaleString();
 
-      // Initialize on load
-      updateStatusCircle();
-      updateDateTime();
-
-      // Check-in logic (writes to Firestore)
-      window.submitCheckin = function(answer) {
-        if (answer === 'yes') {
-          document.getElementById('symptomChecklist').style.display = 'block';
-          document.getElementById('checkinStatus').textContent = '';
-        } else {
-          document.getElementById('symptomChecklist').style.display = 'none';
-          document.getElementById('checkinStatus').textContent =
-            answer === 'no' ? "Logged: No significant symptoms today." : "Skipped today's check-in.";
-          if (auth.currentUser) {
-            db.collection('checkins').add({
-              user: auth.currentUser.email,
-              answer: answer,
-              timestamp: new Date()
+      // Logs loader
+      function loadLogs(){
+        if(!auth.currentUser) return;
+        db.collection('checkins').where('user','==',auth.currentUser.email)
+          .orderBy('timestamp','desc').limit(10).get().then(snap=>{
+            const ul=document.getElementById('logs'),list=document.createElement('ul');
+            snap.forEach(doc=>{
+              const d=doc.data(),li=document.createElement('li');
+              li.textContent=`${d.timestamp.toDate().toLocaleString()}: ${d.answer}`; list.append(li);
             });
-            loadLogs();
-          }
-        }
-      };
-
-      window.submitChecklist = function() {
-        document.getElementById('checkinStatus').textContent = "Symptoms logged. Support notified if needed.";
-        document.getElementById('symptomChecklist').style.display = 'none';
-        if (auth.currentUser) {
-          db.collection('checkins').add({
-            user: auth.currentUser.email,
-            answer: "symptoms",
-            symptoms: Array.from(document.querySelectorAll('#symptomChecklist input:checked')).map(i=>i.parentElement.textContent.trim()),
-            timestamp: new Date()
+            ul.innerHTML=''; ul.append(list);
           });
-          loadLogs();
-        }
-      };
-
-      // Logs logic (reads from Firestore)
-      function loadLogs() {
-        if (!auth.currentUser) return;
-        db.collection('checkins').where('user', '==', auth.currentUser.email).orderBy('timestamp','desc').limit(10).get().then(snapshot => {
-          const logsList = document.getElementById('logsList');
-          logsList.innerHTML = '';
-          snapshot.forEach(doc => {
-            const d = doc.data();
-            const li = document.createElement('li');
-            li.textContent = `${d.timestamp.toDate().toLocaleString()}: ${d.answer}${d.symptoms ? ' ('+d.symptoms.join(', ')+')' : ''}`;
-            logsList.appendChild(li);
-          });
-        });
       }
-
-      // Section navigation helper
-      window.showSection = function(sectionId) {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
-        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-      };
-
-      // Perplexity AI Panel mockup
-      document.getElementById('ai-send').addEventListener('click', async function() {
-        const input = document.getElementById('ai-input').value.trim();
-        const responseDiv = document.getElementById('ai-response');
-        if (!input) { responseDiv.textContent = "Please enter a question or update."; return; }
-        responseDiv.textContent = "Thinking...";
-        setTimeout(() => {
-          responseDiv.textContent = "This is a mock response from Perplexity AI. Replace with real API integration.";
-        }, 1200);
-      });
     });
   </script>
 </body>

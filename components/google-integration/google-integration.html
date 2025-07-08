@@ -4,24 +4,17 @@
   <meta charset="utf-8">
   <title>Academic Allies</title>
 
-  <!-- Content Security Policy allowing Google scripts -->
+  <!-- Content Security Policy allowing Google and Firebase -->
   <meta http-equiv="Content-Security-Policy"
         content="
           default-src 'self';
-          script-src 
-            'self' 
-            https://accounts.google.com 
-            https://apis.google.com 
-            https://www.gstatic.com 
-            https://www.googleapis.com 
-            'unsafe-inline';
+          script-src 'self' https://accounts.google.com https://apis.google.com https://www.gstatic.com https://www.googleapis.com 'unsafe-inline';
           frame-src https://accounts.google.com;
           style-src 'self' 'unsafe-inline';
-          connect-src 'self' https://accounts.google.com https://www.googleapis.com;
+          connect-src 'self' https://accounts.google.com https://www.googleapis.com https://*.firebaseio.com;
           img-src 'self' data:;
         ">
 
-  <!-- Styles (you can also move this to a .css file) -->
   <style>
     .google-integration { background: #f8fafc; border-radius:1rem; padding:1.5rem; max-width:500px; margin:2rem auto; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
     .google-btn, .calendar-btn { background: #3b82f6; color:#fff; border:none; border-radius:0.5em; padding:0.6em 1.4em; font-size:1em; cursor:pointer; transition:background 0.2s; margin-right:0.5em; }
@@ -39,21 +32,13 @@
   <section id="google-integration" class="google-integration" aria-label="Google Sign-In and Calendar">
     <h2>Google Integration</h2>
     <div class="google-signin">
-      <button id="google-signin-btn" class="google-btn" aria-label="Sign in with Google">
-        <span class="google-icon"></span> Sign in with Google
-      </button>
+      <button id="google-signin-btn" class="google-btn"><span class="google-icon"></span>Sign in with Google</button>
       <span id="google-user" class="google-user" style="display:none;"></span>
-      <button id="google-signout-btn" class="google-btn" style="display:none;" aria-label="Sign out">
-        Sign out
-      </button>
+      <button id="google-signout-btn" class="google-btn" style="display:none;">Sign out</button>
     </div>
     <div class="calendar-integration" style="margin-top:1.5em;">
-      <button id="calendar-connect-btn" class="calendar-btn" aria-label="Connect Google Calendar" disabled>
-        Connect Google Calendar
-      </button>
-      <button id="calendar-disconnect-btn" class="calendar-btn" style="display:none;" aria-label="Disconnect Calendar">
-        Disconnect Calendar
-      </button>
+      <button id="calendar-connect-btn" class="calendar-btn" disabled>Connect Google Calendar</button>
+      <button id="calendar-disconnect-btn" class="calendar-btn" style="display:none;">Disconnect Calendar</button>
       <pre id="calendar-status" class="calendar-status"></pre>
     </div>
     <div class="firebase-status" style="margin-top:1.5em;">
@@ -61,17 +46,15 @@
     </div>
   </section>
 
-  <!-- Firebase SDKs -->
+  <!-- Load external libraries synchronously in correct order -->
+  <script src="https://accounts.google.com/gsi/client"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
 
-  <!-- Google APIs -->
-  <script src="https://accounts.google.com/gsi/client" async defer onload="gisOnLoad()"></script>
-  <script src="https://apis.google.com/js/api.js" async defer onload="gapiOnLoad()"></script>
-
   <script>
-    // Configurations
+    // Config
     const firebaseConfig = {
       apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGHbFGH",
       authDomain: "academic-allies-464901.firebaseapp.com",
@@ -86,9 +69,7 @@
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.getAuth(app);
-    firebase.onAuthStateChanged(auth, user => {
-      updateFirebaseStatus(user ? "Authenticated" : "Connected (Not Authenticated)", "connected");
-    });
+    firebase.onAuthStateChanged(auth, user => updateFirebaseStatus(user ? "Authenticated" : "Connected (Not Authenticated)", "connected"));
     function updateFirebaseStatus(text, cls) {
       const el = document.getElementById('firebase-status-text');
       el.textContent = text;
@@ -111,7 +92,7 @@
       try {
         const cred = firebase.GoogleAuthProvider.credential(resp.credential);
         await firebase.signInWithCredential(auth, cred);
-      } catch(e) {
+      } catch (e) {
         console.error(e);
         updateFirebaseStatus("Auth Failed","error");
       }
@@ -132,7 +113,7 @@
       } catch { return {}; }
     }
 
-    // Google Calendar Integration
+    // Google Calendar
     let gapiInited=false, gisInited=false, tokenClient;
     window.gapiOnLoad = async () => {
       await gapi.client.init({ discoveryDocs:['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'] });
@@ -140,16 +121,16 @@
     };
     window.gisOnLoad = () => {
       tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID, scope: CAL_SCOPES,
+        client_id: GOOGLE_CLIENT_ID,
+        scope: CAL_SCOPES,
         callback: async resp => {
           if (resp.error) return document.getElementById('calendar-status').textContent = 'Calendar auth failed';
-          const now=new Date().toISOString();
+          const now = new Date().toISOString();
           const res = await gapi.client.calendar.events.list({
-            calendarId:'primary', timeMin:now, showDeleted:false,
-            singleEvents:true, maxResults:10, orderBy:'startTime'
+            calendarId:'primary', timeMin:now, showDeleted:false, singleEvents:true, maxResults:10, orderBy:'startTime'
           });
           const items = res.result.items||[];
-          document.getElementById('calendar-status').textContent = 
+          document.getElementById('calendar-status').textContent =
             items.length
               ? items.map(e=>`${e.summary} (${e.start.dateTime||e.start.date})`).join('\n')
               : 'No upcoming events.';

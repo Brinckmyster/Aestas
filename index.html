@@ -17,25 +17,87 @@
         ">
 
   <link rel="icon" href="icons/home.png">
+  <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="css/style.css">
 
   <style>
     body { margin:0; font-family:sans-serif; background:#f8fafc; }
-    .centered { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; }
-    .status-circle { width:64px; height:64px; border-radius:50%; background:#3b82f6; margin:2rem auto 1rem auto; display:flex; align-items:center; justify-content:center; }
-    .home-icon { width:40px; height:40px; margin:0 auto 1rem auto; display:block; }
-    .google-integration { background: #fff; border-radius:1rem; padding:1.5rem; max-width:400px; margin:2rem auto; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
-    .google-btn { background: #3b82f6; color:#fff; border:none; border-radius:0.5em; padding:0.6em 1.4em; font-size:1em; cursor:pointer; transition:background 0.2s; display:flex; align-items:center; }
+    /* Fixed status circle (top left) */
+    #statusCircle {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #3b82f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    /* Fixed home icon (top right) */
+    .home-icon {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+      z-index: 1000;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .google-integration {
+      background: #fff;
+      border-radius:1rem;
+      padding:1.5rem;
+      max-width:400px;
+      margin:7rem auto 2rem auto;
+      box-shadow:0 2px 8px rgba(0,0,0,0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .google-btn {
+      background: #3b82f6;
+      color:#fff;
+      border:none;
+      border-radius:0.5em;
+      padding:0.6em 1.4em;
+      font-size:1em;
+      cursor:pointer;
+      transition:background 0.2s;
+      display:flex;
+      align-items:center;
+      margin-bottom:1em;
+    }
     .google-btn:focus { outline:2px solid #6366f1; }
-    .google-icon { display:inline-block; width:1.2em; height:1.2em; background:url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center/contain; vertical-align:middle; margin-right:0.5em; }
+    .google-icon {
+      display:inline-block;
+      width:1.2em;
+      height:1.2em;
+      background:url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center/contain;
+      vertical-align:middle;
+      margin-right:0.5em;
+    }
     .google-user { margin-left:1em; font-weight:600; color:#22223b; }
     .hidden { display:none !important; }
+    /* Responsive for mobile */
+    @media (max-width: 600px) {
+      .google-integration { max-width:95vw; }
+      #statusCircle, .home-icon { width:44px; height:44px; }
+    }
   </style>
 </head>
 <body>
-  <div class="centered" id="pre-auth">
-    <img src="icons/home.png" alt="Home" class="home-icon">
-    <div id="statusCircle" class="status-circle" title="Status"></div>
+  <!-- Always visible: status circle and home icon -->
+  <div id="statusCircle" title="Status"></div>
+  <img src="icons/home.png" alt="Home" class="home-icon">
+
+  <!-- Pre-auth UI: Only Google sign-in visible -->
+  <div id="pre-auth">
     <section id="google-integration" class="google-integration" aria-label="Google Sign-In">
       <button id="google-signin-btn" class="google-btn">
         <span class="google-icon"></span>Sign in with Google
@@ -45,10 +107,8 @@
     </section>
   </div>
 
-  <!-- All other app features, hidden until sign-in -->
+  <!-- Post-auth UI: Hidden until sign-in -->
   <div id="post-auth" class="hidden">
-    <div id="statusCircle2" class="status-circle" title="Status"></div>
-    <img src="icons/home.png" alt="Home" class="home-icon">
     <section id="settings-root" aria-label="App Settings">
       <form id="settings-form" class="settings-form">
         <label for="showEmoji">
@@ -118,6 +178,11 @@
     // Google Sign-In logic
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('google-signin-btn').onclick = function() {
+        // Ensure GSI is loaded before initializing
+        if (typeof google === "undefined" || !google.accounts || !google.accounts.id) {
+          alert("Google Identity Services failed to load. Check your internet connection or CSP.");
+          return;
+        }
         google.accounts.id.initialize({
           client_id: GOOGLE_CLIENT_ID,
           callback: handleCredentialResponse

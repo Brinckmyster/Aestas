@@ -7,7 +7,8 @@ const firebaseConfig = {
   messagingSenderId: "123456789012",
   appId: "1:123456789012:web:abcdef123456789012345678"
 };
-firebase.initializeApp(firebaseConfig);
+// If using Firebase, initialize here (uncomment if firebase is included)
+// firebase.initializeApp(firebaseConfig);
 
 // Load status circle component
 fetch('components/status-circle/status-circle.html')
@@ -16,20 +17,17 @@ fetch('components/status-circle/status-circle.html')
   .catch(console.error);
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Emergency contact button
   document.getElementById('emergencyBtn').addEventListener('click', () => {
     window.location.href = 'emergency.html';
   });
-  // Daily check-in
   document.getElementById('checkInBtn').addEventListener('click', () => {
     window.location.href = 'checkin.html';
   });
-  // Calendar
   document.getElementById('calendarBtn').addEventListener('click', () => {
     window.location.href = 'calendar.html';
   });
 
-  // Recent activity placeholder
+  // Load recent activity logs if any
   const logs = JSON.parse(localStorage.getItem('activityLogs') || '[]');
   const container = document.getElementById('logsContainer');
   logs.forEach(log => {

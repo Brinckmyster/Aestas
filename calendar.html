@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Allies – Calendar</title>
+  …
+</head>
+<body>
+  <main id="calendar-page">
+    <h2>Calendar</h2>
+    <div id="calendar-component-container"></div>
+    <script type="module">
+      import { renderCalendar } from './components/meal-planner/js/meal-planner.js';
+      renderCalendar(document.getElementById('calendar-component-container'), window.firebaseAuth);
+    </script>
+  </main>
+  …
+</body>
+</html>

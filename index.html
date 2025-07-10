@@ -1,43 +1,117 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Academic Allies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="icons/academic-allies.png" sizes="32x32">
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#3b82f6">
-  <style>
-    body { margin:0; font-family:sans-serif; background:#f8fafc; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; }
-    .panel { display:flex; flex-direction:column; align-items:center; gap:1rem; }
-    button { padding:0.75rem 1.5rem; font-size:1rem; border:none; border-radius:0.5rem; cursor:pointer; }
-    #previewBtn { background:#6b7280; color:#fff; }
-    #previewBtn:hover { background:#4b5563; }
-    #googleBtn { background:#4285f4; color:#fff; display:flex; align-items:center; gap:0.5rem; }
-    #googleBtn:hover { background:#357ae8; }
-    .google-icon { width:20px; height:20px; background:url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center/contain; }
-  </style>
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Suppress missing favicon -->
+  <link rel="icon" href="data:,">
 </head>
 <body>
-  <!-- Shared header -->
-  <!-- include shared-header.html verbatim here -->
-  <div id="statusCircle" title="Status"></div>
-  <button id="homeBtn" aria-label="Home" onclick="window.location.href='index.html'">
-    <img src="icons/academic-allies.png" alt="Home">
-  </button>
-  <style>
-    /* Paste the CSS from shared-header.html here */
-  </style>
-  <!-- End shared header -->
+  <!-- Global Header -->
+  <header class="app-header" role="banner">
+    <div class="header-content">
+      <h1>Academic Allies</h1>
+      <p class="tagline">Supporting every step of your academic journey</p>
+      <button id="preview-btn" class="preview-btn" aria-label="Preview App">
+        Preview
+      </button>
+    </div>
+  </header>
 
-  <div class="panel">
-    <button id="previewBtn" onclick="window.location.href='preview.html'">Preview Site</button>
-    <button id="googleBtn" onclick="startGoogleSignIn()">
-      <span class="google-icon"></span>Sign in with Google
-    </button>
-  </div>
+  <!-- Preview Panel (hidden until “Preview” clicked) -->
+  <section id="preview-panel" class="preview-panel" aria-live="polite" hidden>
+    <div class="preview-inner">
+      <button id="close-preview" class="close-preview" aria-label="Close Preview">×</button>
+      <div id="preview-content"></div>
+    </div>
+  </section>
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="js/google-integration.js" type="module"></script>
+  <!-- Status Circle (always visible) -->
+  <div id="statusCircle" class="status-circle"></div>
+  <div id="banner" class="banner" style="display: none;"></div>
+
+  <!-- App Settings (emoji toggle) -->
+  <section id="settings-root" aria-label="App Settings">
+    <form class="settings-form">
+      <label for="showEmoji">
+        <input type="checkbox" id="showEmoji" name="showEmoji">
+        Enable Emoji in Status Circle
+      </label>
+    </form>
+  </section>
+
+  <!-- Modes Switcher -->
+  <section id="modes-root" aria-label="App Mode Switcher">
+    <div data-include="components/modes/modes.html"></div>
+  </section>
+
+  <!-- Google Integration -->
+  <section id="google-integration-root" aria-label="Google Integration">
+    <div data-include="components/google-integration/google-integration.html"></div>
+  </section>
+
+  <!-- User Tiers -->
+  <section id="user-tiers-root" aria-label="User Roles and Permissions">
+    <div data-include="components/user-tiers/user-tiers.html"></div>
+  </section>
+
+  <!-- Spoon Planner -->
+  <section id="spoon-planner-root" aria-label="Daily Spoon Planner">
+    <div data-include="components/spoon-planner/spoon-planner.html"></div>
+  </section>
+
+  <!-- Meal Planner -->
+  <section id="meal-planner-root" aria-label="Meal Planner">
+    <div data-include="components/meal-planner/meal-planner.html"></div>
+  </section>
+
+  <!-- Message System -->
+  <section id="message-system-root" aria-label="Support Messages">
+    <div data-include="components/message-system/message-system.html"></div>
+  </section>
+
+  <!-- Core App Loader -->
+  <script src="js/app.js"></script>
+  <!-- Component Logic -->
+  <script src="js/modes.js"></script>
+  <script src="js/google-integration.js"></script>
+  <script src="js/user-tiers.js"></script>
+  <script src="js/spoon-planner.js"></script>
+  <script src="js/meal-planner.js"></script>
+  <script src="js/message-system.js"></script>
+
+  <!-- HTML Injection & Preview Logic -->
+  <script>
+    // Load modular HTML
+    document.querySelectorAll('[data-include]').forEach(async el => {
+      const file = el.getAttribute('data-include');
+      const res = await fetch(file);
+      if (res.ok) el.innerHTML = await res.text();
+    });
+
+    // Preview button behavior
+    document.addEventListener('DOMContentLoaded', () => {
+      const previewBtn = document.getElementById('preview-btn');
+      const previewPanel = document.getElementById('preview-panel');
+      const closeBtn = document.getElementById('close-preview');
+      const previewContent = document.getElementById('preview-content');
+
+      previewBtn.addEventListener('click', () => {
+        // Clone the entire app body (excluding preview panel and header) into the preview
+        const sections = Array.from(document.body.children)
+          .filter(node => node.id && !['preview-panel','app-header'].includes(node.id));
+        previewContent.innerHTML = '';
+        sections.forEach(node => previewContent.appendChild(node.cloneNode(true)));
+        previewPanel.hidden = false;
+      });
+
+      closeBtn.addEventListener('click', () => {
+        previewPanel.hidden = true;
+      });
+    });
+  </script>
 </body>
 </html>

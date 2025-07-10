@@ -9,99 +9,36 @@ body {
 header {
   background: #26334d;
   color: #fff;
-  padding: 1.5rem 1rem 1rem 1rem;
+  padding: 1.5rem 1rem 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-header img {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  background: #fff;
-  padding: 4px;
-}
+header img { width: 48px; height: 48px; border-radius: 8px; background:#fff; padding:4px; }
+header h1 { font-size:2rem; margin:0; letter-spacing:1px; }
+nav ul { list-style:none; display:flex; gap:1.2rem; margin:0; padding:0; }
+nav li a { color:#b3d1ff; text-decoration:none; font-weight:500; font-size:1.1rem; }
+nav li a:hover { text-decoration:underline; }
 
-header h1 {
-  font-size: 2rem;
-  margin: 0 1.5rem 0 0;
-  letter-spacing: 1px;
-}
+main#dashboard { max-width:900px; margin:2rem auto; padding:1.5rem; background:#fff; border-radius:12px; box-shadow:0 2px 10px #ccd6e6; }
+.quick-actions { display:flex; gap:1rem; margin-bottom:2rem; }
+.action-btn { padding:0.8rem 1rem; border:none; border-radius:6px; font-size:1rem; cursor:pointer; }
+.action-btn.emergency { background:#f44336; color:#fff; }
+.action-btn.check-in { background:#4caf50; color:#fff; }
+.action-btn.calendar { background:#2196f3; color:#fff; }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 1.2rem;
-  margin: 0;
-  padding: 0;
-}
+.logs-preview h2, .support-network h2 { color:#26334d; }
+.log-view-toggle { margin-bottom:1rem; }
+.toggle-btn { margin-right:0.5rem; padding:0.5rem 0.8rem; border:1px solid #ccc; background:#fff; cursor:pointer; }
+.toggle-btn.active { background:#26334d; color:#fff; border-color:#26334d; }
 
-nav li a {
-  color: #b3d1ff;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1.1rem;
-}
+.support-contacts { display:flex; flex-wrap:wrap; gap:1rem; }
+.contact-card { background:#f5f5f5; padding:1rem; border-radius:8px; flex:1 1 calc(33% - 1rem); box-shadow:0 1px 4px #e0e0e0; }
+.contact-btn { margin-left:0.5rem; font-size:1.2rem; cursor:pointer; }
 
-nav li a:hover {
-  text-decoration: underline;
-}
-
-main {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px 0 #ccd6e6;
-}
-
-section {
-  margin-bottom: 2.5rem;
-}
-
-h2 {
-  color: #26334d;
-  margin-top: 0;
-}
-
-footer {
-  text-align: center;
-  font-size: 0.95rem;
-  color: #667;
-  margin: 3rem 0 1rem 0;
-}
-
-#status-circle-container {
-  margin-bottom: 2rem;
-}
-
-/* Dashboard & error styling */
-#dashboard {
-  background: #f5faff;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px #e0eafc;
-}
-
-#error-message {
-  color: #c00;
-  font-weight: 600;
-  margin-top: 1rem;
-}
-
-/* Responsive */
-@media (max-width: 700px) {
-  main {
-    padding: 0.5rem;
-  }
-  header {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  nav ul {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+@media(max-width:700px) {
+  main#dashboard { padding:1rem; }
+  .quick-actions { flex-direction:column; }
+  .contact-card { flex:1 1 100%; }
 }

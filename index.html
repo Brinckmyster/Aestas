@@ -4,76 +4,40 @@
   <meta charset="utf-8">
   <title>Academic Allies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Favicon & manifest -->
   <link rel="icon" href="icons/academic-allies.png" sizes="32x32">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#3b82f6">
-
-  <!-- Preconnect for Google scripts -->
-  <link rel="preconnect" href="https://accounts.google.com">
-  <link rel="preconnect" href="https://apis.google.com" crossorigin>
-
-  <!-- Minimal CSS just for layout -->
   <style>
     body { margin:0; font-family:sans-serif; background:#f8fafc; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; }
-    /* Fixed status circle (top right) */
-    #statusCircle {
-      position: fixed; top:1rem; right:1rem;
-      width:56px; height:56px; border-radius:50%;
-      background:#3b82f6; box-shadow:0 2px 8px rgba(0,0,0,0.07);
-    }
-    /* Fixed Home button (top left) */
-    #homeBtn {
-      position: fixed; top:1rem; left:1rem;
-      background:none; border:none; padding:0; cursor:pointer;
-    }
-    #homeBtn img { width:40px; height:40px; }
-    /* Panel for buttons */
     .panel { display:flex; flex-direction:column; align-items:center; gap:1rem; }
     button { padding:0.75rem 1.5rem; font-size:1rem; border:none; border-radius:0.5rem; cursor:pointer; }
     #previewBtn { background:#6b7280; color:#fff; }
     #previewBtn:hover { background:#4b5563; }
-    #google-btn { background:#4285f4; color:#fff; display:flex; align-items:center; gap:0.5rem; }
-    #google-btn:hover { background:#357ae8; }
+    #googleBtn { background:#4285f4; color:#fff; display:flex; align-items:center; gap:0.5rem; }
+    #googleBtn:hover { background:#357ae8; }
     .google-icon { width:20px; height:20px; background:url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center/contain; }
   </style>
 </head>
 <body>
-  <!-- Fixed icons -->
+  <!-- Shared header -->
+  <!-- include shared-header.html verbatim here -->
   <div id="statusCircle" title="Status"></div>
-  <button id="homeBtn" aria-label="Home" onclick="goHome()">
+  <button id="homeBtn" aria-label="Home" onclick="window.location.href='index.html'">
     <img src="icons/academic-allies.png" alt="Home">
   </button>
+  <style>
+    /* Paste the CSS from shared-header.html here */
+  </style>
+  <!-- End shared header -->
 
   <div class="panel">
     <button id="previewBtn" onclick="window.location.href='preview.html'">Preview Site</button>
-    <button id="google-btn" onclick="startGoogleSignIn()">
+    <button id="googleBtn" onclick="startGoogleSignIn()">
       <span class="google-icon"></span>Sign in with Google
     </button>
   </div>
 
-  <script>
-    // Home returns to self
-    function goHome() {
-      window.location.href = 'index.html';
-    }
-
-    // Stub for Google Sign-In initialization
-    function startGoogleSignIn() {
-      if (typeof google === 'undefined' || !google.accounts?.id) {
-        alert('Google Identity Services not loaded yet.');
-        return;
-      }
-      google.accounts.id.initialize({
-        client_id: 'YOUR_GOOGLE_CLIENT_ID',
-        callback: resp => console.log('Signed in:', resp)
-      });
-      google.accounts.id.prompt();
-    }
-  </script>
-
-  <!-- Load Google script synchronously -->
-  <script src="https://accounts.google.com/gsi/client"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="js/google-integration.js" type="module"></script>
 </body>
 </html>

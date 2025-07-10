@@ -16,26 +16,6 @@
     border: 3px solid #4caf50;
     transition: border-color 0.3s;
   }
-  .status-circle-fixed[aria-label]::after {
-    content: attr(aria-label);
-    position: absolute;
-    top: 65px;
-    right: 0;
-    background: #26334d;
-    color: #fff;
-    padding: 0.3em 0.7em;
-    border-radius: 0.7em;
-    font-size: 0.95rem;
-    white-space: nowrap;
-    opacity: 0.95;
-    pointer-events: none;
-    box-shadow: 0 2px 8px #ccd6e6;
-    display: none;
-  }
-  .status-circle-fixed:hover::after,
-  .status-circle-fixed:focus::after {
-    display: block;
-  }
   .status-dot {
     width: 32px;
     height: 32px;
@@ -49,11 +29,6 @@
     box-shadow: 0 1px 4px #a3e6b8;
     transition: background 0.3s;
   }
-  /* Example: status colors (customize as needed) */
-  .status-ok    { background: #4caf50; }
-  .status-warn  { background: #ff9800; }
-  .status-bad   { background: #f44336; }
-  .status-idle  { background: #bdbdbd; }
 </style>
 <div
   class="status-circle-fixed"
@@ -64,9 +39,3 @@
     &#9679;
   </div>
 </div>
-<script>
-  // Example: Dynamically update status (optional)
-  // You can set status by changing class or aria-label via JS
-  // Example: document.querySelector('.status-dot').className = 'status-dot status-warn';
-  // Example: document.querySelector('.status-circle-fixed').setAttribute('aria-label', 'Status: Warning');
-</script>

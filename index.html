@@ -1,116 +1,92 @@
-<style>
-  body { margin:0; font-family:sans-serif; background:#f8fafc; }
-  /* Fixed status circle (top RIGHT) */
-  #statusCircle {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #3b82f6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  }
-  /* Fixed home button (top LEFT) */
-  #homeBtn {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 1000;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
-  #homeBtn img {
-    width: 40px;
-    height: 40px;
-  }
-  .google-integration {
-    background: #fff;
-    border-radius:1rem;
-    padding:1.5rem;
-    max-width:400px;
-    margin:7rem auto 2rem auto;
-    box-shadow:0 2px 8px rgba(0,0,0,0.07);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .google-btn {
-    background: #4285f4;
-    color:#fff;
-    border:none;
-    border-radius:6px;
-    padding:12px 24px;
-    font-size:16px;
-    font-weight:500;
-    cursor:pointer;
-    transition:background 0.2s;
-    display:flex;
-    align-items:center;
-    margin-bottom:1em;
-    min-width:200px;
-    justify-content:center;
-  }
-  .google-btn:hover { background: #357ae8; }
-  .google-icon {
-    display:inline-block;
-    width:20px;
-    height:20px;
-    background:url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center/contain;
-    margin-right:8px;
-  }
-  .hidden { display:none !important; }
-  @media (max-width: 600px) {
-    .google-integration { max-width:95vw; margin:6rem auto 2rem auto; }
-    #statusCircle { width:44px; height:44px; }
-    #homeBtn img { width:36px; height:36px; }
-  }
-</style>
+<!-- In your <style> section, no changes needed -->
 
 <body>
-  <!-- Always visible: status circle and home button -->
+  <!-- Fixed status circle and Home button -->
   <div id="statusCircle" title="Status"></div>
   <button id="homeBtn" aria-label="Home">
     <img src="icons/academic-allies.png" alt="Home">
   </button>
 
-  <!-- Pre-auth UI -->
+  <!-- Preview content, hidden by default -->
+  <div id="preview" class="hidden" style="margin:8rem auto 2rem; max-width:600px; text-align:center; font-size:1.1rem; color:#4b5563;">
+    <p><strong>Site Preview Coming Soon…</strong></p>
+    <p>Click Home (top left) to return here at any time.</p>
+  </div>
+
+  <!-- Pre-auth Google Sign-In panel -->
   <div id="pre-auth">
-    <section id="google-integration" class="google-integration" aria-label="Google Sign-In">
+    <section class="google-panel" aria-label="Google Sign-In">
       <button id="google-signin-btn" class="google-btn">
         <span class="google-icon"></span>Sign in with Google
       </button>
-      <span id="google-user" class="hidden"></span>
+      <button id="previewBtn" class="google-btn" style="background:#6b7280; margin-top:1rem;">
+        Preview Site
+      </button>
       <button id="google-signout-btn" class="google-btn hidden">Sign out</button>
+      <div id="google-user" class="hidden" style="margin-top:1rem;font-weight:600;"></div>
     </section>
   </div>
 
-  <!-- Post-auth UI (hidden) -->
+  <!-- Post-auth app features, hidden until sign-in -->
   <div id="post-auth" class="hidden">
-    <!-- ... your other components ... -->
+    <!-- component includes… -->
   </div>
 
-  <!-- Scripts -->
-  <script src="https://accounts.google.com/gsi/client" onload="gisLoaded=true"></script>
+  <!-- Scripts… -->
   <script>
-    let gisLoaded = false;
+    // … Firebase and Google config …
+
+    // Helper to show/hide sections
+    function showPreview() {
+      document.getElementById('preview').classList.remove('hidden');
+      document.getElementById('pre-auth').classList.add('hidden');
+      document.getElementById('post-auth').classList.add('hidden');
+    }
+    function showPreAuth() {
+      document.getElementById('preview').classList.add('hidden');
+      document.getElementById('pre-auth').classList.remove('hidden');
+      document.getElementById('post-auth').classList.add('hidden');
+    }
+    function showPostAuth(user) {
+      document.getElementById('preview').classList.add('hidden');
+      document.getElementById('pre-auth').classList.add('hidden');
+      document.getElementById('post-auth').classList.remove('hidden');
+      document.getElementById('google-user').textContent = user.name||user.email;
+      document.getElementById('google-user').classList.remove('hidden');
+      document.getElementById('google-signout-btn').classList.remove('hidden');
+    }
+
+    // Home button returns to Preview
+    document.getElementById('homeBtn').onclick = () => {
+      showPreview();
+      document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Preview button shows Preview
+    document.getElementById('previewBtn').onclick = showPreview;
+
+    // Google Sign-In and Sign-Out handlers
     document.getElementById('google-signin-btn').onclick = () => {
-      if (!gisLoaded) {
-        alert('Google Identity Services loading, please wait.');
-        return;
-      }
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleCredentialResponse
-      });
+      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredential });
       google.accounts.id.prompt();
     };
-    // ... rest of your JS remains unchanged ...
+    document.getElementById('google-signout-btn').onclick = async () => {
+      await firebase.signOut(auth);
+      showPreAuth();
+    };
+
+    // Handle Google response
+    async function handleCredential(resp) {
+      const user = JSON.parse(atob(resp.credential.split('.')[1]));
+      try {
+        const cred = firebase.GoogleAuthProvider.credential(resp.credential);
+        await firebase.signInWithCredential(auth, cred);
+        showPostAuth(user);
+        // load components…
+      } catch {
+        alert("Sign-in failed");
+        showPreAuth();
+      }
+    }
   </script>
 </body>

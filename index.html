@@ -10,18 +10,10 @@
   <link rel="icon" href="data:,">
 </head>
 <body>
-  <!-- Global Header -->
-  <header id="app-header" class="app-header" role="banner">
-    <div class="header-content">
-      <h1>Academic Allies</h1>
-      <p class="tagline">Supporting every step of your academic journey</p>
-      <button id="preview-btn" class="preview-btn" aria-label="Preview App">
-        Preview
-      </button>
-    </div>
-  </header>
+  <!-- Shared Header -->
+  <div data-include="components/shared/header.html"></div>
 
-  <!-- Preview Panel (hidden until “Preview” clicked) -->
+  <!-- Preview Panel -->
   <section id="preview-panel" class="preview-panel" aria-live="polite" hidden>
     <div class="preview-inner">
       <button id="close-preview" class="close-preview" aria-label="Close Preview">×</button>
@@ -29,11 +21,11 @@
     </div>
   </section>
 
-  <!-- Status Circle (always visible) -->
+  <!-- Status Circle -->
   <div id="statusCircle" class="status-circle"></div>
   <div id="banner" class="banner" style="display: none;"></div>
 
-  <!-- App Settings (emoji toggle) -->
+  <!-- Settings -->
   <section id="settings-root" aria-label="App Settings">
     <form class="settings-form">
       <label for="showEmoji">
@@ -85,14 +77,14 @@
 
   <!-- HTML Injection & Preview Logic -->
   <script>
-    // Load modular HTML
+    // Inject shared header and components
     document.querySelectorAll('[data-include]').forEach(async el => {
       const file = el.getAttribute('data-include');
       const res = await fetch(file);
       if (res.ok) el.innerHTML = await res.text();
     });
 
-    // Preview button behavior
+    // Preview behavior
     document.addEventListener('DOMContentLoaded', () => {
       const previewBtn = document.getElementById('preview-btn');
       const previewPanel = document.getElementById('preview-panel');
@@ -100,11 +92,11 @@
       const previewContent = document.getElementById('preview-content');
 
       previewBtn.addEventListener('click', () => {
-        // Clone the entire app body (including header) into the preview
-        const sections = Array.from(document.body.children)
-          .filter(node => node.id && node.id !== 'preview-panel');
+        // Clone everything except preview panel into preview
+        const nodes = Array.from(document.body.children)
+          .filter(n => n.id !== 'preview-panel');
         previewContent.innerHTML = '';
-        sections.forEach(node => previewContent.appendChild(node.cloneNode(true)));
+        nodes.forEach(n => previewContent.appendChild(n.cloneNode(true)));
         previewPanel.hidden = false;
       });
 

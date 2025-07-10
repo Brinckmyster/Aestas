@@ -4,172 +4,47 @@
   <meta charset="utf-8">
   <title>Academic Allies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Favicon & PWA icons -->
   <link rel="icon" href="icons/academic-allies.png" sizes="32x32">
-  <link rel="apple-touch-icon" href="icons/academic-allies.png" sizes="180x180">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#3b82f6">
-
-  <!-- Preconnect for Google scripts -->
-  <link rel="preconnect" href="https://accounts.google.com">
-  <link rel="preconnect" href="https://apis.google.com" crossorigin>
-
-  <!-- Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy"
-        content="
-          default-src 'self';
-          script-src 'self' https://accounts.google.com https://apis.google.com https://www.gstatic.com https://www.googleapis.com 'unsafe-inline';
-          frame-src https://accounts.google.com;
-          style-src 'self' 'unsafe-inline';
-          connect-src 'self' https://accounts.google.com https://www.googleapis.com https://*.firebaseio.com;
-          img-src 'self' data:;
-        ">
-
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    body { margin:0; font-family:sans-serif; background:#f8fafc; }
-    /* Fixed status circle (top right) */
-    #statusCircle {
-      position: fixed; top:1rem; right:1rem;
-      width:56px; height:56px; border-radius:50%;
-      background:#3b82f6; display:flex; align-items:center; justify-content:center;
-      box-shadow:0 2px 8px rgba(0,0,0,0.07); z-index:1000;
-    }
-    /* Fixed Home button (top left) */
-    #homeBtn {
-      position: fixed; top:1rem; left:1rem;
-      background:none; border:none; padding:0; cursor:pointer; z-index:1000;
-    }
-    #homeBtn img { width:40px; height:40px; }
-
-    /* Google panel */
-    .google-panel {
-      background:#fff; padding:1.5rem; border-radius:1rem;
-      max-width:360px; margin:6rem auto 2rem; text-align:center;
-      box-shadow:0 2px 8px rgba(0,0,0,0.07);
-    }
-    .google-btn {
-      display:flex; align-items:center; justify-content:center;
-      background:#4285f4; color:#fff; border:none; border-radius:6px;
-      padding:12px 24px; font-size:16px; cursor:pointer;
-      transition:background .2s; min-width:200px; margin:0 auto;
-    }
-    .google-btn:hover { background:#357ae8; }
-    .google-icon {
-      width:20px; height:20px; margin-right:8px;
-      background:url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg') no-repeat center/contain;
-    }
-    .hidden { display:none!important; }
-
-    /* Preview section */
-    #preview {
-      margin:8rem auto 2rem; max-width:600px; text-align:center;
-      font-size:1.1rem; color:#4b5563;
-    }
-    @media(max-width:600px) {
-      #statusCircle { width:48px; height:48px; }
-      #homeBtn img { width:36px; height:36px; }
-      .google-panel { max-width:90vw; margin:5rem auto 2rem; }
-    }
-  </style>
 </head>
 <body>
-  <!-- Fixed icons -->
-  <div id="statusCircle" title="Status"></div>
-  <button id="homeBtn" aria-label="Home"><img src="icons/academic-allies.png" alt="Home"></button>
+  <!-- Fixed status circle -->
+  <div id="statusCircle" class="fixed-top-left"></div>
+  <!-- Fixed home button -->
+  <button id="homeBtn" class="fixed-top-right" aria-label="Home" onclick="goHome()">
+    <img src="icons/academic-allies.png" alt="Home">
+  </button>
 
-  <!-- Preview content -->
-  <div id="preview">
-    <p><strong>Site Preview Coming Soon…</strong></p>
-    <p>Click “Preview Site” below to explore, or click Home to return.</p>
-  </div>
+  <!-- Preview section: separate file loaded via iframe -->
+  <iframe id="previewFrame" src="components/preview/preview.html"
+          style="width:100%; height:80vh; border:none;"></iframe>
 
-  <!-- Pre-auth Google Sign-In panel -->
-  <div id="pre-auth">
-    <section class="google-panel" aria-label="Google Sign-In">
-      <button id="previewBtn" class="google-btn" style="background:#6b7280;margin-bottom:1rem;">
-        Preview Site
-      </button>
-      <button id="google-signin-btn" class="google-btn">
-        <span class="google-icon"></span>Sign in with Google
-      </button>
-      <button id="google-signout-btn" class="google-btn hidden">Sign out</button>
-      <div id="google-user" class="hidden" style="margin-top:1rem;font-weight:600;"></div>
-    </section>
-  </div>
+  <!-- Google integration section: separate component file -->
+  <div id="googleIntegrationContainer"></div>
 
-  <!-- Post-auth app features -->
-  <div id="post-auth" class="hidden">
-    <div data-include="components/modes/modes.html"></div>
-    <div data-include="components/user-tiers/user-tiers.html"></div>
-    <div data-include="components/spoon-planner/spoon-planner.html"></div>
-    <div data-include="components/meal-planner/meal-planner.html"></div>
-    <div data-include="components/message-system/message-system.html"></div>
-  </div>
+  <!-- Post-auth: separate modules -->
+  <script type="module">
+    import initGoogleIntegration from './js/google-integration.js';
+    import loadModes from './js/modes.js';
+    import loadUserTiers from './js/user-tiers.js';
+    import loadSpoonPlanner from './js/spoon-planner.js';
+    import loadMealPlanner from './js/meal-planner.js';
+    import loadMessageSystem from './js/message-system.js';
 
-  <!-- External scripts -->
-  <script src="https://accounts.google.com/gsi/client"></script>
-  <script src="https://apis.google.com/js/api.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+    // On page load, initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initGoogleIntegration(document.getElementById('googleIntegrationContainer'));
+      // Other post-auth modules will call .show() once signed in
+    });
 
-  <script>
-    // Config
-    const firebaseConfig = {/* your config */};
-    const GOOGLE_CLIENT_ID = "93996985456-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com";
-
-    // Init Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.getAuth(app);
-
-    // UI toggles
-    function showPreview() {
-      document.getElementById('preview').classList.remove('hidden');
-      document.getElementById('pre-auth').classList.add('hidden');
-      document.getElementById('post-auth').classList.add('hidden');
-    }
-    function showPreAuth() {
-      document.getElementById('preview').classList.add('hidden');
-      document.getElementById('pre-auth').classList.remove('hidden');
-      document.getElementById('post-auth').classList.add('hidden');
-    }
-    function showPostAuth(user) {
-      document.getElementById('preview').classList.add('hidden');
-      document.getElementById('pre-auth').classList.add('hidden');
-      document.getElementById('post-auth').classList.remove('hidden');
-      document.getElementById('google-user').textContent = user.name || user.email;
-      document.getElementById('google-user').classList.remove('hidden');
-      document.getElementById('google-signout-btn').classList.remove('hidden');
+    function goHome() {
+      document.getElementById('previewFrame').contentWindow.location.reload();
+      document.getElementById('previewFrame').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Handlers
-    document.getElementById('homeBtn').onclick = () => {
-      showPreview();
-      document.getElementById('preview').scrollIntoView({behavior:'smooth'});
-    };
-    document.getElementById('previewBtn').onclick = showPreview;
-    document.getElementById('google-signin-btn').onclick = () => {
-      google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleCredential});
-      google.accounts.id.prompt();
-    };
-    document.getElementById('google-signout-btn').onclick = async ()=>{await firebase.signOut(auth);showPreAuth();};
-
-    async function handleCredential(resp) {
-      const user = JSON.parse(atob(resp.credential.split('.')[1]));
-      try {
-        const cred = firebase.GoogleAuthProvider.credential(resp.credential);
-        await firebase.signInWithCredential(auth,cred);
-        showPostAuth(user);
-        document.querySelectorAll('[data-include]').forEach(async el=>{
-          const res=await fetch(el.getAttribute('data-include'));
-          if(res.ok) el.innerHTML=await res.text();
-        });
-      } catch {
-        alert("Sign-in failed");showPreAuth();
-      }
-    }
+    export { goHome };
   </script>
 </body>
 </html>

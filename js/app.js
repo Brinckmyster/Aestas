@@ -1,4 +1,4 @@
-// Initialize Firebase
+// Initialize Firebase (if needed)
 const firebaseConfig = {
   apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGH",
   authDomain: "academic-allies-464901.firebaseapp.com",
@@ -7,10 +7,10 @@ const firebaseConfig = {
   messagingSenderId: "123456789012",
   appId: "1:123456789012:web:abcdef123456789012345678"
 };
-// If using Firebase, initialize here (uncomment if firebase is included)
+// Uncomment if you use Firebase SDK
 // firebase.initializeApp(firebaseConfig);
 
-// Load status circle component
+// Inject status circle component
 fetch('components/status-circle/status-circle.html')
   .then(res => res.text())
   .then(html => document.getElementById('status-circle-container').innerHTML = html)

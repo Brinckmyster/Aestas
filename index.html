@@ -11,7 +11,7 @@
 </head>
 <body>
   <!-- Global Header -->
-  <header class="app-header" role="banner">
+  <header id="app-header" class="app-header" role="banner">
     <div class="header-content">
       <h1>Academic Allies</h1>
       <p class="tagline">Supporting every step of your academic journey</p>
@@ -100,9 +100,9 @@
       const previewContent = document.getElementById('preview-content');
 
       previewBtn.addEventListener('click', () => {
-        // Clone the entire app body (excluding preview panel and header) into the preview
+        // Clone the entire app body (including header) into the preview
         const sections = Array.from(document.body.children)
-          .filter(node => node.id && !['preview-panel','app-header'].includes(node.id));
+          .filter(node => node.id && node.id !== 'preview-panel');
         previewContent.innerHTML = '';
         sections.forEach(node => previewContent.appendChild(node.cloneNode(true)));
         previewPanel.hidden = false;

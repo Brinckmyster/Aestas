@@ -3,56 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Academic Allies - Your Disability Support Network</title>
+  <title>Academic Allies - Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="description" content="Your disability accommodations and support network">
 </head>
 <body>
   <div id="site-header"></div>
-  
   <script>
     fetch('shared-header.html')
-      .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.text();
-      })
-      .then(html => {
-        document.getElementById('site-header').innerHTML = html;
-      })
-      .catch(error => {
-        console.error('Header load failed:', error);
-        document.getElementById('site-header').innerHTML = '<header><h1>Academic Allies</h1><p>Your disability accommodations and support network</p></header>';
+      .then(r => { if (!r.ok) throw new Error(r.statusText); return r.text(); })
+      .then(html => document.getElementById('site-header').innerHTML = html)
+      .catch(() => {
+        document.getElementById('site-header').innerHTML =
+          '<header><h1>Academic Allies</h1><p>Your disability accommodations and support network</p></header>';
       });
   </script>
 
-  <main class="dashboard">
-    <section class="status-section">
-      <h1>How are you today?</h1>
-      <div class="status-circle" id="statusCircle" role="button" tabindex="0" aria-label="Current status indicator">
-        <div class="status-segment good" data-status="good"></div>
-        <div class="status-segment okay" data-status="okay"></div>
-        <div class="status-segment struggling" data-status="struggling"></div>
-        <div class="status-segment bad" data-status="bad"></div>
-        <div class="status-segment emergency" data-status="emergency"></div>
-      </div>
-    </section>
+  <main id="dashboard">
+    <!-- Status circle placeholder -->
+    <div id="status-circle-container"></div>
 
+    <!-- Quick actions -->
     <section class="quick-actions">
-      <button class="action-btn emergency" id="emergencyBtn">
-        <span class="icon">🚨</span>
-        Emergency Contact
-      </button>
-      <button class="action-btn check-in" id="checkInBtn">
-        <span class="icon">✓</span>
-        Daily Check-in
-      </button>
-      <button class="action-btn calendar" id="calendarBtn">
-        <span class="icon">📅</span>
-        Calendar
-      </button>
+      <button id="emergencyBtn" class="action-btn emergency">🚨 Emergency Contact</button>
+      <button id="checkInBtn" class="action-btn check-in">✓ Daily Check-in</button>
+      <button id="calendarBtn" class="action-btn calendar">📅 Calendar</button>
     </section>
 
+    <!-- Recent activity logs -->
     <section class="logs-preview">
       <h2>Recent Activity</h2>
       <div class="log-view-toggle">
@@ -60,65 +38,16 @@
         <button class="toggle-btn" data-view="chart">Chart</button>
         <button class="toggle-btn" data-view="calendar">Calendar</button>
       </div>
-      <div id="logsContainer">
-        <div class="log-entry">
-          <span class="log-date">Today</span>
-          <span class="log-status good">Good day</span>
-        </div>
-      </div>
+      <div id="logsContainer"></div>
     </section>
 
+    <!-- Support network -->
     <section class="support-network">
       <h2>Your Support Team</h2>
-      <div class="support-contacts">
-        <div class="contact-card">
-          <span class="contact-name">Primary Contact</span>
-          <div class="contact-actions">
-            <button class="contact-btn call">📞</button>
-            <button class="contact-btn email">📧</button>
-          </div>
-        </div>
-      </div>
+      <div class="support-contacts"></div>
     </section>
   </main>
 
-  <script>
-    // Initialize Firebase with your config
-    const firebaseConfig = {
-      apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGH",
-      authDomain: "academic-allies-464901.firebaseapp.com",
-      projectId: "academic-allies-464901",
-      storageBucket: "academic-allies-464901.appspot.com",
-      messagingSenderId: "123456789012",
-      appId: "1:123456789012:web:abcdef123456789012345678"
-    };
-
-    // Status circle interaction
-    document.addEventListener('DOMContentLoaded', function() {
-      const statusCircle = document.getElementById('statusCircle');
-      const segments = statusCircle.querySelectorAll('.status-segment');
-      
-      segments.forEach(segment => {
-        segment.addEventListener('click', function() {
-          segments.forEach(s => s.classList.remove('active'));
-          this.classList.add('active');
-          
-          const status = this.dataset.status;
-          console.log('Status updated:', status);
-          
-          // Store in localStorage for persistence
-          localStorage.setItem('currentStatus', status);
-          localStorage.setItem('statusTimestamp', new Date().toISOString());
-        });
-      });
-
-      // Load previous status
-      const savedStatus = localStorage.getItem('currentStatus');
-      if (savedStatus) {
-        const segment = statusCircle.querySelector(`[data-status="${savedStatus}"]`);
-        if (segment) segment.classList.add('active');
-      }
-    });
-  </script>
+  <script src="js/app.js"></script>
 </body>
 </html>

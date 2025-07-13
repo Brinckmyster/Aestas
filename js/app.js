@@ -1,42 +1,50 @@
-// js/app.js
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+// --- Firebase Config (from your Space instructions) ---
+const firebaseConfig = {
+  apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGH",
+  authDomain: "academic-allies-464901.firebaseapp.com",
+  projectId: "academic-allies-464901",
+  storageBucket: "academic-allies-464901.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:abcdef123456789012345678"
+};
 
-// Use the auth instance exposed on window
-const auth = window.firebaseAuth;
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
-// Render status circle component
-fetch('components/status-circle/status-circle.html')
-  .then(res => res.text())
-  .then(html => document.getElementById('status-circle-container').innerHTML = html)
-  .catch(console.error);
+// --- Google Sign-In Setup ---
+function handleCredentialResponse(response) {
+  const idToken = response.credential;
+  const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+  firebase.auth().signInWithCredential(credential)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      document.getElementById('userDisplay').textContent =
+        `Signed in as: ${user.displayName || user.email}`;
+    })
+    .catch((error) => {
+      document.getElementById('userDisplay').textContent =
+        `Sign-in failed: ${error.message}`;
+    });
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Quick-action buttons
-  document.getElementById('emergencyBtn').onclick = () => window.location.href = 'emergency.html';
-  document.getElementById('checkInBtn').onclick = () => window.location.href = 'checkin.html';
-  document.getElementById('calendarBtn').onclick = () => window.location.href = 'calendar.html';
-
-  // Authentication state handler
-  onAuthStateChanged(auth, user => {
+window.onload = function() {
+  google.accounts.id.initialize({
+    client_id: "93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com",
+    callback: handleCredentialResponse
+  });
+  google.accounts.id.renderButton(
+    document.getElementById("googleSignIn"),
+    { theme: "outline", size: "large" }
+  );
+  
+  // --- This keeps login "sticky" ---
+  firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      // User signed in
-      console.log('Signed in as', user.email);
+      document.getElementById('userDisplay').textContent =
+        `Signed in as: ${user.displayName || user.email}`;
     } else {
-      // No user, prompt sign-in
-      console.log('No user signed in');
+      document.getElementById('userDisplay').textContent =
+        "No user signed in.";
     }
   });
-
-  // Load activity logs
-  const logs = JSON.parse(localStorage.getItem('activityLogs') || '[]');
-  const container = document.getElementById('logsContainer');
-  logs.forEach(log => {
-    const entry = document.createElement('div');
-    entry.className = 'log-entry';
-    entry.innerHTML = `
-      <span class="log-date">${log.date}</span>
-      <span class="log-status ${log.status}">${log.label}</span>
-    `;
-    container.appendChild(entry);
-  });
-});
+};

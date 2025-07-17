@@ -1,37 +1,13 @@
-<div id="statusCircle" title="Status"></div>
-<button id="homeBtn" aria-label="Home" onclick="window.location.href='index.html'">
-  <img src="icons/academic-allies.png" alt="Home">
-</button>
-<style>
-  /* Header: Status circle (top right) */
-  #statusCircle {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #3b82f6;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    z-index: 1000;
-  }
-  /* Header: Home button (top left) */
-  #homeBtn {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    z-index: 1000;
-  }
-  #homeBtn img {
-    width: 40px;
-    height: 40px;
-  }
-  @media (max-width: 600px) {
-    #statusCircle { width: 48px; height: 48px; }
-    #homeBtn img  { width: 36px; height: 36px; }
-  }
-</style>
+<header class="site-header">
+  <!-- SVG Home Icon (replaces PNG, file can be icons/home.svg) -->
+  <a href="index.html" class="home-link" aria-label="Home">
+    <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="Home">
+      <path d="M12 2.1L1 12h3v9h6v-6h4v6h6v-9h3L12 2.1zm0 2.691l6 5.4V19h-2v-6H8v6H6v-9.809l6-5.4z"/>
+    </svg>
+    <span class="tagline">Academic Allies: Dashboard</span>
+  </a>
+  <nav>
+    <a href="sitemap.html">Sitemap</a>
+  </nav>
+  <div id="status-circle-container" class="status-circle-fixed"></div>
+</header>

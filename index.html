@@ -6,13 +6,11 @@
   <title>Academic Allies – Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="manifest" href="manifest.webmanifest">
-
-  <!-- Firebase SDKs -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
-
-    const firebaseConfig = {
+    import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+    window.firebaseConfig = {
       apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGH",
       authDomain: "academic-allies-464901.firebaseapp.com",
       projectId: "academic-allies-464901",
@@ -20,22 +18,21 @@
       messagingSenderId: "123456789012",
       appId: "1:123456789012:web:abcdef123456789012345678"
     };
-    const app = initializeApp(firebaseConfig);
-    window.firebaseAuth = getAuth(app);
+    window.app = initializeApp(window.firebaseConfig);
+    window.auth = getAuth(window.app);
   </script>
-
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-  <header class="site-header">
-    <a href="index.html" class="home-link" aria-label="Home">
-      <img src="icons/home.svg" alt="Home" class="home-icon">
-    </a>
-    <div id="status-circle-container" class="status-circle-fixed"></div>
-  </header>
+  <!-- Modular Header Injection -->
+  <div id="header-anchor"></div>
+  <script>
+    fetch("shared-header.html").then(r => r.text()).then(html => {
+      document.getElementById("header-anchor").innerHTML = html;
+    });
+  </script>
 
   <main id="dashboard">
+    <!-- Google Sign-In (GIS) buttons and container -->
     <div id="g_id_onload"
          data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
          data-callback="handleCredentialResponse"
@@ -76,6 +73,17 @@
     </ul>
   </footer>
 
-  <script type="module" src="js/app.js"></script>
+  <!-- Modular app JS -->
+  <script src="js/app.js" type="module"></script>
+  <script>
+    // Google Identity callback
+    window.handleCredentialResponse = function(response) {
+      // (Pal here:) Simulating Pal — hand credential off to Firebase
+      const { GoogleAuthProvider, getAuth, signInWithCredential } = window;
+      // This is where a backend would receive the token. For demo: mark user as signed in.
+      alert('Google sign-in succeeded! JWT in console.');
+      console.log(response);
+    };
+  </script>
 </body>
 </html>

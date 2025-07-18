@@ -6,12 +6,19 @@
   <title>Academic Allies – Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="manifest" href="manifest.webmanifest">
-  <script src="https://accounts.google.com/gsi/client"></script>
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithCredential } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut,
+      GoogleAuthProvider,
+      signInWithCredential
+    } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 
-    // ← Full overwrite this block with your Firebase config
+    // ← Replace with your real Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGH",
       authDomain: "academic-allies-464901.firebaseapp.com",
@@ -23,27 +30,58 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Watch auth state to show/hide button container
-    onAuthStateChanged(auth, user => {
-      const container = document.querySelector('.g_id_signin');
-      container.style.display = user ? 'none' : 'block';
+    // Initialize and render GSI once Google’s script has loaded
+    window.addEventListener("DOMContentLoaded", () => {
+      if (!window.google?.accounts?.id) {
+        console.error("GSI script not available");
+        return;
+      }
+      google.accounts.id.initialize({
+        client_id: "93996985456.apps.googleusercontent.com", // ← use your Web client ID
+        callback: handleCredentialResponse,
+        auto_select: false,
+        cancel_on_tap_outside: false
+      });
+      google.accounts.id.renderButton(
+        document.querySelector(".g_id_signin"),
+        { type: "standard", size: "large", theme: "outline", text: "signin_with" }
+      );
+      google.accounts.id.prompt();
     });
 
-    // Google credential handler
-    window.handleCredentialResponse = async res => {
+    // Handle the Google credential, sign into Firebase
+    window.handleCredentialResponse = async (response) => {
       try {
-        const cred = GoogleAuthProvider.credential(res.credential);
+        const cred = GoogleAuthProvider.credential(response.credential);
         await signInWithCredential(auth, cred);
       } catch (e) {
+        console.error("Sign-in failed:", e);
         alert("Sign-in failed: " + e.message);
       }
     };
+
+    // Auth state watcher hides/shows button and updates status circle
+    onAuthStateChanged(auth, user => {
+      const btn = document.querySelector(".g_id_signin");
+      if (btn) btn.style.display = user ? "none" : "block";
+
+      const statusContainer = document.getElementById("status-circle-container");
+      if (statusContainer) {
+        statusContainer.innerHTML = ""; 
+        const circle = document.createElement("div");
+        circle.className = "status-circle";
+        circle.title = user ? `Signed in as ${user.email}` : "Signed out";
+        circle.style.backgroundColor = user ? "#4CAF50" : "#F44336";
+        statusContainer.appendChild(circle);
+      }
+    });
 
     window.signOutUser = async () => {
       await signOut(auth);
       location.reload();
     };
-    window.goHome = () => location.href = 'index.html';
+
+    window.goHome = () => (window.location.href = "index.html");
   </script>
 </head>
 <body>
@@ -57,33 +95,18 @@
     </nav>
   </header>
 
-  <!-- Google Sign-In Button Container -->
+  <!-- Persistent Google Sign-In button appears here -->
   <div class="g_id_signin"></div>
 
+  <!-- Status circle container must exist for app.js to populate -->
+  <div id="status-circle-container"></div>
+
   <main id="dashboard">
-    <section class="quick-actions">
-      <button id="emergencyBtn" class="action-btn emergency">🚨 Emergency Contact</button>
-      <button id="checkInBtn" class="action-btn check-in">✓ Daily Check-in</button>
-      <button id="calendarBtn" class="action-btn calendar">📅 Calendar</button>
-    </section>
-    <section class="logs-preview">
-      <h2>Recent Activity</h2>
-      <div id="logsContainer"></div>
-    </section>
-    <section class="support-network">
-      <h2>Your Support Team</h2>
-      <div class="support-contacts"></div>
-    </section>
+    <!-- Your app sections… -->
   </main>
 
   <footer class="site-map">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="emergency.html">Emergency Contact</a></li>
-      <li><a href="checkin.html">Daily Check-in</a></li>
-      <li><a href="calendar.html">Calendar</a></li>
-      <li><a href="preview.html">Preview</a></li>
-    </ul>
+    <!-- Sitemap links… -->
   </footer>
 
   <script src="js/app.js" type="module"></script>

@@ -1,42 +1,41 @@
-// js/app.js — Modular Google Sign-In + Firebase wiring for Academic Allies
+// js/app.js — Modular Google GIS + Firebase Auth handler for Academic Allies
 
 import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithCredential } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 
-// --- Firebase Auth Instance ---
+// Initialize Firebase Auth
 const auth = getAuth();
 
-// --- UI Update on Auth State Change ---
+// Watch Authentication State and Toggle Google Sign-In Widget
 const gsiContainer = document.querySelector('.g_id_signin');
 onAuthStateChanged(auth, user => {
   if (user) {
     if (gsiContainer) gsiContainer.style.display = 'none';
-    // Optional: Display user info or UI state changes here
+    // Optional: Add signed-in UI updates here
   } else {
     if (gsiContainer) gsiContainer.style.display = 'block';
   }
 });
 
-// --- GIS Credential to Firebase Auth Handler ---
+// Google Identity Services: Credential to Firebase
 window.handleCredentialResponse = async (response) => {
   try {
     const credential = GoogleAuthProvider.credential(response.credential);
     await signInWithCredential(auth, credential);
-    // UI auto-updates via onAuthStateChanged after successful sign-in
+    // UI auto-updates via onAuthStateChanged
   } catch (e) {
     alert("Sign-in failed: " + e.message);
-    // Optionally log error: console.error(e);
   }
 };
 
-// --- Modular App Sign-Out ---
+// Sign-Out
 window.signOutUser = async () => {
   await signOut(auth);
   location.reload();
 };
 
-// --- Home Navigation Logic (for SVG, PNG, or image Home icons) ---
+// Home Navigation
 window.goHome = function() {
   window.location.href = 'index.html';
 };
 
-// Place any other JS modules or dashboard code here, if needed.
+// Add other dashboard logic as needed.

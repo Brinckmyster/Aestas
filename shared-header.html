@@ -1,10 +1,18 @@
-<header class="site-header">
-  <a href="index.html" class="home-link" aria-label="Home">
-    <img src="icons/academic-allies.png" alt="Home" class="home-icon">
-    <span class="tagline">Academic Allies: Dashboard</span>
+<header class="site-header" role="banner">
+  <a href="index.html" class="home-link" aria-label="Home" title="Go Home">
+    <img src="icons/academic-allies.png" alt="Home" class="home-icon" title="Academic Allies Home">
+    <span class="tagline" title="Academic Allies: Dashboard">Academic Allies: Dashboard</span>
   </a>
-  <nav>
-    <a href="sitemap.html">Sitemap</a>
+  <!-- Status Circle Container -->
+  <div id="status-circle-container" role="status" aria-live="polite" title="Authentication Status"></div>
+  <nav aria-label="Main navigation">
+    <ul class="nav-list">
+      <li><a href="index.html" title="Home">Home</a></li>
+      <li><a href="emergency.html" title="Emergency Contact">Emergency Contact</a></li>
+      <li><a href="checkin.html" title="Daily Check-In">Daily Check-In</a></li>
+      <li><a href="calendar.html" title="Calendar">Calendar</a></li>
+      <li><a href="preview.html" title="Preview">Preview</a></li>
+      <li><a href="sitemap.html" title="Site Map">Site Map</a></li>
+    </ul>
   </nav>
-  <div id="status-circle-container" class="status-circle-fixed"></div>
 </header>

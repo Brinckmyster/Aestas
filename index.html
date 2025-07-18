@@ -6,7 +6,6 @@
   <title>Academic Allies – Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="manifest" href="manifest.webmanifest">
-  <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
@@ -18,7 +17,7 @@
       signInWithCredential
     } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 
-    // ← Replace with your real Firebase config
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGH",
       authDomain: "academic-allies-464901.firebaseapp.com",
@@ -30,14 +29,14 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Initialize and render GSI once Google’s script has loaded
+    // Initialize Google Identity Services on DOMContentLoaded
     window.addEventListener("DOMContentLoaded", () => {
       if (!window.google?.accounts?.id) {
-        console.error("GSI script not available");
+        console.error("GSI client failed to load");
         return;
       }
       google.accounts.id.initialize({
-        client_id: "93996985456.apps.googleusercontent.com", // ← use your Web client ID
+        client_id: "93996985456.apps.googleusercontent.com",
         callback: handleCredentialResponse,
         auto_select: false,
         cancel_on_tap_outside: false
@@ -49,7 +48,7 @@
       google.accounts.id.prompt();
     });
 
-    // Handle the Google credential, sign into Firebase
+    // Handle Google credential → Firebase sign-in
     window.handleCredentialResponse = async (response) => {
       try {
         const cred = GoogleAuthProvider.credential(response.credential);
@@ -60,14 +59,14 @@
       }
     };
 
-    // Auth state watcher hides/shows button and updates status circle
+    // Watch auth state: toggle button & render status circle
     onAuthStateChanged(auth, user => {
       const btn = document.querySelector(".g_id_signin");
       if (btn) btn.style.display = user ? "none" : "block";
 
       const statusContainer = document.getElementById("status-circle-container");
       if (statusContainer) {
-        statusContainer.innerHTML = ""; 
+        statusContainer.innerHTML = "";
         const circle = document.createElement("div");
         circle.className = "status-circle";
         circle.title = user ? `Signed in as ${user.email}` : "Signed out";
@@ -86,27 +85,54 @@
 </head>
 <body>
   <header class="site-header">
-    <a href="index.html" class="home-link" aria-label="Home">
-      <img src="icons/academic-allies.png" alt="Home" class="home-icon">
-      <span class="tagline">Academic Allies: Dashboard</span>
+    <a href="index.html" class="home-link" aria-label="Home" title="Go Home">
+      <img src="icons/academic-allies.png" alt="Home" class="home-icon" title="Academic Allies Home">
+      <span class="tagline" title="Dashboard">Academic Allies: Dashboard</span>
     </a>
-    <nav>
-      <a href="sitemap.html">Site Map</a>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="index.html" title="Home">Home</a></li>
+        <li><a href="emergency.html" title="Emergency Contact">Emergency</a></li>
+        <li><a href="checkin.html" title="Daily Check-In">Check-In</a></li>
+        <li><a href="calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="preview.html" title="Preview">Preview</a></li>
+        <li><a href="sitemap.html" title="Site Map">Sitemap</a></li>
+      </ul>
     </nav>
   </header>
 
-  <!-- Persistent Google Sign-In button appears here -->
+  <!-- Google Sign-In Button Container -->
   <div class="g_id_signin"></div>
 
-  <!-- Status circle container must exist for app.js to populate -->
+  <!-- Status Circle Container (rendered by status-circle module) -->
   <div id="status-circle-container"></div>
 
   <main id="dashboard">
-    <!-- Your app sections… -->
+    <section class="quick-actions">
+      <button id="emergencyBtn" class="action-btn emergency">🚨 Emergency Contact</button>
+      <button id="checkInBtn" class="action-btn check-in">✓ Daily Check-in</button>
+      <button id="calendarBtn" class="action-btn calendar">📅 Calendar</button>
+    </section>
+
+    <section class="logs-preview">
+      <h2>Recent Activity</h2>
+      <div id="logsContainer"></div>
+    </section>
+
+    <section class="support-network">
+      <h2>Your Support Team</h2>
+      <div class="support-contacts"></div>
+    </section>
   </main>
 
-  <footer class="site-map">
-    <!-- Sitemap links… -->
+  <footer class="site-map" aria-label="Footer navigation">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="emergency.html">Emergency</a></li>
+      <li><a href="checkin.html">Check-In</a></li>
+      <li><a href="calendar.html">Calendar</a></li>
+      <li><a href="preview.html">Preview</a></li>
+    </ul>
   </footer>
 
   <script src="js/app.js" type="module"></script>

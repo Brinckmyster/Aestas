@@ -6,10 +6,9 @@
   <title>Academic Allies – Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="manifest" href="manifest.webmanifest">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://accounts.google.com/gsi/client"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    // Use consistent config per prompt and repo
     const firebaseConfig = {
       apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGH",
       authDomain: "academic-allies-464901.firebaseapp.com",
@@ -22,28 +21,24 @@
   </script>
 </head>
 <body>
-  <!-- Modular Header Injection -->
   <div id="header-anchor"></div>
   <script>
-    fetch("shared-header.html").then(r => r.text()).then(html => {
-      document.getElementById("header-anchor").innerHTML = html;
-    });
+    fetch("shared-header.html")
+      .then(r => r.text())
+      .then(html => { document.getElementById("header-anchor").innerHTML = html; });
   </script>
 
   <main id="dashboard">
     <div id="g_id_onload"
          data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
          data-callback="handleCredentialResponse"
-         data-auto_prompt="false">
-    </div>
+         data-auto_prompt="false"></div>
     <div class="g_id_signin"></div>
-
     <section class="quick-actions">
       <button id="emergencyBtn" class="action-btn emergency">🚨 Emergency Contact</button>
       <button id="checkInBtn" class="action-btn check-in">✓ Daily Check-in</button>
       <button id="calendarBtn" class="action-btn calendar">📅 Calendar</button>
     </section>
-
     <section class="logs-preview">
       <h2>Recent Activity</h2>
       <div class="log-view-toggle">
@@ -53,13 +48,11 @@
       </div>
       <div id="logsContainer"></div>
     </section>
-
     <section class="support-network">
       <h2>Your Support Team</h2>
       <div class="support-contacts"></div>
     </section>
   </main>
-
   <footer class="site-map">
     <h2>Site Map</h2>
     <ul>
@@ -70,8 +63,6 @@
       <li><a href="preview.html">Preview</a></li>
     </ul>
   </footer>
-
-  <!-- Single Modular Application Script (no handlers in this file) -->
   <script src="js/app.js" type="module"></script>
 </body>
 </html>

@@ -9,8 +9,8 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
-    window.firebaseConfig = {
+    // Use consistent config per prompt and repo
+    const firebaseConfig = {
       apiKey: "AIzaSyBVQFGHbFGHbFGHbFGHbFGHbFGHbFGH",
       authDomain: "academic-allies-464901.firebaseapp.com",
       projectId: "academic-allies-464901",
@@ -18,8 +18,7 @@
       messagingSenderId: "123456789012",
       appId: "1:123456789012:web:abcdef123456789012345678"
     };
-    window.app = initializeApp(window.firebaseConfig);
-    window.auth = getAuth(window.app);
+    window.app = initializeApp(firebaseConfig);
   </script>
 </head>
 <body>
@@ -32,7 +31,6 @@
   </script>
 
   <main id="dashboard">
-    <!-- Google Sign-In (GIS) buttons and container -->
     <div id="g_id_onload"
          data-client_id="93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com"
          data-callback="handleCredentialResponse"
@@ -73,17 +71,7 @@
     </ul>
   </footer>
 
-  <!-- Modular app JS -->
+  <!-- Single Modular Application Script (no handlers in this file) -->
   <script src="js/app.js" type="module"></script>
-  <script>
-    // Google Identity callback
-    window.handleCredentialResponse = function(response) {
-      // (Pal here:) Simulating Pal — hand credential off to Firebase
-      const { GoogleAuthProvider, getAuth, signInWithCredential } = window;
-      // This is where a backend would receive the token. For demo: mark user as signed in.
-      alert('Google sign-in succeeded! JWT in console.');
-      console.log(response);
-    };
-  </script>
 </body>
 </html>

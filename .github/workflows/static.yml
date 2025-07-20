@@ -1,43 +1,71 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# .github/workflows/static.yml
+# Deploy Academic Allies to GitHub Pages, with secrets support
+
+name: Deploy Academic Allies to GitHub Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches:
+      - main
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    env:
+      # Add secrets as environment variables here for ALL steps (jobs-level)
+      # Github Actions injects values from the Secrets section
+      SUPPORT_TIER_EMAILS: ${{ secrets.SUPPORT_TIER_EMAILS }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      # Add more secrets as needed
+      # Example: FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          # Upload entire repository
-          path: '.'
+          node-version: 20
+
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies if package.json exists
+        run: |
+          if [ -f "package.json" ]; then
+            npm ci
+          fi
+
+      - name: Build site (skip if not needed)
+        run: |
+          if [ -f "package.json" ] && [ -f "package-lock.json" ]; then
+            npm run build || echo "No build step"
+          else
+            echo "No build step"
+          fi
+
+      - name: Show secret values for test/debug ONLY (OPTIONAL, REMOVE IN PROD)
+        run: |
+          echo "Support Tier Emails: $SUPPORT_TIER_EMAILS"
+          echo "Google Client Secret: $GOOGLE_CLIENT_SECRET"
+        env:
+          SUPPORT_TIER_EMAILS: ${{ secrets.SUPPORT_TIER_EMAILS }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          branch: main
+          folder: modular

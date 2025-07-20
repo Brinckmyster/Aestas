@@ -9,7 +9,7 @@ const firebaseConfig = {
   appId: "YOUR_REAL_APP_ID",
   // ...any additional fields as needed...
 };
-const GOOGLE_CLIENT_ID = "93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "93996985456-ffj2euk9i4q41v88njuhpusk73mdb31j.apps.googleusercontent.com";
 
 // --- Firebase Initialization ---
 if (!window.firebaseAppsInitialized) {

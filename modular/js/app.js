@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithCre
 const auth = getAuth();
 
 // When the page loads, initialize Google ID Services and render the sign-in button
+alert("call addeventlistner" + e.message);
 window.addEventListener('load', () => {
   // Initialize Google One-Tap & Button
   google.accounts.id.initialize({

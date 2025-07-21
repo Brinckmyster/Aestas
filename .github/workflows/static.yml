@@ -1,23 +1,18 @@
 # .github/workflows/static.yml
 # Deploy Academic Allies to GitHub Pages, with secrets support
-
 name: Deploy Academic Allies to GitHub Pages
-
 on:
   push:
     branches:
       - main
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: "pages"
   cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,16 +23,13 @@ jobs:
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       # Add more secrets as needed
       # Example: FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
       - name: Restore npm cache
         uses: actions/cache@v4
         with:
@@ -45,13 +37,11 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
       - name: Install dependencies if package.json exists
         run: |
           if [ -f "package.json" ]; then
             npm ci
           fi
-
       - name: Build site (skip if not needed)
         run: |
           if [ -f "package.json" ] && [ -f "package-lock.json" ]; then
@@ -59,7 +49,6 @@ jobs:
           else
             echo "No build step"
           fi
-
       - name: Show secret values for test/debug ONLY (OPTIONAL, REMOVE IN PROD)
         run: |
           echo "Support Tier Emails: $SUPPORT_TIER_EMAILS"
@@ -67,15 +56,12 @@ jobs:
         env:
           SUPPORT_TIER_EMAILS: ${{ secrets.SUPPORT_TIER_EMAILS }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './modular'
-
+          path: '.'
   deploy:
     environment:
       name: github-pages

@@ -7,7 +7,6 @@
   <link href="css/style.css" rel="stylesheet"/>
   <link href="manifest.webmanifest" rel="manifest"/>
 </head>
-
 <body>
   <header class="site-header">
     <a aria-label="Home" class="home-link" href="index.html" title="Go Home">
@@ -25,13 +24,10 @@
       </ul>
     </nav>
   </header>
-
   <!-- Google Sign-In Container -->
   <div id="googleSignInContainer"></div>
-
   <!-- Status Circle Container (rendered by status-circle module) -->
   <div id="status-circle-container"></div>
-
   <main id="dashboard">
     <section class="quick-actions">
       <h2>Quick Actions</h2>
@@ -39,18 +35,15 @@
       <button class="action-btn check-in" id="checkInBtn">✓ Daily Check-in</button>
       <button class="action-btn calendar" id="calendarBtn">📅 Calendar</button>
     </section>
-
     <section class="logs-preview">
       <h2>Recent Activity</h2>
       <div id="logsContainer"></div>
     </section>
-
     <section class="support-network">
       <h2>Your Support Team</h2>
       <div class="support-contacts"></div>
     </section>
   </main>
-
   <footer aria-label="Footer navigation" class="site-map">
     <ul>
       <li><a href="index.html">Home</a></li>
@@ -60,10 +53,10 @@
       <li><a href="preview.html">Preview</a></li>
     </ul>
   </footer>
-
-  <script src="js/app.js" type="module"></script>
-  <!-- Google integration moved to archive - update path or remove if deprecated -->
-  <!-- <script src="/modular/archive/google-integration.js" type="module"></script> -->
-
+  
+  <!-- Google sign-in handled by dedicated component module -->
+  <script src="modular/components/google-integration/google-integration.html" type="module"></script>
+  <!-- Main app script commented out to avoid conflicts with Google integration component -->
+  <!-- <script src="js/app.js" type="module"></script> -->
 </body>
 </html>

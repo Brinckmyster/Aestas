@@ -6,6 +6,12 @@
     <title>Daily Check-In - Academic Allies</title>
 </head>
 <body>
+    <div id="site-header"></div>
+    <script>
+      fetch('shared-header.html')
+        .then(res => res.text())
+        .then(html => { document.getElementById('site-header').innerHTML = html; });
+    </script>
     <header>
         <h1>Daily Check-In</h1>
     </header>

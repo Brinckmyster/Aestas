@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Academic Allies – Daily Check-In</title>
-  …
-</head>
-<body>
-  <main id="checkin-page">
-    <h2>Daily Check-In</h2>
-    <div id="checkin-component-container"></div>
-    <script type="module">
-      import { renderCheckIn } from './components/spoon-planner/js/spoon-planner.js';
-      renderCheckIn(document.getElementById('checkin-component-container'), window.firebaseAuth);
-    </script>
-  </main>
-  …
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Allies – Daily Check-In</title>
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <script src="/shared-header.js"></script>
+    <main id="checkin-page">
+      <h2>Daily Check-In</h2>
+      <div id="checkin-component-container"></div>
+      <script type="module">
+        import { renderCheckIn } from './components/spoon-planner/js/spoon-planner.js';
+        renderCheckIn(document.getElementById('checkin-component-container'), window.firebaseAuth);
+      </script>
+    </main>
+  </body>
 </html>

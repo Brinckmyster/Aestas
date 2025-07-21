@@ -8,6 +8,18 @@
   <link href="manifest.webmanifest" rel="manifest"/>
 </head>
 <body>
+  <div id="site-header"></div>
+  <script>
+    // Fetch and load shared header
+    fetch('shared-header.js')
+      .then(response => response.text())
+      .then(script => {
+        const scriptElement = document.createElement('script');
+        scriptElement.textContent = script;
+        document.head.appendChild(scriptElement);
+      })
+      .catch(error => console.error('Error loading shared header:', error));
+  </script>
   <header class="site-header">
     <a aria-label="Home" class="home-link" href="index.html" title="Go Home">
       <img alt="Home" class="home-icon" title="Academic Allies Home"/>
@@ -36,8 +48,5 @@
       <button class="action-btn calendar" id="calendarBtn">📅 Calendar</button>
     </section>
   </main>
-
-  <!-- All UI features and integrations are loaded via modules! -->
-  <script type="module" src="js/app.js"></script>
 </body>
 </html>

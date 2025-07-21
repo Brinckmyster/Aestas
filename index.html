@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Academic Allies – Dashboard</title>
-  <link href="css/style.css" rel="stylesheet"/>
-  <link href="manifest.webmanifest" rel="manifest"/>
-</head>
-<body>
-  <div id="site-header"></div>
-  <script>
-    // Fetch and load shared header
-    fetch('modular/shared-header.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('site-header').innerHTML = html;
-      })
-      .catch(error => console.error('Error loading shared header:', error));
-  </script>
-
-  <!-- Rest of page content would go here -->
-
-</body>
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Academic Allies – Dashboard</title>
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="manifest.webmanifest" rel="manifest"/>
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <script>
+      // Fetch and load shared header
+      fetch('modular/shared-header.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('site-header').innerHTML = html;
+        })
+        .catch(error => console.error('Error loading shared header:', error));
+    </script>
+    <!-- Google Sign-In Container -->
+    <div id="googleSignInContainer"></div>
+    <!-- Status Circle Container (rendered by status-circle module) -->
+    <div id="status-circle-container"></div>
+    <main id="dashboard">
+      <section class="quick-actions">
+        <h2>Quick Actions</h2>
+        <button class="action-btn emergency" id="emergencyBtn">🚨 Emergency Contact</button>
+        <button class="action-btn check-in" id="checkInBtn">✓ Daily Check-in</button>
+        <button class="action-btn calendar" id="calendarBtn">📅 Calendar</button>
+      </section>
+    </main>
+  </body>
 </html>

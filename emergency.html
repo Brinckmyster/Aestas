@@ -6,6 +6,12 @@
     <title>Emergency Contact - Academic Allies</title>
 </head>
 <body>
+    <div id="site-header"></div>
+    <script>
+      fetch('shared-header.html')
+        .then(res => res.text())
+        .then(html => { document.getElementById('site-header').innerHTML = html; });
+    </script>
     <header>
         <h1>Emergency Contact</h1>
     </header>

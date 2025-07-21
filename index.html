@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Academic Allies – Dashboard</title>
   <link href="css/style.css" rel="stylesheet"/>
   <link href="manifest.webmanifest" rel="manifest"/>
@@ -11,12 +11,10 @@
   <div id="site-header"></div>
   <script>
     // Fetch and load shared header
-    fetch('shared-header.js')
+    fetch('modular/shared-header.html')
       .then(response => response.text())
-      .then(script => {
-        const scriptElement = document.createElement('script');
-        scriptElement.textContent = script;
-        document.head.appendChild(scriptElement);
+      .then(html => {
+        document.getElementById('site-header').innerHTML = html;
       })
       .catch(error => console.error('Error loading shared header:', error));
   </script>

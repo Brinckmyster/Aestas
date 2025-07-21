@@ -7,3 +7,4 @@ It integrates an **AI Protocol Editor** in the Admin panel—by default using Pe
 - Calendar: Google Calendar, BYU-I Academic, and Health Reminders integration.
 - Emergency Contacts: default and custom contacts, call/email buttons, add/edit/remove.
 //noop commit for failed deploy CAj did this
+//noop commit for failed deploy CAj did this

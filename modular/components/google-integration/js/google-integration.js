@@ -1,6 +1,6 @@
 // js/google-integration.js
 export function startGoogleSignIn() {
-  const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+  const GOOGLE_CLIENT_ID = "93996985456-ffj2euk9i4q41v88njuhpusk73mdb31j.apps.googleusercontent.com";
   if (!window.google?.accounts?.id) {
     alert('Google Identity Services not loaded yet.');
     return;
@@ -11,7 +11,6 @@ export function startGoogleSignIn() {
   });
   google.accounts.id.prompt();
 }
-
 async function handleCredentialResponse(response) {
   try {
     console.log('Signed in:', response);

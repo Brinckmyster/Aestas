@@ -35,28 +35,9 @@
       <button class="action-btn check-in" id="checkInBtn">✓ Daily Check-in</button>
       <button class="action-btn calendar" id="calendarBtn">📅 Calendar</button>
     </section>
-    <section class="logs-preview">
-      <h2>Recent Activity</h2>
-      <div id="logsContainer"></div>
-    </section>
-    <section class="support-network">
-      <h2>Your Support Team</h2>
-      <div class="support-contacts"></div>
-    </section>
   </main>
-  <footer aria-label="Footer navigation" class="site-map">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="emergency.html">Emergency</a></li>
-      <li><a href="checkin.html">Check-In</a></li>
-      <li><a href="calendar.html">Calendar</a></li>
-      <li><a href="preview.html">Preview</a></li>
-    </ul>
-  </footer>
-  
-  <!-- Google sign-in handled by dedicated component module -->
-  <script src="modular/components/google-integration/google-integration.html" type="module"></script>
-  <!-- Main app script commented out to avoid conflicts with Google integration component -->
-  <!-- <script src="js/app.js" type="module"></script> -->
+
+  <!-- All Google sign-in logic lives in modules ONLY. No direct script changes needed! -->
+  <script src="js/app.js" type="module"></script>
 </body>
 </html>

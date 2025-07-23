@@ -1,36 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Academic Allies – Emergency Contact</title>
-  <link href="../css/style.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Allies – Emergency Contact</title>
+    <link href="../css/style.css" rel="stylesheet"/>
 </head>
 <body>
-  <header class="site-header">
-    <a aria-label="Home" class="home-link" href="../index.html" title="Go Home">
-      <img alt="Home" class="home-icon" title="Academic Allies Home"/>
-      <span class="tagline" title="Dashboard">Academic Allies: Dashboard</span>
-    </a>
-    <nav aria-label="Main navigation">
-      <ul class="nav-list">
-        <li><a href="../index.html" title="Home">Home</a></li>
-        <li><a href="emergency.html" title="Emergency Contact">Emergency</a></li>
-        <li><a href="checkin.html" title="Daily Check-In">Check-In</a></li>
-        <li><a href="calendar.html" title="Calendar">Calendar</a></li>
-        <li><a href="preview.html" title="Preview">Preview</a></li>
-        <li><a href="sitemap.html" title="Site Map">Sitemap</a></li>
-      </ul>
-    </nav>
-  </header>
-  
-  <main id="emergency-page">
-    <h2>Emergency Contacts</h2>
-    <div id="emergency-component-container"></div>
-    <script type="module">
-      import { renderEmergency } from './components/message-system/js/google-integration.js';
-      renderEmergency(document.getElementById('emergency-component-container'), window.firebaseAuth);
+    <!-- Shared header loader -->
+    <div id="site-header"></div>
+    <script>
+      fetch('./shared-header.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('site-header').innerHTML = html;
+        });
     </script>
-  </main>
+    
+    <!-- Google integration container -->
+    <div class="g_id_signin"></div>
+    
+    <main id="emergency-page">
+      <h2>Emergency Contacts</h2>
+      <div id="emergency-component-container"></div>
+      <script type="module">
+        import { renderEmergency } from './components/message-system/js/google-integration.js';
+        renderEmergency(document.getElementById('emergency-component-container'), window.firebaseAuth);
+      </script>
+    </main>
 </body>
 </html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Allies – Site Map</title>
+</head>
+<body>
+    <!-- Shared header loader -->
+    <div id="site-header"></div>
+    <script>
+      fetch('./shared-header.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('site-header').innerHTML = html;
+        });
+    </script>
+    
+    <!-- Google integration container -->
+    <div class="g_id_signin"></div>
+    
+    <main id="sitemap-page">
+      <h2>Site Map</h2>
+      <div id="sitemap-content">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="emergency.html">Emergency Contact</a></li>
+          <li><a href="checkin.html">Daily Check-In</a></li>
+          <li><a href="calendar.html">Calendar</a></li>
+          <li><a href="preview.html">Preview</a></li>
+          <li><a href="sitemap.html">Site Map</a></li>
+        </ul>
+      </div>
+    </main>
+</body>
+</html>

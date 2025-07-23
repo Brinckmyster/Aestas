@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academic Allies – Daily Check-In</title>
-  </head>
-  <body>
+</head>
+<body>
+    <!-- Shared header loader -->
     <div id="site-header"></div>
-    <script src="/shared-header.js"></script>
+    <script>
+      fetch('./shared-header.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('site-header').innerHTML = html;
+        });
+    </script>
+    
+    <!-- Google integration container -->
+    <div class="g_id_signin"></div>
+    
     <main id="checkin-page">
       <h2>Daily Check-In</h2>
       <div id="checkin-component-container"></div>
@@ -16,5 +27,5 @@
         renderCheckIn(document.getElementById('checkin-component-container'), window.firebaseAuth);
       </script>
     </main>
-  </body>
+</body>
 </html>

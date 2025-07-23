@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -14,6 +14,19 @@
   </style>
 </head>
 <body>
+  <!-- Shared header loader -->
+  <div id="site-header"></div>
+  <script>
+    fetch('./shared-header.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('site-header').innerHTML = html;
+      });
+  </script>
+  
+  <!-- Google integration container -->
+  <div class="g_id_signin"></div>
+  
   <h1>Coming Soon</h1>
   <p>This is just a preview page.</p>
   <a href="index.html">Return Home</a>

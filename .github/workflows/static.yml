@@ -49,12 +49,16 @@ jobs:
           else
             echo "No build step"
           fi
-      - name: Show secret values for test/debug ONLY (OPTIONAL, REMOVE IN PROD)
+      - name: Inject Google OAuth secret into shared-header.html
         run: |
-          echo "Support Tier Emails: $SUPPORT_TIER_EMAILS"
-          echo "Google Client Secret: $GOOGLE_CLIENT_SECRET"
+          echo "Injecting Google OAuth secret into shared-header.html..."
+          if [ -f "modular/shared-header.html" ]; then
+            sed -i "s/{{GOOGLE_CLIENT_SECRET}}/$GOOGLE_CLIENT_SECRET/g" modular/shared-header.html
+            echo "Secret injection completed."
+          else
+            echo "shared-header.html not found, skipping secret injection."
+          fi
         env:
-          SUPPORT_TIER_EMAILS: ${{ secrets.SUPPORT_TIER_EMAILS }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       - name: Setup Pages
         uses: actions/configure-pages@v5

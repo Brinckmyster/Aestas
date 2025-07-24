@@ -12,7 +12,72 @@
       <li><a href="/Academic-Allies/modular/sitemap.html" title="Site Map">Site Map</a></li>
     </ul>
   </nav>
+  
+  <!-- Google Login Button -->
+  <button id="google-login">Login with Google</button>
+  
+  <!-- Status Circle -->
+  <div id="status-circle" tabindex="0" aria-label="Status: Not signed in" style="width:28px;height:28px;border-radius:50%;background:#ccc;display:inline-block;outline:1.5px solid #aaa;cursor:move;"></div>
+  
   <!-- Status Circle Container -->
   <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
+  
+  <script>
+    // Simple draggable functionality for status circle
+    document.addEventListener('DOMContentLoaded', function() {
+      const statusCircle = document.getElementById('status-circle');
+      let isDragging = false;
+      let startX, startY, initialX, initialY;
+      
+      statusCircle.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        const rect = statusCircle.getBoundingClientRect();
+        initialX = rect.left;
+        initialY = rect.top;
+        statusCircle.style.position = 'absolute';
+        statusCircle.style.zIndex = '1000';
+      });
+      
+      document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+        statusCircle.style.left = (initialX + deltaX) + 'px';
+        statusCircle.style.top = (initialY + deltaY) + 'px';
+      });
+      
+      document.addEventListener('mouseup', function() {
+        isDragging = false;
+      });
+      
+      // Keyboard accessibility for dragging
+      statusCircle.addEventListener('keydown', function(e) {
+        const step = 5;
+        const rect = statusCircle.getBoundingClientRect();
+        switch(e.key) {
+          case 'ArrowUp':
+            statusCircle.style.top = (rect.top - step) + 'px';
+            e.preventDefault();
+            break;
+          case 'ArrowDown':
+            statusCircle.style.top = (rect.top + step) + 'px';
+            e.preventDefault();
+            break;
+          case 'ArrowLeft':
+            statusCircle.style.left = (rect.left - step) + 'px';
+            e.preventDefault();
+            break;
+          case 'ArrowRight':
+            statusCircle.style.left = (rect.left + step) + 'px';
+            e.preventDefault();
+            break;
+        }
+      });
+    });
+  </script>
+  
   <script src="/Academic-Allies/modular/js/google-integration.js"></script>
 </header>

@@ -9,10 +9,12 @@
 
 <!-- Shared header loader (robust, with fallback for GitHub Pages) -->
 <div id="site-header"></div>
+
 <script>
 (function() {
   var headerUrl = './shared-header.html';
   function injectStaticHeader() {
+    // Simplified fallback header without duplicate Google login components
     document.getElementById('site-header').innerHTML = `
 <header class="site-header" role="banner">
   <div class="header-content">
@@ -30,29 +32,29 @@
       </ul>
     </nav>
     <div class="header-controls">
-      <button id="google-login">Login with Google</button>
-      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
+      <!-- NOTE: Google login components removed - now consolidated in shared-header.html only -->
+      <p style="color: #666; font-size: 12px;">Header fallback mode - Google login unavailable</p>
     </div>
   </div>
-  <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
 </header>
     `;
   }
+  
   fetch(headerUrl).then(function(response) {
-    if (!response.ok) throw new Error();
+    if (!response.ok) throw new Error('Header fetch failed');
     return response.text();
   }).then(function(html) {
     document.getElementById('site-header').innerHTML = html;
-  }).catch(function() {
+  }).catch(function(error) {
+    console.warn('Falling back to static header:', error);
     injectStaticHeader();
   });
 })();
 </script>
 
-<!-- Google integration container -->
-<div class="g_id_signin"></div>
+<!-- Main calendar content -->
 <main id="calendar-page">
-  <h2>Calendar</h2>
+  <h1>Calendar</h1>
   <div id="calendar-component-container"></div>
   <script type="module">
     import { renderCalendar } from './components/meal-planner/js/meal-planner.js';

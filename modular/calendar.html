@@ -1,31 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Allies – Calendar</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Academic Allies – Calendar</title>
 </head>
 <body>
-    <!-- Shared header loader -->
-    <div id="site-header"></div>
-    <script>
-      fetch('./shared-header.html')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('site-header').innerHTML = html;
-        });
-    </script>
-    
-    <!-- Google integration container -->
-    <div class="g_id_signin"></div>
-    
-    <main id="calendar-page">
-      <h2>Calendar</h2>
-      <div id="calendar-component-container"></div>
-      <script type="module">
-        import { renderCalendar } from './components/meal-planner/js/meal-planner.js';
-        renderCalendar(document.getElementById('calendar-component-container'), window.firebaseAuth);
-      </script>
-    </main>
+
+<!-- Shared header loader (robust, with fallback for GitHub Pages) -->
+<div id="site-header"></div>
+<script>
+(function() {
+  var headerUrl = './shared-header.html';
+  function injectStaticHeader() {
+    document.getElementById('site-header').innerHTML = `
+<header class="site-header" role="banner">
+  <div class="header-content">
+    <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
+      <img alt="Home" class="home-icon" height="30" title="Academic Allies Home" width="30" />
+      <span class="tagline" title="Academic Allies: Dashboard">Academic Allies: Dashboard</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="/Academic-Allies/modular/calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="/Academic-Allies/modular/emergency.html" title="Emergency Contact">Emergency Contact</a></li>
+        <li><a href="/Academic-Allies/modular/checkin.html" title="Daily Check-In">Daily Check-In</a></li>
+        <li><a href="/Academic-Allies/modular/preview.html" title="Preview">Preview</a></li>
+        <li><a href="/Academic-Allies/modular/sitemap.html" title="Site Map">Site Map</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button id="google-login">Login with Google</button>
+      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
+    </div>
+  </div>
+  <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
+</header>
+    `;
+  }
+  fetch(headerUrl).then(function(response) {
+    if (!response.ok) throw new Error();
+    return response.text();
+  }).then(function(html) {
+    document.getElementById('site-header').innerHTML = html;
+  }).catch(function() {
+    injectStaticHeader();
+  });
+})();
+</script>
+
+<!-- Google integration container -->
+<div class="g_id_signin"></div>
+<main id="calendar-page">
+  <h2>Calendar</h2>
+  <div id="calendar-component-container"></div>
+  <script type="module">
+    import { renderCalendar } from './components/meal-planner/js/meal-planner.js';
+    renderCalendar(document.getElementById('calendar-component-container'), window.firebaseAuth);
+  </script>
+</main>
+
 </body>
 </html>

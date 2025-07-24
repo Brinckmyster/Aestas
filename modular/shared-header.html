@@ -1,34 +1,187 @@
 <header class="site-header" role="banner">
-  <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
-    <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/academic-allies.png" width="30" height="30" title="Academic Allies Home"/>
-    <span class="tagline" title="Academic Allies: Dashboard">Academic Allies: Dashboard</span>
-  </a>
-  <nav aria-label="Main navigation">
-    <ul class="nav-list">
-      <li><a href="/Academic-Allies/modular/calendar.html" title="Calendar">Calendar</a></li>
-      <li><a href="/Academic-Allies/modular/emergency.html" title="Emergency Contact">Emergency Contact</a></li>
-      <li><a href="/Academic-Allies/modular/checkin.html" title="Daily Check-In">Daily Check-In</a></li>
-      <li><a href="/Academic-Allies/modular/preview.html" title="Preview">Preview</a></li>
-      <li><a href="/Academic-Allies/modular/sitemap.html" title="Site Map">Site Map</a></li>
-    </ul>
-  </nav>
-  
-  <!-- Google Login Button -->
-  <button id="google-login">Login with Google</button>
-  
-  <!-- Status Circle -->
-  <div id="status-circle" tabindex="0" aria-label="Status: Not signed in" style="width:28px;height:28px;border-radius:50%;background:#ccc;display:inline-block;outline:1.5px solid #aaa;cursor:move;"></div>
+  <div class="header-content">
+    <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
+      <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/academic-allies.png" width="30" height="30" title="Academic Allies Home"/>
+      <span class="tagline" title="Academic Allies: Dashboard">Academic Allies: Dashboard</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="/Academic-Allies/modular/calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="/Academic-Allies/modular/emergency.html" title="Emergency Contact">Emergency Contact</a></li>
+        <li><a href="/Academic-Allies/modular/checkin.html" title="Daily Check-In">Daily Check-In</a></li>
+        <li><a href="/Academic-Allies/modular/preview.html" title="Preview">Preview</a></li>
+        <li><a href="/Academic-Allies/modular/sitemap.html" title="Site Map">Site Map</a></li>
+      </ul>
+    </nav>
+    
+    <div class="header-controls">
+      <!-- Google Login Button -->
+      <button id="google-login">Login with Google</button>
+      
+      <!-- Status Circle -->
+      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
+    </div>
+  </div>
   
   <!-- Status Circle Container -->
   <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
   
+  <style>
+    .site-header {
+      background: #f8f9fa;
+      border-bottom: 1px solid #e1e5e9;
+      padding: 12px 20px;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .home-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #24292f;
+      font-weight: 600;
+    }
+    
+    .home-icon {
+      margin-right: 8px;
+    }
+    
+    .nav-list {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 20px;
+    }
+    
+    .nav-list a {
+      text-decoration: none;
+      color: #656d76;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    
+    .nav-list a:hover {
+      background: #f3f4f6;
+      color: #24292f;
+    }
+    
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+    }
+    
+    #google-login {
+      background: #4285f4;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    
+    #google-login:hover {
+      background: #3367d6;
+    }
+    
+    #status-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ccc;
+      outline: 1.5px solid #aaa;
+      cursor: move;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    
+    #status-circle:hover {
+      transform: scale(1.1);
+    }
+    
+    #status-circle:focus {
+      outline: 2px solid #0969da;
+      outline-offset: 2px;
+    }
+    
+    #status-circle.online {
+      background: #44cc44;
+      outline-color: #2da02d;
+    }
+    
+    #status-circle.offline {
+      background: #ccc;
+      outline-color: #aaa;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      
+      .nav-list {
+        gap: 12px;
+      }
+      
+      .nav-list a {
+        padding: 6px 8px;
+        font-size: 14px;
+      }
+    }
+  </style>
+  
   <script>
-    // Simple draggable functionality for status circle
     document.addEventListener('DOMContentLoaded', function() {
       const statusCircle = document.getElementById('status-circle');
+      const googleLoginBtn = document.getElementById('google-login');
+      let isOnline = false;
       let isDragging = false;
       let startX, startY, initialX, initialY;
       
+      // Google login button click handler
+      googleLoginBtn.addEventListener('click', function() {
+        alert('Google login clicked!');
+      });
+      
+      // Status circle click handler for toggling online/offline state
+      statusCircle.addEventListener('click', function(e) {
+        if (!isDragging) {
+          isOnline = !isOnline;
+          updateStatusCircle();
+        }
+      });
+      
+      // Function to update status circle appearance and accessibility
+      function updateStatusCircle() {
+        if (isOnline) {
+          statusCircle.style.background = '#44cc44';
+          statusCircle.style.outlineColor = '#2da02d';
+          statusCircle.setAttribute('aria-label', 'Status: Online');
+          statusCircle.className = 'online';
+        } else {
+          statusCircle.style.background = '#ccc';
+          statusCircle.style.outlineColor = '#aaa';
+          statusCircle.setAttribute('aria-label', 'Status: Offline');
+          statusCircle.className = 'offline';
+        }
+      }
+      
+      // Draggable functionality for status circle
       statusCircle.addEventListener('mousedown', function(e) {
         isDragging = true;
         startX = e.clientX;
@@ -38,6 +191,9 @@
         initialY = rect.top;
         statusCircle.style.position = 'absolute';
         statusCircle.style.zIndex = '1000';
+        
+        // Prevent click event during drag
+        setTimeout(() => { isDragging = false; }, 200);
       });
       
       document.addEventListener('mousemove', function(e) {
@@ -50,32 +206,57 @@
       });
       
       document.addEventListener('mouseup', function() {
-        isDragging = false;
+        if (isDragging) {
+          setTimeout(() => { isDragging = false; }, 100);
+        }
       });
       
       // Keyboard accessibility for dragging
       statusCircle.addEventListener('keydown', function(e) {
         const step = 5;
         const rect = statusCircle.getBoundingClientRect();
+        let moved = false;
+        
         switch(e.key) {
           case 'ArrowUp':
+            statusCircle.style.position = 'absolute';
             statusCircle.style.top = (rect.top - step) + 'px';
-            e.preventDefault();
+            statusCircle.style.left = rect.left + 'px';
+            moved = true;
             break;
           case 'ArrowDown':
+            statusCircle.style.position = 'absolute';
             statusCircle.style.top = (rect.top + step) + 'px';
-            e.preventDefault();
+            statusCircle.style.left = rect.left + 'px';
+            moved = true;
             break;
           case 'ArrowLeft':
+            statusCircle.style.position = 'absolute';
             statusCircle.style.left = (rect.left - step) + 'px';
-            e.preventDefault();
+            statusCircle.style.top = rect.top + 'px';
+            moved = true;
             break;
           case 'ArrowRight':
+            statusCircle.style.position = 'absolute';
             statusCircle.style.left = (rect.left + step) + 'px';
-            e.preventDefault();
+            statusCircle.style.top = rect.top + 'px';
+            moved = true;
+            break;
+          case 'Enter':
+          case ' ':
+            isOnline = !isOnline;
+            updateStatusCircle();
+            moved = true;
             break;
         }
+        
+        if (moved) {
+          e.preventDefault();
+        }
       });
+      
+      // Initialize status circle
+      updateStatusCircle();
     });
   </script>
   

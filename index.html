@@ -1,26 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="cache-control" content="no-cache">
-    <meta http-equiv="expires" content="0">
-    <meta http-equiv="pragma" content="no-cache">
-    <title>Academic Allies – Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="manifest" href="manifest.webmanifest">
-</head>
-<body>
-    <div id="header-placeholder"></div>
-    <script>
-        fetch('/Academic-Allies/header.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('header-placeholder').innerHTML = html;
-            });
-    </script>
-    <main id="dashboard">
-        <!-- Main dashboard content here -->
-    </main>
-</body>
-</html>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="no-cache" http-equiv="cache-control"/>
+<meta content="0" http-equiv="expires"/>
+<meta content="no-cache" http-equiv="pragma"/>
+Academic Allies – Dashboard
+<link href="css/style.css" rel="stylesheet"/>
+<link href="manifest.webmanifest" rel="manifest"/>
+<div id="header-placeholder"></div>
+<br>        fetch('/Academic-Allies/header.html')<br>            .then(response => response.text())<br>            .then(html => {<br>                document.getElementById('header-placeholder').innerHTML = html;<br>            });<br>
+<main id="dashboard">
+    <!-- Main dashboard content here -->
+</main>
+<!-- Force deploy update -->

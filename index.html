@@ -11,25 +11,12 @@
   <link rel="manifest" href="manifest.webmanifest"/>
 </head>
 <body>
-  <!-- Header Module -->
-  <div id="site-header">
-    <header class="main-header">
-      <nav class="navbar">
-        <div class="nav-brand">
-          <h1>Academic Allies</h1>
-        </div>
-        <ul class="nav-links">
-          <li><a href="#dashboard">Dashboard</a></li>
-          <li><a href="#calendar">Calendar</a></li>
-          <li><a href="#resources">Resources</a></li>
-          <li><a href="#profile">Profile</a></li>
-        </ul>
-        <div class="user-menu">
-          <button class="user-btn">Account</button>
-        </div>
-      </nav>
-    </header>
-  </div>
+  <div id="header-placeholder"></div>
+  <script>
+    fetch('/Academic-Allies/header.html')
+      .then(response => response.text())
+      .then(html => { document.getElementById('header-placeholder').innerHTML = html });
+  </script>
   <main id="dashboard">
     <!-- Main dashboard content here -->
   </main>

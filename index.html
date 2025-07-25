@@ -3,13 +3,12 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="cache-control" content="no-cache"/>
+  <meta http-equiv="expires" content="0"/>
+  <meta http-equiv="pragma" content="no-cache"/>
   <title>Academic Allies – Dashboard</title>
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="manifest" href="manifest.webmanifest"/>
-  <style>
-.status-circle { display: inline-block; width: 0.75em; height: 0.75em; margin-right: 0.5em; border-radius: 50%; background-color: #28a745; vertical-align: middle; }
-.system-status-line { display: flex; align-items: center; gap: 0.5em; font-weight: 500; font-size: 1em; }
-</style>
 </head>
 <body>
   <!-- Header Module -->
@@ -31,186 +30,8 @@
       </nav>
     </header>
   </div>
-  
   <main id="dashboard">
-    <header>
-      <h1>Academic Allies</h1>
-      <p class="tagline">Your disability accommodations and support network</p>
-    </header>
-    
-    <!-- Google Sign-In Container -->
-    <div class="g_id_signin"></div>
-    
-    <!-- Status Circle Module -->
-    <div id="status-circle-container">
-      <div class="status-circle">
-        <div class="status-indicator active">
-          <span class="status-text">Active</span>
-          <div class="status-dot"></div>
-        </div>
-        <div class="status-details">
-          <div class="system-status-line">
-            <span class="status-circle" aria-label="Operational status - All services operational" role="img"></span>
-            System Status: All services operational
-          </div>
-          <p>Last Updated: <span id="last-updated">Just now</span></p>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Emergency Module -->
-    <div id="emergency-container">
-      <section class="emergency-section">
-        <h2>Emergency Contacts</h2>
-        <div class="emergency-contacts">
-          <div class="contact-card primary">
-            <h3>Campus Safety</h3>
-            <p class="phone">📞 (555) 123-4567</p>
-            <button class="emergency-btn">Call Now</button>
-          </div>
-          <div class="contact-card">
-            <h3>Counseling Services</h3>
-            <p class="phone">📞 (555) 123-4568</p>
-            <button class="emergency-btn">Call Now</button>
-          </div>
-          <div class="contact-card">
-            <h3>Disability Services</h3>
-            <p class="phone">📞 (555) 123-4569</p>
-            <button class="emergency-btn">Call Now</button>
-          </div>
-        </div>
-      </section>
-    </div>
-    
-    <!-- Check-in Module -->
-    <div id="checkin-container">
-      <section class="checkin-section">
-        <h2>Daily Check-in</h2>
-        <form class="checkin-form">
-          <div class="mood-selector">
-            <label>How are you feeling today?</label>
-            <div class="mood-options">
-              <button type="button" class="mood-btn" data-mood="excellent">😊 Excellent</button>
-              <button type="button" class="mood-btn" data-mood="good">🙂 Good</button>
-              <button type="button" class="mood-btn" data-mood="okay">😐 Okay</button>
-              <button type="button" class="mood-btn" data-mood="struggling">😔 Struggling</button>
-            </div>
-          </div>
-          <div class="notes-section">
-            <label for="daily-notes">Any notes for today?</label>
-            <textarea id="daily-notes" placeholder="Optional notes about your day..."></textarea>
-          </div>
-          <button type="submit" class="submit-checkin">Submit Check-in</button>
-        </form>
-        <div class="checkin-streak">
-          <p>🔥 Current streak: <span id="streak-count">7</span> days</p>
-        </div>
-      </section>
-    </div>
-    
-    <!-- Calendar Module -->
-    <div id="calendar-container">
-      <section class="calendar-section">
-        <h2>Your Schedule</h2>
-        <div class="calendar-widget">
-          <div class="calendar-header">
-            <button class="nav-btn prev">‹</button>
-            <h3 id="current-month">January 2025</h3>
-            <button class="nav-btn next">›</button>
-          </div>
-          <div class="calendar-grid">
-            <div class="day-header">Sun</div>
-            <div class="day-header">Mon</div>
-            <div class="day-header">Tue</div>
-            <div class="day-header">Wed</div>
-            <div class="day-header">Thu</div>
-            <div class="day-header">Fri</div>
-            <div class="day-header">Sat</div>
-            <!-- Calendar days would be dynamically generated -->
-          </div>
-        </div>
-        <div class="upcoming-events">
-          <h3>Upcoming Events</h3>
-          <ul class="event-list">
-            <li class="event-item">
-              <span class="event-time">10:00 AM</span>
-              <span class="event-title">Math Tutoring Session</span>
-            </li>
-            <li class="event-item">
-              <span class="event-time">2:00 PM</span>
-              <span class="event-title">Accommodation Meeting</span>
-            </li>
-          </ul>
-        </div>
-      </section>
-    </div>
-    
-    <section class="quick-actions">
-      <h2>Quick Actions</h2>
-      <button class="action-btn emergency" id="emergencyBtn">🚨 Emergency Contact</button>
-      <button class="action-btn check-in" id="checkInBtn">✓ Daily Check-in</button>
-      <button class="action-btn calendar" id="calendarBtn">📅 Calendar</button>
-    </section>
-    
-    <!-- Preview Module -->
-    <div id="preview-container">
-      <section class="preview-section">
-        <h2>Quick Preview</h2>
-        <div class="preview-cards">
-          <div class="preview-card">
-            <h3>Today's Tasks</h3>
-            <ul>
-              <li>Complete math assignment</li>
-              <li>Submit accommodation request</li>
-              <li>Attend study group</li>
-            </ul>
-          </div>
-          <div class="preview-card">
-            <h3>Recent Activity</h3>
-            <ul>
-              <li>Completed daily check-in</li>
-              <li>Scheduled tutoring session</li>
-              <li>Updated profile</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-    </div>
-    
-    <!-- Sitemap Module -->
-    <div id="sitemap-container">
-      <section class="sitemap-section">
-        <h2>Site Navigation</h2>
-        <div class="sitemap-grid">
-          <div class="sitemap-column">
-            <h3>Dashboard</h3>
-            <ul>
-              <li><a href="#overview">Overview</a></li>
-              <li><a href="#checkin">Daily Check-in</a></li>
-              <li><a href="#status">System Status</a></li>
-            </ul>
-          </div>
-          <div class="sitemap-column">
-            <h3>Resources</h3>
-            <ul>
-              <li><a href="#accommodations">Accommodations</a></li>
-              <li><a href="#tutoring">Tutoring</a></li>
-              <li><a href="#counseling">Counseling</a></li>
-            </ul>
-          </div>
-          <div class="sitemap-column">
-            <h3>Support</h3>
-            <ul>
-              <li><a href="#emergency">Emergency Contacts</a></li>
-              <li><a href="#help">Help Center</a></li>
-              <li><a href="#contact">Contact Us</a></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-    </div>
+    <!-- Main dashboard content here -->
   </main>
-  
-  <script src="js/app.js"></script>
 </body>
 </html>

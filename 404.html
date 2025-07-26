@@ -11,6 +11,7 @@
     <link href="manifest.webmanifest" rel="manifest"/>
 </head>
 <body>
+<script>fetch('modular/shared-header.html').then(r=>r.text()).then(h=>document.body.insertAdjacentHTML('afterbegin',h));</script>
     <div id="header-placeholder">
         <!-- Header content will be loaded here -->
         <script>

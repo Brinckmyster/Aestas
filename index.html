@@ -3,29 +3,57 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="cache-control" content="no-cache">
-    <meta http-equiv="expires" content="0">
-    <meta http-equiv="pragma" content="no-cache">
-    <title>Academic Allies – Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Academic Allies - Your disability accommodations and support network">
+    <title>Academic Allies - Dashboard</title>
+    <link rel="stylesheet" href="modular/css/style.css">
     <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
-    <div id="header-placeholder">
-        <!-- Header content will be loaded here -->
-        <script>
-            fetch('/Academic-Allies/header.html')
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('header-placeholder').innerHTML = html;
-                });
-        </script>
-    </div>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
     
-    <main id="dashboard">
-        <!-- Main dashboard content here -->
-        <h1>Welcome to Academic Allies Dashboard</h1>
-        <p>Dashboard content will be implemented here.</p>
+    <!-- Header navigation -->
+    <header role="banner">
+        <nav role="navigation" aria-label="Main navigation">
+            <h1 class="site-title">Academic Allies</h1>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" aria-label="Dashboard" accesskey="d">Dashboard</a></li>
+                <li><a href="#profile" aria-label="Profile" accesskey="p">Profile</a></li>
+                <li><a href="#support" aria-label="Support" accesskey="s">Support</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- Main content area -->
+    <main id="main-content" role="main" tabindex="-1">
+        <section id="dashboard" aria-labelledby="dashboard-title">
+            <h2 id="dashboard-title">Welcome to Academic Allies Dashboard</h2>
+            <p>Your disability accommodations and support network dashboard.</p>
+            
+            <!-- Status indicator -->
+            <div class="status-section" role="region" aria-labelledby="status-title">
+                <h3 id="status-title">Current Status</h3>
+                <div class="status-circle" role="img" aria-label="Status indicator" tabindex="0"></div>
+            </div>
+            
+            <!-- Quick actions -->
+            <section class="quick-actions" role="region" aria-labelledby="actions-title">
+                <h3 id="actions-title">Quick Actions</h3>
+                <ul role="list">
+                    <li><button type="button" aria-label="Daily check-in" accesskey="c">Daily Check-in</button></li>
+                    <li><button type="button" aria-label="View logs" accesskey="l">View Logs</button></li>
+                    <li><button type="button" aria-label="Emergency contacts" accesskey="e">Emergency Contacts</button></li>
+                </ul>
+            </section>
+        </section>
     </main>
+    
+    <!-- Footer -->
+    <footer role="contentinfo">
+        <p>&copy; 2025 Academic Allies. Licensed under <a href="LICENSE" aria-label="MIT License">MIT License</a>.</p>
+    </footer>
+    
+    <!-- Load modular components -->
+    <script src="modular/js/main.js" defer></script>
 </body>
 </html>

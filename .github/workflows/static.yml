@@ -21,8 +21,11 @@ jobs:
       # Github Actions injects values from the Secrets section
       SUPPORT_TIER_EMAILS: ${{ secrets.SUPPORT_TIER_EMAILS }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+      FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+      FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
       # Add more secrets as needed
-      # Example: FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -49,17 +52,34 @@ jobs:
           else
             echo "No build step"
           fi
-      - name: Inject Google OAuth secret into shared-header.html
+      - name: Inject Firebase config into header
         run: |
-          echo "Injecting Google OAuth secret into shared-header.html..."
+          echo "Injecting Firebase configuration..."
           if [ -f "modular/shared-header.html" ]; then
+            # Create firebase config for injection
+            cat > firebase-config.js << EOF
+          const firebaseConfig = {
+            apiKey: "$FIREBASE_API_KEY",
+            authDomain: "$FIREBASE_PROJECT_ID.firebaseapp.com",
+            projectId: "$FIREBASE_PROJECT_ID",
+            storageBucket: "$FIREBASE_PROJECT_ID.appspot.com",
+            messagingSenderId: "$(echo $FIREBASE_CONFIG | jq -r '.messagingSenderId' || echo '')",
+            appId: "$(echo $FIREBASE_CONFIG | jq -r '.appId' || echo '')"
+          };
+          EOF
+            # Inject Firebase config
+            sed -i 's|{{FIREBASE_CONFIG}}|'"$(cat firebase-config.js)"'|g' modular/shared-header.html
+            # Inject Google OAuth secret
             sed -i "s/{{GOOGLE_CLIENT_SECRET}}/$GOOGLE_CLIENT_SECRET/g" modular/shared-header.html
-            echo "Secret injection completed."
+            echo "Configuration injection completed."
           else
-            echo "shared-header.html not found, skipping secret injection."
+            echo "shared-header.html not found, skipping configuration injection."
           fi
         env:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

@@ -9,6 +9,11 @@
     <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
+<script>
+  fetch('modular/shared-header.html')
+    .then(r=>r.text())
+    .then(h=>document.body.insertAdjacentHTML('afterbegin',h));
+</script>
     <!-- Skip to main content link for accessibility -->
     <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
     
@@ -50,10 +55,10 @@
     
     <!-- Footer -->
     <footer role="contentinfo">
-        <p>&copy; 2025 Academic Allies. Licensed under <a href="LICENSE" aria-label="MIT License">MIT License</a>.</p>
+        <p>© 2025 Academic Allies. Licensed under <a aria-label="MIT License" href="LICENSE">MIT License</a>.</p>
     </footer>
     
     <!-- Load modular components -->
-    <script src="modular/js/main.js" defer></script>
+    <script defer src="modular/js/main.js"></script>
 </body>
 </html>

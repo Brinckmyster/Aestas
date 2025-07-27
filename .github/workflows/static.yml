@@ -56,21 +56,53 @@ jobs:
         run: |
           echo "Injecting Firebase configuration..."
           if [ -f "modular/shared-header.html" ]; then
-            # Create firebase config for injection
-            cat > firebase-config.js << EOF
-          const firebaseConfig = {
-            apiKey: "$FIREBASE_API_KEY",
-            authDomain: "$FIREBASE_PROJECT_ID.firebaseapp.com",
-            projectId: "$FIREBASE_PROJECT_ID",
-            storageBucket: "$FIREBASE_PROJECT_ID.appspot.com",
-            messagingSenderId: "$(echo $FIREBASE_CONFIG | jq -r '.messagingSenderId' || echo '')",
-            appId: "$(echo $FIREBASE_CONFIG | jq -r '.appId' || echo '')"
-          };
-          EOF
-            # Inject Firebase config
-            sed -i 's|{{FIREBASE_CONFIG}}|'"$(cat firebase-config.js)"'|g' modular/shared-header.html
-            # Inject Google OAuth secret
-            sed -i "s/{{GOOGLE_CLIENT_SECRET}}/$GOOGLE_CLIENT_SECRET/g" modular/shared-header.html
+            # Install jq for JSON parsing
+            sudo apt-get update && sudo apt-get install -y jq
+            
+            # Parse Firebase config safely
+            MESSAGING_SENDER_ID=""
+            APP_ID=""
+            if [ -n "$FIREBASE_CONFIG" ]; then
+              MESSAGING_SENDER_ID=$(echo "$FIREBASE_CONFIG" | jq -r '.messagingSenderId // ""' 2>/dev/null || echo "")
+              APP_ID=$(echo "$FIREBASE_CONFIG" | jq -r '.appId // ""' 2>/dev/null || echo "")
+            fi
+            
+            # Create firebase config for injection with proper escaping
+            cat > firebase-config.js << 'EOF'
+const firebaseConfig = {
+  apiKey: "FIREBASE_API_KEY_PLACEHOLDER",
+  authDomain: "FIREBASE_PROJECT_ID_PLACEHOLDER.firebaseapp.com",
+  projectId: "FIREBASE_PROJECT_ID_PLACEHOLDER",
+  storageBucket: "FIREBASE_PROJECT_ID_PLACEHOLDER.appspot.com",
+  messagingSenderId: "MESSAGING_SENDER_ID_PLACEHOLDER",
+  appId: "APP_ID_PLACEHOLDER"
+};
+EOF
+            
+            # Replace placeholders with actual values using sed
+            sed -i "s/FIREBASE_API_KEY_PLACEHOLDER/$FIREBASE_API_KEY/g" firebase-config.js
+            sed -i "s/FIREBASE_PROJECT_ID_PLACEHOLDER/$FIREBASE_PROJECT_ID/g" firebase-config.js
+            sed -i "s/MESSAGING_SENDER_ID_PLACEHOLDER/$MESSAGING_SENDER_ID/g" firebase-config.js
+            sed -i "s/APP_ID_PLACEHOLDER/$APP_ID/g" firebase-config.js
+            
+            # Read the firebase config content
+            FIREBASE_CONFIG_CONTENT=$(cat firebase-config.js)
+            
+            # Create a temporary file with the header content
+            cp modular/shared-header.html modular/shared-header.html.tmp
+            
+            # Replace Firebase config placeholder
+            sed -i "s|{{FIREBASE_CONFIG}}|$FIREBASE_CONFIG_CONTENT|g" modular/shared-header.html.tmp
+            
+            # Replace Google OAuth secret
+            sed -i "s/{{GOOGLE_CLIENT_SECRET}}/$GOOGLE_CLIENT_SECRET/g" modular/shared-header.html.tmp
+            
+            # Move the temporary file back
+            mv modular/shared-header.html.tmp modular/shared-header.html
+            
+            # Clean up
+            rm -f firebase-config.js
+            
             echo "Configuration injection completed."
           else
             echo "shared-header.html not found, skipping configuration injection."

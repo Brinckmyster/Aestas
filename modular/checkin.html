@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Academic Allies – Daily Check-In</title>
-  …
+  <link href="./css/style.css" rel="stylesheet" />
 </head>
 <body>
+  <!-- Header will be injected here -->
+  <div id="site-header"></div>
+  <!-- Google integration container -->
+  <div class="g_id_signin"></div>
+
   <main id="checkin-page">
     <h2>Daily Check-In</h2>
     <div id="checkin-component-container"></div>
@@ -15,6 +20,25 @@
       renderCheckIn(document.getElementById('checkin-component-container'), window.firebaseAuth);
     </script>
   </main>
-  …
+
+  <!-- Fail-safe header loader (ensures all scripts run after insertion)-->
+  <script>
+    fetch('./shared-header.html')
+      .then(response => response.text())
+      .then(html => {
+        const container = document.getElementById('site-header');
+        container.innerHTML = html;
+        // Execute any scripts found in the loaded header
+        const scripts = container.querySelectorAll('script');
+        scripts.forEach(oldScript => {
+          const newScript = document.createElement('script');
+          Array.from(oldScript.attributes).forEach(attr =>
+            newScript.setAttribute(attr.name, attr.value)
+          );
+          newScript.textContent = oldScript.textContent;
+          oldScript.replaceWith(newScript);
+        });
+      });
+  </script>
 </body>
 </html>

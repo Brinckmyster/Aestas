@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="no-cache" http-equiv="cache-control"/>
+    <meta content="0" http-equiv="expires"/>
+    <meta content="no-cache" http-equiv="pragma"/>
+    <title>Academic Allies – Dashboard</title>
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="manifest.webmanifest" rel="manifest"/>
+</head>
+<body>
+<script>fetch('modular/shared-header.html').then(r=>r.text()).then(h=>document.body.insertAdjacentHTML('afterbegin',h));</script>
+    <div id="header-placeholder">
+        <!-- Header content will be loaded here -->
+        <script>
+            fetch('/Academic-Allies/header.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('header-placeholder').innerHTML = html;
+                });
+        </script>
+    </div>
+    
+    <main id="dashboard">
+        <!-- Main dashboard content here -->
+        <h1>Welcome to Academic Allies Dashboard</h1>
+        <p>Dashboard content will be implemented here.</p>
+    </main>
+</body>
+</html>

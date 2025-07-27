@@ -60,12 +60,13 @@ jobs:
             sudo apt-get update && sudo apt-get install -y jq
             
             # Parse Firebase config safely
-            MESSAGING_SENDER_ID=""
-            APP_ID=""
-            if [ -n "$FIREBASE_CONFIG" ]; then
-              MESSAGING_SENDER_ID=$(echo "$FIREBASE_CONFIG" | jq -r '.messagingSenderId // ""' 2>/dev/null || echo "")
-              APP_ID=$(echo "$FIREBASE_CONFIG" | jq -r '.appId // ""' 2>/dev/null || echo "")
-            fi
+            echo "$FIREBASE_CONFIG" | jq -r '.' > firebase-config.json
+            
+            # Extract individual values
+            FIREBASE_API_KEY_VALUE=$(echo "$FIREBASE_CONFIG" | jq -r '.apiKey')
+            FIREBASE_PROJECT_ID_VALUE=$(echo "$FIREBASE_CONFIG" | jq -r '.projectId')
+            MESSAGING_SENDER_ID=$(echo "$FIREBASE_CONFIG" | jq -r '.messagingSenderId')
+            APP_ID=$(echo "$FIREBASE_CONFIG" | jq -r '.appId')
             
             # Create firebase config for injection with proper escaping
             cat > firebase-config.js << 'EOF'
@@ -80,8 +81,8 @@ const firebaseConfig = {
 EOF
             
             # Replace placeholders with actual values using sed
-            sed -i "s/FIREBASE_API_KEY_PLACEHOLDER/$FIREBASE_API_KEY/g" firebase-config.js
-            sed -i "s/FIREBASE_PROJECT_ID_PLACEHOLDER/$FIREBASE_PROJECT_ID/g" firebase-config.js
+            sed -i "s/FIREBASE_API_KEY_PLACEHOLDER/$FIREBASE_API_KEY_VALUE/g" firebase-config.js
+            sed -i "s/FIREBASE_PROJECT_ID_PLACEHOLDER/$FIREBASE_PROJECT_ID_VALUE/g" firebase-config.js
             sed -i "s/MESSAGING_SENDER_ID_PLACEHOLDER/$MESSAGING_SENDER_ID/g" firebase-config.js
             sed -i "s/APP_ID_PLACEHOLDER/$APP_ID/g" firebase-config.js
             
@@ -101,7 +102,7 @@ EOF
             mv modular/shared-header.html.tmp modular/shared-header.html
             
             # Clean up
-            rm -f firebase-config.js
+            rm -f firebase-config.js firebase-config.json
             
             echo "Configuration injection completed."
           else

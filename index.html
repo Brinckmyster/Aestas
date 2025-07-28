@@ -38,6 +38,14 @@
             <h2 id="dashboard-title">Welcome to Academic Allies Dashboard</h2>
             <p>Your disability accommodations and support network dashboard.</p>
             
+            <!-- Google Sign-in Module -->
+            <div id="google-signin-module"></div>
+            <script>
+            fetch('modular/components/google-integration/google-integration.html')
+                .then(r=>r.text())
+                .then(h=>document.getElementById('google-signin-module').innerHTML=h);
+            </script>
+            
             <!-- Status indicator -->
             <div class="status-section" role="region" aria-labelledby="status-title">
                 <h3 id="status-title">Current Status</h3>
@@ -58,7 +66,7 @@
     
     <!-- Footer -->
     <footer role="contentinfo">
-        <p>© 2025 Academic Allies. Licensed under <a aria-label="MIT License" href="LICENSE">MIT License</a>.</p>
+        <p>© 2025 Academic Allies. Licensed under <a href="LICENSE" aria-label="MIT License">MIT License</a>.</p>
     </footer>
     
     <!-- Load modular components -->

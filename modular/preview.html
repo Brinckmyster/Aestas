@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8"/>
   <title>Icon Gallery - Academic Allies</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <style>
     body { margin: 0; font-family: sans-serif; background: #fff; padding: 2rem; }
     header { text-align: center; margin-bottom: 2rem; }
@@ -19,23 +19,14 @@
   </style>
 </head>
 <body>
-  <script>
-    // Load shared header
-    fetch('../shared-header.html')
-      .then(response => response.text())
-      .then(html => {
-        const headerDiv = document.createElement('div');
-        headerDiv.innerHTML = html;
-        document.body.insertBefore(headerDiv, document.body.firstChild);
-      })
-      .catch(error => console.log('Header not found, using local header'));
-  </script>
-
+  <div id="site-header"></div>
+  <script>fetch('./shared-header.html').then(r => r.text()).then(h => document.getElementById('site-header').innerHTML=h);</script>
+  
   <header>
     <h1>Icon Gallery</h1>
     <p class="subtitle">Visual icon collection</p>
   </header>
-
+  
   <div class="icon-grid">
     <div class="icon-item"><img src="icons/Admin%20star%20with%20badge.png" alt="Admin star with badge.png"/><div class="icon-filename">Admin star with badge.png</div></div>
     <div class="icon-item"><img src="icons/Recovery%20mode.png" alt="Recovery mode.png"/><div class="icon-filename">Recovery mode.png</div></div>
@@ -74,8 +65,7 @@
     <div class="icon-item"><img src="icons/user_student.png" alt="user_student.png"/><div class="icon-filename">user_student.png</div></div>
     <div class="icon-item"><img src="icons/user_support.png" alt="user_support.png"/><div class="icon-filename">user_support.png</div></div>
   </div>
-
+  
   <a class="return-home" href="/Academic-Allies/">Return Home</a>
-
 </body>
 </html>

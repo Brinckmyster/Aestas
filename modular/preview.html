@@ -6,9 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
     body { margin: 0; font-family: sans-serif; background: #fff; padding: 2rem; }
-    header { text-align: center; margin-bottom: 2rem; }
-    h1 { color: #1f2937; margin-bottom: 0.5rem; }
-    .subtitle { color: #4b5563; margin-bottom: 2rem; }
     .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto 3rem; }
     .icon-item { display: flex; flex-direction: column; align-items: center; padding: 1rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; background: #f9fafb; transition: transform 0.2s, box-shadow 0.2s; }
     .icon-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
@@ -16,7 +13,6 @@
     .icon-filename { font-size: 0.875rem; color: #374151; text-align: center; word-break: break-word; padding: 0.5rem 0.75rem; background: #3b82f6; color: #fff; border-radius: 0.375rem; font-weight: 500; min-height: 1.25rem; display: flex; align-items: center; justify-content: center; }
     .return-home { display: block; margin: 2rem auto 0; padding: 0.75rem 1.5rem; background: #3b82f6; color: #fff; text-decoration: none; border-radius: 0.5rem; text-align: center; max-width: 200px; font-weight: 500; transition: background-color 0.2s; }
     .return-home:hover { background: #2563eb; }
-    footer { text-align: center; margin-top: 2rem; color: #6b7280; font-size: 0.875rem; }
   </style>
 </head>
 <body>
@@ -32,52 +28,46 @@
       .catch(error => console.log('Header not found, using local header'));
   </script>
   
-  <header>
-    <h1>Icon Gallery - Academic Allies</h1>
-    <p class="subtitle">Director review of all icons and images</p>
-  </header>
-  
   <div class="icon-grid">
-    <div class="icon-item"><img src="icons/Admin%20star%20with%20badge.png" alt="Admin star with badge.png" onerror="this.style.display='none'"/><div class="icon-filename">Admin star with badge.png</div></div>
-    <div class="icon-item"><img src="icons/Recovery%20mode.png" alt="Recovery mode.png" onerror="this.style.display='none'"/><div class="icon-filename">Recovery mode.png</div></div>
-    <div class="icon-item"><img src="icons/THE%20picture%20-%20brain%20scan.jpeg" alt="THE picture - brain scan.jpeg" onerror="this.style.display='none'"/><div class="icon-filename">THE picture - brain scan.jpeg</div></div>
-    <div class="icon-item"><img src="icons/boring%20student%20icon.png" alt="boring student icon.png" onerror="this.style.display='none'"/><div class="icon-filename">boring student icon.png</div></div>
-    <div class="icon-item"><img src="icons/branding_avif.png" alt="branding_avif.png" onerror="this.style.display='none'"/><div class="icon-filename">branding_avif.png</div></div>
-    <div class="icon-item"><img src="icons/branding_jpg.png" alt="branding_jpg.png" onerror="this.style.display='none'"/><div class="icon-filename">branding_jpg.png</div></div>
-    <div class="icon-item"><img src="icons/branding_png.png" alt="branding_png.png" onerror="this.style.display='none'"/><div class="icon-filename">branding_png.png</div></div>
-    <div class="icon-item"><img src="icons/branding_webp.png" alt="branding_webp.png" onerror="this.style.display='none'"/><div class="icon-filename">branding_webp.png</div></div>
-    <div class="icon-item"><img src="icons/button-admin-star-incorrect-partial.png" alt="button-admin-star-incorrect-partial.png" onerror="this.style.display='none'"/><div class="icon-filename">button-admin-star-incorrect-partial.png</div></div>
-    <div class="icon-item"><img src="icons/button-mode-admin-incorrect-badge.png" alt="button-mode-admin-incorrect-badge.png" onerror="this.style.display='none'"/><div class="icon-filename">button-mode-admin-incorrect-badge.png</div></div>
-    <div class="icon-item"><img src="icons/button-mode-normal-bold.png" alt="button-mode-normal-bold.png" onerror="this.style.display='none'"/><div class="icon-filename">button-mode-normal-bold.png</div></div>
-    <div class="icon-item"><img src="icons/button-mode-normal-outline.png" alt="button-mode-normal-outline.png" onerror="this.style.display='none'"/><div class="icon-filename">button-mode-normal-outline.png</div></div>
-    <div class="icon-item"><img src="icons/button-mode-normal-plain.png" alt="button-mode-normal-plain.png" onerror="this.style.display='none'"/><div class="icon-filename">button-mode-normal-plain.png</div></div>
-    <div class="icon-item"><img src="icons/button-nope-white.png" alt="button-nope-white.png" onerror="this.style.display='none'"/><div class="icon-filename">button-nope-white.png</div></div>
-    <div class="icon-item"><img src="icons/button-semi-nope-extra-n-odd.png" alt="button-semi-nope-extra-n-odd.png" onerror="this.style.display='none'"/><div class="icon-filename">button-semi-nope-extra-n-odd.png</div></div>
-    <div class="icon-item"><img src="icons/button-semi-nope-odd-o.png" alt="button-semi-nope-odd-o.png" onerror="this.style.display='none'"/><div class="icon-filename">button-semi-nope-odd-o.png</div></div>
-    <div class="icon-item"><img src="icons/cool_leaf_for_student_profile.png" alt="cool_leaf_for_student_profile.png" onerror="this.style.display='none'"/><div class="icon-filename">cool_leaf_for_student_profile.png</div></div>
-    <div class="icon-item"><img src="icons/ic_recovery_white_24dp.png" alt="ic_recovery_white_24dp.png" onerror="this.style.display='none'"/><div class="icon-filename">ic_recovery_white_24dp.png</div></div>
-    <div class="icon-item"><img src="icons/icon_options.png" alt="icon_options.png" onerror="this.style.display='none'"/><div class="icon-filename">icon_options.png</div></div>
-    <div class="icon-item"><img src="icons/image-20%20%283%29.png" alt="image-20 (3).png" onerror="this.style.display='none'"/><div class="icon-filename">image-20 (3).png</div></div>
-    <div class="icon-item"><img src="icons/image-22%20%283%29.png" alt="image-22 (3).png" onerror="this.style.display='none'"/><div class="icon-filename">image-22 (3).png</div></div>
-    <div class="icon-item"><img src="icons/image-23%20%283%29.png" alt="image-23 (3).png" onerror="this.style.display='none'"/><div class="icon-filename">image-23 (3).png</div></div>
-    <div class="icon-item"><img src="icons/image-3.png" alt="image-3.png" onerror="this.style.display='none'"/><div class="icon-filename">image-3.png</div></div>
-    <div class="icon-item"><img src="icons/image-4.png" alt="image-4.png" onerror="this.style.display='none'"/><div class="icon-filename">image-4.png</div></div>
-    <div class="icon-item"><img src="icons/image-5.png" alt="image-5.png" onerror="this.style.display='none'"/><div class="icon-filename">image-5.png</div></div>
-    <div class="icon-item"><img src="icons/image-6.png" alt="image-6.png" onerror="this.style.display='none'"/><div class="icon-filename">image-6.png</div></div>
-    <div class="icon-item"><img src="icons/image-7.png" alt="image-7.png" onerror="this.style.display='none'"/><div class="icon-filename">image-7.png</div></div>
-    <div class="icon-item"><img src="icons/image-8.png" alt="image-8.png" onerror="this.style.display='none'"/><div class="icon-filename">image-8.png</div></div>
-    <div class="icon-item"><img src="icons/image-9.png" alt="image-9.png" onerror="this.style.display='none'"/><div class="icon-filename">image-9.png</div></div>
-    <div class="icon-item"><img src="icons/nope_button.png" alt="nope_button.png" onerror="this.style.display='none'"/><div class="icon-filename">nope_button.png</div></div>
-    <div class="icon-item"><img src="icons/status-badbrain-alt.jpg" alt="status-badbrain-alt.jpg" onerror="this.style.display='none'"/><div class="icon-filename">status-badbrain-alt.jpg</div></div>
-    <div class="icon-item"><img src="icons/status-badbrain-day.jpg" alt="status-badbrain-day.jpg" onerror="this.style.display='none'"/><div class="icon-filename">status-badbrain-day.jpg</div></div>
-    <div class="icon-item"><img src="icons/user_admin.png" alt="user_admin.png" onerror="this.style.display='none'"/><div class="icon-filename">user_admin.png</div></div>
-    <div class="icon-item"><img src="icons/user_nearby_help.png" alt="user_nearby_help.png" onerror="this.style.display='none'"/><div class="icon-filename">user_nearby_help.png</div></div>
-    <div class="icon-item"><img src="icons/user_student.png" alt="user_student.png" onerror="this.style.display='none'"/><div class="icon-filename">user_student.png</div></div>
-    <div class="icon-item"><img src="icons/user_support.png" alt="user_support.png" onerror="this.style.display='none'"/><div class="icon-filename">user_support.png</div></div>
+    <div class="icon-item"><img src="../images/Admin%20star%20with%20badge.png" alt="Admin star with badge.png" onerror="this.style.display='none'"/><div class="icon-filename">Admin star with badge.png</div></div>
+    <div class="icon-item"><img src="../images/Recovery%20mode.png" alt="Recovery mode.png" onerror="this.style.display='none'"/><div class="icon-filename">Recovery mode.png</div></div>
+    <div class="icon-item"><img src="../images/THE%20picture%20-%20brain%20scan.jpeg" alt="THE picture - brain scan.jpeg" onerror="this.style.display='none'"/><div class="icon-filename">THE picture - brain scan.jpeg</div></div>
+    <div class="icon-item"><img src="../images/boring%20student%20icon.png" alt="boring student icon.png" onerror="this.style.display='none'"/><div class="icon-filename">boring student icon.png</div></div>
+    <div class="icon-item"><img src="../images/branding_avif.png" alt="branding_avif.png" onerror="this.style.display='none'"/><div class="icon-filename">branding_avif.png</div></div>
+    <div class="icon-item"><img src="../images/branding_jpg.png" alt="branding_jpg.png" onerror="this.style.display='none'"/><div class="icon-filename">branding_jpg.png</div></div>
+    <div class="icon-item"><img src="../images/branding_png.png" alt="branding_png.png" onerror="this.style.display='none'"/><div class="icon-filename">branding_png.png</div></div>
+    <div class="icon-item"><img src="../images/branding_webp.png" alt="branding_webp.png" onerror="this.style.display='none'"/><div class="icon-filename">branding_webp.png</div></div>
+    <div class="icon-item"><img src="../images/button-admin-star-incorrect-partial.png" alt="button-admin-star-incorrect-partial.png" onerror="this.style.display='none'"/><div class="icon-filename">button-admin-star-incorrect-partial.png</div></div>
+    <div class="icon-item"><img src="../images/button-mode-admin-incorrect-badge.png" alt="button-mode-admin-incorrect-badge.png" onerror="this.style.display='none'"/><div class="icon-filename">button-mode-admin-incorrect-badge.png</div></div>
+    <div class="icon-item"><img src="../images/button-mode-normal-bold.png" alt="button-mode-normal-bold.png" onerror="this.style.display='none'"/><div class="icon-filename">button-mode-normal-bold.png</div></div>
+    <div class="icon-item"><img src="../images/button-mode-normal-outline.png" alt="button-mode-normal-outline.png" onerror="this.style.display='none'"/><div class="icon-filename">button-mode-normal-outline.png</div></div>
+    <div class="icon-item"><img src="../images/button-mode-normal-plain.png" alt="button-mode-normal-plain.png" onerror="this.style.display='none'"/><div class="icon-filename">button-mode-normal-plain.png</div></div>
+    <div class="icon-item"><img src="../images/button-nope-white.png" alt="button-nope-white.png" onerror="this.style.display='none'"/><div class="icon-filename">button-nope-white.png</div></div>
+    <div class="icon-item"><img src="../images/button-semi-nope-extra-n-odd.png" alt="button-semi-nope-extra-n-odd.png" onerror="this.style.display='none'"/><div class="icon-filename">button-semi-nope-extra-n-odd.png</div></div>
+    <div class="icon-item"><img src="../images/button-semi-nope-odd-o.png" alt="button-semi-nope-odd-o.png" onerror="this.style.display='none'"/><div class="icon-filename">button-semi-nope-odd-o.png</div></div>
+    <div class="icon-item"><img src="../images/cool_leaf_for_student_profile.png" alt="cool_leaf_for_student_profile.png" onerror="this.style.display='none'"/><div class="icon-filename">cool_leaf_for_student_profile.png</div></div>
+    <div class="icon-item"><img src="../images/ic_recovery_white_24dp.png" alt="ic_recovery_white_24dp.png" onerror="this.style.display='none'"/><div class="icon-filename">ic_recovery_white_24dp.png</div></div>
+    <div class="icon-item"><img src="../images/icon_options.png" alt="icon_options.png" onerror="this.style.display='none'"/><div class="icon-filename">icon_options.png</div></div>
+    <div class="icon-item"><img src="../images/image-20%20(3).png" alt="image-20 (3).png" onerror="this.style.display='none'"/><div class="icon-filename">image-20 (3).png</div></div>
+    <div class="icon-item"><img src="../images/image-22%20(3).png" alt="image-22 (3).png" onerror="this.style.display='none'"/><div class="icon-filename">image-22 (3).png</div></div>
+    <div class="icon-item"><img src="../images/image-23%20(3).png" alt="image-23 (3).png" onerror="this.style.display='none'"/><div class="icon-filename">image-23 (3).png</div></div>
+    <div class="icon-item"><img src="../images/image-3.png" alt="image-3.png" onerror="this.style.display='none'"/><div class="icon-filename">image-3.png</div></div>
+    <div class="icon-item"><img src="../images/image-4.png" alt="image-4.png" onerror="this.style.display='none'"/><div class="icon-filename">image-4.png</div></div>
+    <div class="icon-item"><img src="../images/image-5.png" alt="image-5.png" onerror="this.style.display='none'"/><div class="icon-filename">image-5.png</div></div>
+    <div class="icon-item"><img src="../images/image-6.png" alt="image-6.png" onerror="this.style.display='none'"/><div class="icon-filename">image-6.png</div></div>
+    <div class="icon-item"><img src="../images/image-7.png" alt="image-7.png" onerror="this.style.display='none'"/><div class="icon-filename">image-7.png</div></div>
+    <div class="icon-item"><img src="../images/image-8.png" alt="image-8.png" onerror="this.style.display='none'"/><div class="icon-filename">image-8.png</div></div>
+    <div class="icon-item"><img src="../images/image-9.png" alt="image-9.png" onerror="this.style.display='none'"/><div class="icon-filename">image-9.png</div></div>
+    <div class="icon-item"><img src="../images/nope_button.png" alt="nope_button.png" onerror="this.style.display='none'"/><div class="icon-filename">nope_button.png</div></div>
+    <div class="icon-item"><img src="../images/status-badbrain-alt.jpg" alt="status-badbrain-alt.jpg" onerror="this.style.display='none'"/><div class="icon-filename">status-badbrain-alt.jpg</div></div>
+    <div class="icon-item"><img src="../images/status-badbrain-day.jpg" alt="status-badbrain-day.jpg" onerror="this.style.display='none'"/><div class="icon-filename">status-badbrain-day.jpg</div></div>
+    <div class="icon-item"><img src="../images/user_admin.png" alt="user_admin.png" onerror="this.style.display='none'"/><div class="icon-filename">user_admin.png</div></div>
+    <div class="icon-item"><img src="../images/user_nearby_help.png" alt="user_nearby_help.png" onerror="this.style.display='none'"/><div class="icon-filename">user_nearby_help.png</div></div>
+    <div class="icon-item"><img src="../images/user_student.png" alt="user_student.png" onerror="this.style.display='none'"/><div class="icon-filename">user_student.png</div></div>
+    <div class="icon-item"><img src="../images/user_support.png" alt="user_support.png" onerror="this.style.display='none'"/><div class="icon-filename">user_support.png</div></div>
   </div>
   
   <a class="return-home" href="/Academic-Allies/">Return Home</a>
   
-  <!-- Icon gallery for director review per D rule audit -->
 </body>
 </html>

@@ -7,12 +7,12 @@
   "theme_color": "#3b82f6",
   "icons": [
     {
-      "src": "icons/academic-allies.png",
+      "src": "modular/icons/branding_png.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/academic-allies.png",
+      "src": "modular/icons/branding_png.png",
       "sizes": "512x512",
       "type": "image/png"
     }

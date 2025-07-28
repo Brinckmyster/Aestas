@@ -7,13 +7,16 @@
     <title>Academic Allies - Dashboard</title>
     <link rel="stylesheet" href="modular/css/style.css">
     <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" href="modular/icons/branding_png.png">
+    <link rel="apple-touch-icon" href="modular/icons/branding_png.png">
 </head>
 <body>
-<script>
-  fetch('modular/shared-header.html')
-    .then(r=>r.text())
-    .then(h=>document.body.insertAdjacentHTML('afterbegin',h));
-</script>
+    <script>
+    fetch('modular/shared-header.html')
+        .then(r=>r.text())
+        .then(h=>document.body.insertAdjacentHTML('afterbegin',h));
+    </script>
+    
     <!-- Skip to main content link for accessibility -->
     <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
     

@@ -1,46 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
   <title>Preview – Academic Allies</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="icons/academic-allies.png" sizes="32x32" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
     body { margin:0; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background:#fff; }
-    h1 { color:#3b82f6; }
-    p { color:#4b5563; }
+    p { color:#4b5563; text-align:center; }
     a { margin-top:2rem; padding:0.75rem 1.5rem; background:#3b82f6; color:#fff; text-decoration:none; border-radius:0.5rem; }
     a:hover { background:#2563eb; }
   </style>
 </head>
 <body>
-  <!-- Header will be injected here -->
-  <div id="site-header"></div>
-  <!-- Google integration container -->
-  <div class="g_id_signin"></div>
-
-  <h1>Coming Soon</h1>
-  <p>This is just a preview page.</p>
+  <!-- Simplified preview page per director D rule and audit trace -->
+  <p>Future feature preview or tutorial area. Not needed for normal users.</p>
   <a href="/Academic-Allies/">Return Home</a>
-
-  <!-- Fail-safe header loader (ensures all scripts run after insertion)-->
-  <script>
-    fetch('./shared-header.html')
-      .then(response => response.text())
-      .then(html => {
-        const container = document.getElementById('site-header');
-        container.innerHTML = html;
-        // Execute any scripts found in the loaded header
-        const scripts = container.querySelectorAll('script');
-        scripts.forEach(oldScript => {
-          const newScript = document.createElement('script');
-          Array.from(oldScript.attributes).forEach(attr =>
-            newScript.setAttribute(attr.name, attr.value)
-          );
-          newScript.textContent = oldScript.textContent;
-          oldScript.replaceWith(newScript);
-        });
-      });
-  </script>
 </body>
 </html>

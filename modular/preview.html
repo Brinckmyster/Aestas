@@ -116,3 +116,24 @@
     }
   }
 </style>
+<style>
+img {
+  background-color: #ff18c8 !important; /* Bold magenta -- super visible */
+  padding: 12px !important;
+  border-radius: 6px !important;
+  outline: 3px solid #000 !important; /* Black for max contrast */
+  box-shadow: 0 0 8px #fff, 0 0 0 6px #ff18c8 !important;
+  transition: background-color 0.2s;
+}
+@media (prefers-color-scheme: dark) {
+  img {
+    background-color: #ff18c8 !important;
+    outline: 3px solid #fff !important;
+    box-shadow: 0 0 12px #333, 0 0 0 8px #ff18c8 !important;
+  }
+  body {
+    background-color: #222;
+    color: #eee;
+  }
+}
+</style>

@@ -13,6 +13,15 @@
           connect-src 'self' https://accounts.google.com https://www.googleapis.com https://*.firebaseio.com;
           img-src 'self' data:;
         ">
+  
+  <!-- Load external libraries synchronously in correct order -->
+  <script src="https://accounts.google.com/gsi/client"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+  <script src="modular/google-integration.js"></script>
+  
   <style>
     .google-integration { background: #f8fafc; border-radius:1rem; padding:1.5rem; max-width:500px; margin:2rem auto; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
     .google-btn, .calendar-btn { background: #3b82f6; color:#fff; border:none; border-radius:0.5em; padding:0.6em 1.4em; font-size:1em; cursor:pointer; transition:background 0.2s; margin-right:0.5em; }
@@ -35,7 +44,7 @@
       <button class="google-btn" id="google-signout-btn" style="display:none;">Sign out</button>
     </div>
     <div class="calendar-integration" style="margin-top:1.5em;">
-      <button class="calendar-btn" disabled="" id="calendar-connect-btn">Connect Google Calendar</button>
+      <button class="calendar-btn" disabled id="calendar-connect-btn">Connect Google Calendar</button>
       <button class="calendar-btn" id="calendar-disconnect-btn" style="display:none;">Disconnect Calendar</button>
       <pre class="calendar-status" id="calendar-status"></pre>
     </div>
@@ -43,12 +52,5 @@
       Firebase: <strong id="firebase-status-text">Connecting...</strong>
     </div>
   </section>
-  <!-- Load external libraries synchronously in correct order -->
-  <script src="https://accounts.google.com/gsi/client"></script>
-  <script src="https://apis.google.com/js/api.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
-  <script src="modular/google-integration.js"></script>
 </body>
 </html>

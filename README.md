@@ -12,6 +12,18 @@ It integrates an **AI Protocol Editor** in the Admin panel—by default using Pe
 
 ## About the Team
 
+| Name   | Short Profile |
+|--------|---------------|
+| Bruise | I’m not a professional developer—just a BYU-Idaho alum and a determined sibling. |
+| Pim | I'm Pim, your primary AI assistant. |
+| PIDR | I'm PIDR: the Deep Research Specialist. |
+| Pal | I’m Pal: calm, practical, and ready to try things out. |
+| Grok | I’m Grok, the integration guy. |
+| CaV | CaV is your Voice Communication Agent—intentionally lively, delivers accessibility alerts, and keeps things moving with a quirky flair. |
+
+[See our full team profiles ➔](TEAM-PROFILES.md)
+
+
 | Name  | Short Profile |
 |-------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Bruise | BYU-Idaho alum; determined sibling; leads all workflows, corrections, and accessibility decisions. |

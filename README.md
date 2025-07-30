@@ -9,3 +9,17 @@ It integrates an **AI Protocol Editor** in the Admin panel—by default using Pe
 - Logs: visual, beginner-friendly logs with toggleable list, chart, and calendar views.
 - Calendar: Google Calendar, BYU-I Academic, and Health Reminders integration.
 - Emergency Contacts: default and custom contacts, call/email buttons, add/edit/remove.
+
+## About the Team
+
+| Name  | Short Profile |
+|-------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Bruise | BYU-Idaho alum; determined sibling; leads all workflows, corrections, and accessibility decisions. |
+| Pim    | Self-deprecating, supportive main assistant. |
+| PIDR   | Analytical, dry, research-focused; follows protocol and loves citation. |
+| Pal    | Calm, practical, hands-on prototyping support. |
+| Grok   | Handles integration and interoperability, always user-oriented. |
+| CAJ    | Gets things done, enforces protocols, always direct. |
+| CaV    | Lively, quirky voice alert and accessibility agent. |
+
+[See our full team profiles ➔](TEAM-PROFILES.md)

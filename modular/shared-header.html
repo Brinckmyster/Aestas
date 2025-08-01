@@ -3,8 +3,14 @@
     <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
     <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/branding_png.png" width="48" height="48" title="Academic Allies Home"/>
     </a>
+    <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
+    <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/branding_png.png" width="48" height="48" title="Academic Allies Home"/>
+    </a>
+    <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
+      <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/branding_png.png" width="48" height="48" title="Academic Allies Home"/>
       <span class="tagline" title="Academic Allies
 Your disability accommodations and support network">Academic Allies: Dashboard</span>
+    </a>
     <nav aria-label="Main navigation">
       <ul class="nav-list">
         <li><a href="/Academic-Allies/modular/calendar.html" title="Calendar">Calendar</a></li>
@@ -26,8 +32,10 @@ Your disability accommodations and support network">Academic Allies: Dashboard</
   
   <!-- Status Circle Container -->
   <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
+  
   <!-- Google Identity Services -->
   <script async defer src="https://accounts.google.com/gsi/client"></script>
+  
   <!-- Google Sign-In JavaScript -->
   <script>
     // Initialize Google Sign-In when the API loads
@@ -36,6 +44,7 @@ Your disability accommodations and support network">Academic Allies: Dashboard</
         client_id: 'YOUR_GOOGLE_CLIENT_ID',
         callback: handleCredentialResponse
       });
+      
       google.accounts.id.renderButton(
         document.getElementById('googleSignInContainer'),
         {
@@ -48,6 +57,7 @@ Your disability accommodations and support network">Academic Allies: Dashboard</
         }
       );
     };
+    
     function handleCredentialResponse(response) {
       // Handle the signed-in user info
       console.log('Encoded JWT ID token: ' + response.credential);
@@ -62,36 +72,63 @@ Your disability accommodations and support network">Academic Allies: Dashboard</
   border-bottom: 1px solid #e1e5e9;
   padding: 12px 20px;
 }
+
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
+}
+
 .home-link {
+  display: flex;
+  align-items: center;
   text-decoration: none;
   color: #333;
   font-weight: 600;
+}
+
 .home-link:hover {
   color: #0066cc;
+}
+
 .home-icon {
   margin-right: 8px;
+}
+
 .nav-list {
+  display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
   gap: 20px;
+}
+
 .nav-list li {
+  margin: 0;
+}
+
 .nav-list a {
+  text-decoration: none;
   color: #555;
   font-weight: 500;
   padding: 8px 12px;
   border-radius: 4px;
   transition: background-color 0.2s;
+}
+
 .nav-list a:hover {
   background-color: #e9ecef;
+  color: #333;
+}
+
 .header-controls {
+  display: flex;
+  align-items: center;
   gap: 15px;
+}
+
 #status-circle {
   width: 40px;
   height: 40px;
@@ -100,19 +137,29 @@ Your disability accommodations and support network">Academic Allies: Dashboard</
   cursor: pointer;
   position: fixed; top: 16px; right: 16px; left: auto; z-index: 1000;
   transition: background-color 0.3s;
+}
+
 #status-circle:hover {
   background-color: #c82333;
+}
+
 #status-circle.signed-in {
   background-color: #28a745;
+}
+
 #status-circle.signed-in:hover {
   background-color: #218838;
+}
+
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
     gap: 15px;
   }
+  
   .nav-list {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+  }
 }</style>

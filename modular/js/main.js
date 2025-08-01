@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (logsButton) {
         logsButton.addEventListener('click', function(e) {
             e.preventDefault();
-            window.location.href = 'modular/preview.html';
+            window.location.href = 'modular/icon-gallery.html';
         });
     }
 

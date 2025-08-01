@@ -1,131 +1,51 @@
-# .github/workflows/static.yml
-# Deploy Academic Allies to GitHub Pages, with secrets support
-name: Deploy Academic Allies to GitHub Pages
+name: Deploy Academic Allies to Firebase
+run-name: "🚀 Deploy: ${{ github.event.head_commit.message }} by @${{ github.actor }}"
+
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-      # Add secrets as environment variables here for ALL steps (jobs-level)
-      # Github Actions injects values from the Secrets section
-      SUPPORT_TIER_EMAILS: ${{ secrets.SUPPORT_TIER_EMAILS }}
-      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-      # FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
-      # FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
-      # FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-      # FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-      # Add more secrets as needed
+    environment: production
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Set up Node.js
+
+      - name: Show deployment info
+        run: |
+          echo "🚀 Deploying: ${{ github.event.head_commit.message }}"
+          echo "👤 Author: ${{ github.event.head_commit.author.name }}"
+          echo "📝 Commit: ${{ github.sha }}"
+          echo "## 📋 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.event.head_commit.message }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Author:** ${{ github.event.head_commit.author.name }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Restore npm cache
-        uses: actions/cache@v4
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+        if: hashFiles('package-lock.json') != ''
+
+      - name: Build app with secrets
+        run: npm run build || echo "No build script found"
+        if: hashFiles('package-lock.json') != ''
+        env:
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          SUPPORT_TIER_EMAILS: ${{ secrets.SUPPORT_TIER_EMAILS }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies if package.json exists
-        run: |
-          if [ -f "package.json" ]; then
-            npm ci
-          fi
-      - name: Build site (skip if not needed)
-        run: |
-          if [ -f "package.json" ] && [ -f "package-lock.json" ]; then
-            npm run build || echo "No build step"
-          else
-            echo "No build step"
-          fi
-      # - name: Inject Firebase config into header
-      #   run: |
-      #     echo "Injecting Firebase configuration..."
-      #     if [ -f "modular/shared-header.html" ]; then
-      #       # Install jq for JSON parsing
-      #       sudo apt-get update && sudo apt-get install -y jq
-      #       
-      #       # Parse Firebase config safely
-      #       echo "$FIREBASE_CONFIG" | jq -r '.' > firebase-config.json
-      #       
-      #       # Extract values safely
-      #       FIREBASE_API_KEY_VALUE=$(echo "$FIREBASE_CONFIG" | jq -r '.apiKey // ""')
-      #       FIREBASE_PROJECT_ID_VALUE=$(echo "$FIREBASE_CONFIG" | jq -r '.projectId // ""')
-      #       MESSAGING_SENDER_ID=$(echo "$FIREBASE_CONFIG" | jq -r '.messagingSenderId // ""')
-      #       APP_ID=$(echo "$FIREBASE_CONFIG" | jq -r '.appId // ""')
-      #       
-      #       # Create firebase config for injection with proper escaping
-      #       cat > firebase-config.js << 'EOF'
-      # const firebaseConfig = {
-      #   apiKey: "FIREBASE_API_KEY_PLACEHOLDER",
-      #   authDomain: "FIREBASE_PROJECT_ID_PLACEHOLDER.firebaseapp.com",
-      #   projectId: "FIREBASE_PROJECT_ID_PLACEHOLDER",
-      #   storageBucket: "FIREBASE_PROJECT_ID_PLACEHOLDER.appspot.com",
-      #   messagingSenderId: "MESSAGING_SENDER_ID_PLACEHOLDER",
-      #   appId: "APP_ID_PLACEHOLDER"
-      # };
-      # EOF
-      #       
-      #       # Replace placeholders with actual values using sed
-      #       sed -i "s/FIREBASE_API_KEY_PLACEHOLDER/$FIREBASE_API_KEY_VALUE/g" firebase-config.js
-      #       sed -i "s/FIREBASE_PROJECT_ID_PLACEHOLDER/$FIREBASE_PROJECT_ID_VALUE/g" firebase-config.js
-      #       sed -i "s/MESSAGING_SENDER_ID_PLACEHOLDER/$MESSAGING_SENDER_ID/g" firebase-config.js
-      #       sed -i "s/APP_ID_PLACEHOLDER/$APP_ID/g" firebase-config.js
-      #       
-      #       # Read the firebase config content
-      #       FIREBASE_CONFIG_CONTENT=$(cat firebase-config.js)
-      #       
-      #       # Create a temporary file with the header content
-      #       cp modular/shared-header.html modular/shared-header.html.tmp
-      #       
-      #       # Replace Firebase config placeholder
-      #       sed -i "s|{{FIREBASE_CONFIG}}|$FIREBASE_CONFIG_CONTENT|g" modular/shared-header.html.tmp
-      #       
-      #       # Replace Google OAuth secret
-      #       sed -i "s/{{GOOGLE_CLIENT_SECRET}}/$GOOGLE_CLIENT_SECRET/g" modular/shared-header.html.tmp
-      #       
-      #       # Move the temporary file back
-      #       mv modular/shared-header.html.tmp modular/shared-header.html
-      #       
-      #       # Clean up
-      #       rm -f firebase-config.js firebase-config.json
-      #       
-      #       echo "Configuration injection completed."
-      #     else
-      #       echo "shared-header.html not found, skipping configuration injection."
-      #     fi
-      #   env:
-      #     GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-      #     FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-      #     FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-      #     FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          channelId: live

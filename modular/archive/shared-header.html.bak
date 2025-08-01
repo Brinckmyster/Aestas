@@ -5,7 +5,7 @@
     </a>
     </a>
       <span class="tagline" title="Academic Allies
-Your disability accommodations and support network">Academic Allies: Icon Gallery</span>
+Your disability accommodations and support network">Academic Allies: Dashboard</span>
     </a>
     <nav aria-label="Main navigation">
       <ul class="nav-list">
@@ -155,7 +155,7 @@ Your disability accommodations and support network">Academic Allies: Icon Galler
   
   .nav-list {
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 10px;
   }
 }</style>

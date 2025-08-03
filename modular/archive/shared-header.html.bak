@@ -3,17 +3,15 @@
     <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
     <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/branding_png.png" width="48" height="48" title="Academic Allies Home"/>
     </a>
-    </a>
       <span class="tagline" title="Academic Allies
 Your disability accommodations and support network">Your disability accommodations and support network</span>
-    </a>
     <nav aria-label="Main navigation">
       <ul class="nav-list">
-        <li><a href="/Academic-Allies/modular/calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="/Academic-Allies/modular/components/calendar/calendar.html" title="Calendar">Calendar</a></li>
         <li><a href="/Academic-Allies/modular/emergency.html" title="Emergency Contact">Emergency Contact</a></li>
         <li><a href="/Academic-Allies/modular/checkin.html" title="Daily Check-In">Daily Check-In</a></li>
         <li><a href="/Academic-Allies/modular/icon-gallery.html" title="Icon Gallery">Icon Gallery</a></li>
-        <li><a href="/Academic-Allies/modular/sitemap.html" title="Site Map">Site Map</a></li>
+        <li><a href="/Academic-Allies/modular/static/sitemap.html" title="Site Map">Site Map</a></li>
       </ul>
     </nav>
     

@@ -5,32 +5,25 @@
 <link rel="icon" href="/favicon.ico?v=3">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Academic Allies – Site Map</title>
+  <title>Academic Allies – Daily Check-In</title>
   <link href="./css/style.css" rel="stylesheet" />
 </head>
 <body>
   <!-- Header will be injected here -->
   <div id="site-header"></div>
-  <!-- Google integration container -->
-  <div class="g_id_signin"></div>
 
-  <main id="sitemap-page">
-    <h2>Site Map</h2>
-    <div id="sitemap-content">
-      <ul>
-        <li><a href="/Academic-Allies/">Home</a></li>
-        <li><a href="./emergency.html">Emergency Contact</a></li>
-        <li><a href="./checkin.html">Daily Check-In</a></li>
-        <li><a href="/Academic-Allies/modular/components/calendar/calendar.html">Calendar</a></li>
-        <li><a href="./icon-gallery.html">Preview</a></li>
-        <li><a href="./sitemap.html">Site Map</a></li>
-      </ul>
-    </div>
+  <main id="checkin-page">
+    <h2>Daily Check-In</h2>
+    <div id="checkin-component-container"></div>
+    <script type="module">
+      import { renderCheckIn } from './components/spoon-planner/js/spoon-planner.js';
+      renderCheckIn(document.getElementById('checkin-component-container'), window.firebaseAuth);
+    </script>
   </main>
 
   <!-- Fail-safe header loader (ensures all scripts run after insertion)-->
   <script>
-    fetch('/Academic-Allies/modular/shared-header.html')
+    fetch('modular/shared-header.html')
       .then(response => response.text())
       .then(html => {
         const container = document.getElementById('site-header');

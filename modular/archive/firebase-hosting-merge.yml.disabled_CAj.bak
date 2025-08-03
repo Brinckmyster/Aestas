@@ -1,5 +1,5 @@
 name: Deploy to Firebase Hosting on merge
-#on: [disabled for pause, CAj SOP]
+on:
   push:
     branches:
       - main

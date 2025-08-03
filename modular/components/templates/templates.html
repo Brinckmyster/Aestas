@@ -9,7 +9,7 @@
 </head>
 <body>
   <div id="site-header"></div>
-  <script>fetch("modular/shared-header.html").then(r=>r.text()).then(html=>{const c=document.getElementById("site-header");c.innerHTML=html;const s=c.querySelectorAll("script");s.forEach(o=>{const n=document.createElement("script");Array.from(o.attributes).forEach(a=>n.setAttribute(a.name,a.value));n.textContent=o.textContent;o.replaceWith(n);});});</script>
+  <script>fetch("/Academic-Allies/modular/shared-header.html").then(r=>r.text()).then(html=>{const c=document.getElementById("site-header");c.innerHTML=html;const s=c.querySelectorAll("script");s.forEach(o=>{const n=document.createElement("script");Array.from(o.attributes).forEach(a=>n.setAttribute(a.name,a.value));n.textContent=o.textContent;o.replaceWith(n);});});</script>
   <h1>Communication Templates</h1>
   <section>
     <h2>General Accommodation Activation</h2>

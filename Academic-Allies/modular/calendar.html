@@ -9,7 +9,7 @@
   <link href="./css/style.css" rel="stylesheet" />
 </head>
 <body>
-<!--#include virtual="/modular/shared-header.html" -->
+<!--#include virtual="//Academic-Allies/modular/shared-header.html" -->
   <!-- Header will be injected here -->
   <div id="site-header"></div>
   <!-- Google integration container -->
@@ -26,7 +26,7 @@
 
   <!-- Fail-safe header loader (ensures all scripts run after insertion)-->
   <script>
-    fetch('modular/shared-header.html')
+    fetch('/Academic-Allies/modular/shared-header.html')
       .then(response => response.text())
       .then(html => {
         const container = document.getElementById('site-header');

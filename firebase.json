@@ -2,15 +2,15 @@
   "hosting": [
     {
       "target": "production",
-      "public": "."
+      "public": "Academic-Allies"
     },
     {
       "target": "staging",
-      "public": "."
+      "public": "Academic-Allies"
     },
     {
       "target": "development",
-      "public": "."
+      "public": "Academic-Allies"
     }
   ]
 }

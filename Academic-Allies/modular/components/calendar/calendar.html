@@ -26,7 +26,7 @@
 
   <!-- Fail-safe header loader (ensures all scripts run after insertion)-->
   <script>
-    fetch('modular/shared-header.html')
+    fetch('/Academic-Allies/modular/shared-header.html')
       .then(response => response.text())
       .then(html => {
         const container = document.getElementById('site-header');

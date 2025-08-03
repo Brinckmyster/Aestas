@@ -2,18 +2,15 @@
   "hosting": [
     {
       "target": "production",
-      "public": ".",
-      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+      "public": "."
     },
     {
       "target": "staging",
-      "public": ".",
-      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+      "public": "."
     },
     {
       "target": "development",
-      "public": ".",
-      "rewrites": [{ "source": "**", "destination": "/index.html" }]
+      "public": "."
     }
   ]
 }

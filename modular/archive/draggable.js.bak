@@ -30,17 +30,17 @@ function dragElement(elmnt) {
 
 
 # Backup and fix the header layout
-cp /Academic-Allies/modular/shared-header.html /Academic-Allies/modular/shared-header.html.bak
+cp modular/shared-header.html modular/shared-header.html.bak
 
 # Remove the duplicate justify-content rule that conflicts with proper positioning
-sed -i '/\.header-content {/,/}/ { /justify-content: space-between/d; }' /Academic-Allies/modular/shared-header.html
+sed -i '/\.header-content {/,/}/ { /justify-content: space-between/d; }' modular/shared-header.html
 
 # Ensure home icon is properly positioned at top-left
-sed -i '/\.home-link {/,/}/ s/text-align: [^;]*/text-align: left/' /Academic-Allies/modular/shared-header.html
-sed -i '/\.home-link {/,/}/ { /margin-left:/!s/}/  margin-left: 0;\n}/ }' /Academic-Allies/modular/shared-header.html
+sed -i '/\.home-link {/,/}/ s/text-align: [^;]*/text-align: left/' modular/shared-header.html
+sed -i '/\.home-link {/,/}/ { /margin-left:/!s/}/  margin-left: 0;\n}/ }' modular/shared-header.html
 
 # Stage, commit, and push all changes
-git add modular/js/draggable.js /Academic-Allies/modular/shared-header.html
+git add modular/js/draggable.js modular/shared-header.html
 git commit -m "Make status circle draggable and fix home icon position (CAj)"
 git push
 

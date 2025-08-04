@@ -33,6 +33,7 @@
   <header>
     <h1>Icon Gallery</h1>
     <p class="subtitle">Visual icon collection</p>
+  <div class="icon-grid">
     <div class="icon-item">
     </div>
     <div class="icon-item">

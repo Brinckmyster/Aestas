@@ -45,8 +45,8 @@
       <div class="icon-filename">ai_png.png</div>
     </div>
     <div class="icon-item">
-      <img src="icons/branding_png.png" alt="Branding Icon">
-      <div class="icon-filename">branding_png.png</div>
+      <img src="icons/home.png" alt="Branding Icon">
+      <div class="icon-filename">home.png</div>
     </div>
     <div class="icon-item">
       <img src="icons/calculus_png.png" alt="Calculus Icon">

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/Academic-Allies/favicon.ico?v=44">
+<link rel="icon" href="/favicon.ico?v=3">
+  <meta charset="utf-8"/>
+  <title>Icon Gallery - Academic Allies</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #fff; padding: 2rem; }
+    header { text-align: center; margin-bottom: 2rem; }
+    h1 { color: #1f2937; margin-bottom: 0.5rem; }
+    .subtitle { color: #4b5563; margin-bottom: 2rem; }
+    .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto 3rem; }
+    .icon-item { display: flex; flex-direction: column; align-items: center; padding: 1rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; background: #f9fafb; transition: transform 0.2s, box-shadow 0.2s; }
+    .icon-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+    .icon-item img { max-width: 100px; max-height: 100px; object-fit: contain; margin-bottom: 0.75rem; border-radius: 0.25rem; }
+    .icon-filename { font-size: 0.875rem; color: #374151; text-align: center; word-break: break-word; padding: 0.5rem 0.75rem; background: #3b82f6; color: #fff; border-radius: 0.375rem; font-weight: 500; min-height: 1.25rem; display: flex; align-items: center; justify-content: center; }
+    .return-home { display: block; margin: 2rem auto 0; padding: 0.75rem 1.5rem; background: #3b82f6; color: #fff; text-decoration: none; border-radius: 0.5rem; text-align: center; max-width: 200px; font-weight: 500; transition: background-color 0.2s; }
+    .return-home:hover { background: #2563eb; }
+    .user-tier img, .icon-item img { width: 32px !important; height: 32px !important; object-fit: contain; padding: 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  
+  <div id="site-header"></div>
+  <script>
+    fetch('shared-header.html')
+      .then(r => r.text())
+      .then(h => document.getElementById('site-header').innerHTML=h);
+  </script>
+  
+  <header>
+    <h1>Icon Gallery</h1>
+    <p class="subtitle">Visual icon collection</p>
+  </header>
+
+  <div class="icon-grid">
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Academy Icon">
+      <div class="icon-filename">academy.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="AI Icon">
+      <div class="icon-filename">ai.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Branding Icon">
+      <div class="icon-filename">branding.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Calculus Icon">
+      <div class="icon-filename">calculus.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Chemistry Icon">
+      <div class="icon-filename">chemistry.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="College Icon">
+      <div class="icon-filename">college.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Computer Science Icon">
+      <div class="icon-filename">computer_science.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Economics Icon">
+      <div class="icon-filename">economics.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Engineering Icon">
+      <div class="icon-filename">engineering.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="English Icon">
+      <div class="icon-filename">english.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Geometry Icon">
+      <div class="icon-filename">geometry.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Graduate Cap Icon">
+      <div class="icon-filename">graduatecap.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="History Icon">
+      <div class="icon-filename">history.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Literature Icon">
+      <div class="icon-filename">literature.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Math Icon">
+      <div class="icon-filename">math.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Philosophy Icon">
+      <div class="icon-filename">philosophy.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Physics Icon">
+      <div class="icon-filename">physics.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Psychology Icon">
+      <div class="icon-filename">psychology.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Research Icon">
+      <div class="icon-filename">research.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Science Icon">
+      <div class="icon-filename">science.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Sociology Icon">
+      <div class="icon-filename">sociology.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Statistics Icon">
+      <div class="icon-filename">statistics.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="Study Icon">
+      <div class="icon-filename">study.png</div>
+    </div>
+    <div class="icon-item">
+      <img src="icons/branding.png" alt="University Icon">
+      <div class="icon-filename">university.png</div>
+    </div>
+  </div>
+
+  <a href="/Academic-Allies/" class="return-home">Return to Home</a>
+</body>
+</html>

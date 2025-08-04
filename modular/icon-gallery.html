@@ -1,139 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<link rel="icon" href="/Academic-Allies/favicon.ico?v=44">
-<link rel="icon" href="/favicon.ico?v=3">
-  <meta charset="utf-8"/>
+  <meta charset="UTF-8">
   <title>Icon Gallery - Academic Allies</title>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <style>
-    body { margin: 0; font-family: sans-serif; background: #fff; padding: 2rem; }
-    header { text-align: center; margin-bottom: 2rem; }
-    h1 { color: #1f2937; margin-bottom: 0.5rem; }
-    .subtitle { color: #4b5563; margin-bottom: 2rem; }
-    .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto 3rem; }
-    .icon-item { display: flex; flex-direction: column; align-items: center; padding: 1rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; background: #f9fafb; transition: transform 0.2s, box-shadow 0.2s; }
-    .icon-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
-    .icon-item img { max-width: 100px; max-height: 100px; object-fit: contain; margin-bottom: 0.75rem; border-radius: 0.25rem; }
-    .icon-filename { font-size: 0.875rem; color: #374151; text-align: center; word-break: break-word; padding: 0.5rem 0.75rem; background: #3b82f6; color: #fff; border-radius: 0.375rem; font-weight: 500; min-height: 1.25rem; display: flex; align-items: center; justify-content: center; }
-    .return-home { display: block; margin: 2rem auto 0; padding: 0.75rem 1.5rem; background: #3b82f6; color: #fff; text-decoration: none; border-radius: 0.5rem; text-align: center; max-width: 200px; font-weight: 500; transition: background-color 0.2s; }
-    .return-home:hover { background: #2563eb; }
-    .user-tier img, .icon-item img { width: 32px !important; height: 32px !important; object-fit: contain; padding: 4px; border-radius: 4px; }
-  </style>
+  <link rel="stylesheet" href="/Academic-Allies/styles.css">
 </head>
 <body>
-  
-  <div id="site-header"></div>
-  <script>
-    fetch('/Academic-Allies/modular/shared-header.html')
-      .then(r => r.text())
-      .then(h => document.getElementById('site-header').innerHTML=h);
-  </script>
-  
-  <header>
-    <h1>Icon Gallery</h1>
-    <p class="subtitle">Visual icon collection</p>
-  </header>
-
-  <div class="icon-grid">
-    <div class="icon-item">
-      <img src="icons/academy_png.png" alt="Academy Icon">
-      <div class="icon-filename">academy_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/ai_png.png" alt="AI Icon">
-      <div class="icon-filename">ai_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/branding_png.png" alt="Branding Icon">
-      <div class="icon-filename">branding_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/calculus_png.png" alt="Calculus Icon">
-      <div class="icon-filename">calculus_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/chemistry_png.png" alt="Chemistry Icon">
-      <div class="icon-filename">chemistry_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/college_png.png" alt="College Icon">
-      <div class="icon-filename">college_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/computer_science_png.png" alt="Computer Science Icon">
-      <div class="icon-filename">computer_science_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/economics_png.png" alt="Economics Icon">
-      <div class="icon-filename">economics_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/engineering_png.png" alt="Engineering Icon">
-      <div class="icon-filename">engineering_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/english_png.png" alt="English Icon">
-      <div class="icon-filename">english_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/geometry_png.png" alt="Geometry Icon">
-      <div class="icon-filename">geometry_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/graduatecap_png.png" alt="Graduate Cap Icon">
-      <div class="icon-filename">graduatecap_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/history_png.png" alt="History Icon">
-      <div class="icon-filename">history_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/literature_png.png" alt="Literature Icon">
-      <div class="icon-filename">literature_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/math_png.png" alt="Math Icon">
-      <div class="icon-filename">math_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/philosophy_png.png" alt="Philosophy Icon">
-      <div class="icon-filename">philosophy_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/physics_png.png" alt="Physics Icon">
-      <div class="icon-filename">physics_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/psychology_png.png" alt="Psychology Icon">
-      <div class="icon-filename">psychology_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/research_png.png" alt="Research Icon">
-      <div class="icon-filename">research_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/science_png.png" alt="Science Icon">
-      <div class="icon-filename">science_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/sociology_png.png" alt="Sociology Icon">
-      <div class="icon-filename">sociology_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/statistics_png.png" alt="Statistics Icon">
-      <div class="icon-filename">statistics_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/study_png.png" alt="Study Icon">
-      <div class="icon-filename">study_png.png</div>
-    </div>
-    <div class="icon-item">
-      <img src="icons/university_png.png" alt="University Icon">
-      <div class="icon-filename">university_png.png</div>
-    </div>
+  <h1>Icon Gallery</h1>
+  <div class="icon-gallery">
+    <div class="icon-row"><img src="icons/Admin star with badge.png" alt="Admin star with badge" width="36" height="36"><span>Admin star with badge</span></div>
+    <div class="icon-row"><img src="icons/Admin_star_with_badge.png" alt="Admin star with badge" width="36" height="36"><span>Admin star with badge</span></div>
+    <div class="icon-row"><img src="icons/THE picture - brain scan.jpeg" alt="THE picture   brain scan" width="36" height="36"><span>THE picture   brain scan</span></div>
+    <div class="icon-row"><img src="icons/badge-admin-icon.png" alt="badge admin icon" width="36" height="36"><span>badge admin icon</span></div>
+    <div class="icon-row"><img src="icons/badge-admin-incorrect.png" alt="badge admin incorrect" width="36" height="36"><span>badge admin incorrect</span></div>
+    <div class="icon-row"><img src="icons/badge-admin-yellow-center.png" alt="badge admin yellow center" width="36" height="36"><span>badge admin yellow center</span></div>
+    <div class="icon-row"><img src="icons/branding_avif.png" alt="branding avif" width="36" height="36"><span>branding avif</span></div>
+    <div class="icon-row"><img src="icons/branding_jpg.png" alt="branding jpg" width="36" height="36"><span>branding jpg</span></div>
+    <div class="icon-row"><img src="icons/branding_png.png" alt="branding png" width="36" height="36"><span>branding png</span></div>
+    <div class="icon-row"><img src="icons/branding_webp.png" alt="branding webp" width="36" height="36"><span>branding webp</span></div>
+    <div class="icon-row"><img src="icons/color-swatch-joule-blue.png" alt="color swatch joule blue" width="36" height="36"><span>color swatch joule blue</span></div>
+    <div class="icon-row"><img src="icons/cool_leaf_for_student_profile.png" alt="cool leaf for student profile" width="36" height="36"><span>cool leaf for student profile</span></div>
+    <div class="icon-row"><img src="icons/ic_recovery_white_24dp.png" alt="ic recovery white 24dp" width="36" height="36"><span>ic recovery white 24dp</span></div>
+    <div class="icon-row"><img src="icons/icon-admin-incorrect.png" alt="icon admin incorrect" width="36" height="36"><span>icon admin incorrect</span></div>
+    <div class="icon-row"><img src="icons/icon-admin-star-incorrect-badge.png" alt="icon admin star incorrect badge" width="36" height="36"><span>icon admin star incorrect badge</span></div>
+    <div class="icon-row"><img src="icons/icon-admin-star-incorrect-partial.png" alt="icon admin star incorrect partial" width="36" height="36"><span>icon admin star incorrect partial</span></div>
+    <div class="icon-row"><img src="icons/icon-boring-student.png" alt="icon boring student" width="36" height="36"><span>icon boring student</span></div>
+    <div class="icon-row"><img src="icons/icon-user-admin.png" alt="icon user admin" width="36" height="36"><span>icon user admin</span></div>
+    <div class="icon-row"><img src="icons/icon-user-nearby-help.png" alt="icon user nearby help" width="36" height="36"><span>icon user nearby help</span></div>
+    <div class="icon-row"><img src="icons/icon-user-student.png" alt="icon user student" width="36" height="36"><span>icon user student</span></div>
+    <div class="icon-row"><img src="icons/icon-user-support.png" alt="icon user support" width="36" height="36"><span>icon user support</span></div>
+    <div class="icon-row"><img src="icons/icon_options.png" alt="icon options" width="36" height="36"><span>icon options</span></div>
+    <div class="icon-row"><img src="icons/mode-bad-brain-alt.jpg" alt="mode bad brain alt" width="36" height="36"><span>mode bad brain alt</span></div>
+    <div class="icon-row"><img src="icons/mode-bad-brain-broke.png" alt="mode bad brain broke" width="36" height="36"><span>mode bad brain broke</span></div>
+    <div class="icon-row"><img src="icons/mode-bad-brain-day.jpg" alt="mode bad brain day" width="36" height="36"><span>mode bad brain day</span></div>
+    <div class="icon-row"><img src="icons/mode-bad-brain-perplexity.png" alt="mode bad brain perplexity" width="36" height="36"><span>mode bad brain perplexity</span></div>
+    <div class="icon-row"><img src="icons/mode-nope-button.png" alt="mode nope button" width="36" height="36"><span>mode nope button</span></div>
+    <div class="icon-row"><img src="icons/mode-nope-white.png" alt="mode nope white" width="36" height="36"><span>mode nope white</span></div>
+    <div class="icon-row"><img src="icons/mode-normal-bold.png" alt="mode normal bold" width="36" height="36"><span>mode normal bold</span></div>
+    <div class="icon-row"><img src="icons/mode-normal-outline.png" alt="mode normal outline" width="36" height="36"><span>mode normal outline</span></div>
+    <div class="icon-row"><img src="icons/mode-normal-plain.png" alt="mode normal plain" width="36" height="36"><span>mode normal plain</span></div>
+    <div class="icon-row"><img src="icons/mode-normal-stoplight-horizontal.png" alt="mode normal stoplight horizontal" width="36" height="36"><span>mode normal stoplight horizontal</span></div>
+    <div class="icon-row"><img src="icons/mode-recovery.png" alt="mode recovery" width="36" height="36"><span>mode recovery</span></div>
+    <div class="icon-row"><img src="icons/mode-semi-nope-extra-n-odd.png" alt="mode semi nope extra n odd" width="36" height="36"><span>mode semi nope extra n odd</span></div>
+    <div class="icon-row"><img src="icons/mode-semi-nope-odd-o.png" alt="mode semi nope odd o" width="36" height="36"><span>mode semi nope odd o</span></div>
+    <div class="icon-row"><img src="icons/mode-semi-nope-shadow-alt.png" alt="mode semi nope shadow alt" width="36" height="36"><span>mode semi nope shadow alt</span></div>
+    <div class="icon-row"><img src="icons/mode-semi-nope-shadow-alt2.png" alt="mode semi nope shadow alt2" width="36" height="36"><span>mode semi nope shadow alt2</span></div>
+    <div class="icon-row"><img src="icons/mode-semi-nope-shadow-tilted.png" alt="mode semi nope shadow tilted" width="36" height="36"><span>mode semi nope shadow tilted</span></div>
+    <div class="icon-row"><img src="icons/mode-semi-nope-shadow.png" alt="mode semi nope shadow" width="36" height="36"><span>mode semi nope shadow</span></div>
   </div>
-
-  <a href="/Academic-Allies/" class="return-home">Return to Home</a>
+  <p><a href=\"/Academic-Allies/\">Return to Home</a></p>
 </body>
 </html>

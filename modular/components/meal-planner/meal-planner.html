@@ -6,9 +6,10 @@
   <h2>Meal Planner</h2>
   <div class="meal-upload">
     <label for="base-meal-file" class="upload-label">Upload Base Meal Plan:</label>
-    <input type="file" id="base-meal-file" accept=".json,.txt,.csv" aria-label="Upload base meal plan" />
+    <input type="file" id="base-meal-file" accept=".json,.txt,.csv,.pdf,.doc,.docx" aria-label="Upload base meal plan" />
     <button type="button" id="load-base-meal" class="upload-btn">Load Base Plan</button>
   </div>
+  <p class="file-types">File types accepted: .json, .txt, .csv, .pdf, .doc, .docx</p>
   <div class="meal-summary" aria-live="polite">
     <span id="meals-today">Meals Planned Today: <strong>0</strong></span>
     <button type="button" id="reset-meals" class="reset-btn" aria-label="Reset daily meals">Reset</button>
@@ -45,7 +46,7 @@
   display: flex;
   align-items: center;
   gap: 1em;
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
 }
 .upload-label {
   font-weight: 600;
@@ -59,6 +60,11 @@
   font-size: 1em;
   cursor: pointer;
   transition: background 0.2s;
+}
+.file-types {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 1em;
 }
 .meal-summary {
   display: flex;
@@ -238,23 +244,44 @@ function resetMeals() {
 }
 
 function parseBaseMealFile(file, callback) {
+  const extension = file.name.split('.').pop().toLowerCase();
   const reader = new FileReader();
+
   reader.onload = function (e) {
     let baseMeals = [];
     try {
-      // Try JSON first
-      baseMeals = JSON.parse(e.target.result);
-      if (!Array.isArray(baseMeals)) throw new Error();
-    } catch {
-      // Try CSV or TXT fallback
-      const lines = e.target.result.split('\n').filter(Boolean);
-      baseMeals = lines.map(line => {
-        const [name, time, notes] = line.split(',');
-        return { name: name?.trim() || '', time: time?.trim() || '', notes: notes?.trim() || '' };
-      });
+      if (extension === 'json') {
+        baseMeals = JSON.parse(e.target.result);
+        if (!Array.isArray(baseMeals)) throw new Error('Invalid JSON format');
+      } else if (extension === 'csv' || extension === 'txt') {
+        const lines = e.target.result.split('\n').filter(Boolean);
+        baseMeals = lines.map(line => {
+          const [name, time, notes] = line.split(',').map(item => item?.trim() || '');
+          return { name, time, notes };
+        });
+      } else if (extension === 'pdf' || extension === 'doc' || extension === 'docx') {
+        // Simplified handling: assume text-based content in a similar format
+        // Note: Real PDF/DOC parsing requires external libraries (e.g., pdf.js, mammoth.js)
+        const text = e.target.result;
+        const lines = text.split('\n').filter(Boolean);
+        baseMeals = lines.map(line => {
+          const [name, time, notes] = line.split(',').map(item => item?.trim() || '');
+          return { name, time, notes };
+        });
+        console.warn(`Parsing .${extension} files is limited. For full support, integrate a parsing library.`);
+      } else {
+        throw new Error('Unsupported file type');
+      }
+    } catch (err) {
+      alert(`Error parsing file: ${err.message}. Please ensure the file is correctly formatted.`);
+      return;
     }
+    // Validate meal objects
+    baseMeals = baseMeals.filter(meal => meal.name && meal.time);
     callback(baseMeals);
   };
+
+  // Read as text for simplicity; PDFs and DOCs may need binary handling with libraries
   reader.readAsText(file);
 }
 

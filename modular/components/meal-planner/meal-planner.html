@@ -325,8 +325,8 @@ function generateSuggestions() {
         const currentTime = time.replace(/[^\d:]/g, '');
         const currentHour = parseInt(currentTime.split(':')[0]);
         
-        // Check if after 5 PM (liquids only)
-        if (currentHour >= 17) {
+        // Check if after 5 PM (liquids only) - only if this rule exists in the plan
+        if (currentHour >= 17 && dietaryRules.timingRules.some(rule => rule.rule && rule.rule.includes('liquid'))) {
             suggestions.push({
                 name: 'Liquids Only',
                 time: time,

@@ -313,55 +313,56 @@ function renderSuggestions(suggestions) {
 }
 
 // [CAj-AUTO] Original generateSuggestions commented out.
-//function generateSuggestions() {
-//    if (dietaryRules.mealTimes.length === 0) {
-//        alert('Please upload a base meal plan with meal times first.');
-//        return;
-//    }
-//    
-//    const suggestions = [];
-//    const shuffledTimes = [...dietaryRules.mealTimes].sort(() => Math.random() - 0.5).slice(0, Math.min(3, dietaryRules.mealTimes.length));
-//    
-//    shuffledTimes.forEach(time => {
-//        const currentTime = time.replace(/[^\d:]/g, '');
-//        const currentHour = parseInt(currentTime.split(':')[0]);
-//        
-//        // Check if after 5 PM (liquids only) - only if this rule exists in the plan
-//        if (currentHour >= 17 && dietaryRules.timingRules.some(rule => rule.rule && rule.rule.includes('liquid'))) {
-//            suggestions.push({
-//                name: 'Liquids Only',
-//                time: time,
-//                notes: 'Water, herbal tea, or other liquids only after 5:00 PM per meal timing rules.'
-//            });
-//            return;
-//        }
-//        
-//        // Generate meal from available food groups
-//        const protein = dietaryRules.proteins[Math.floor(Math.random() * dietaryRules.proteins.length)] || 'protein';
-//        const carb = dietaryRules.carbohydrates[Math.floor(Math.random() * dietaryRules.carbohydrates.length)] || 'carbohydrate';
-//        const fruitVeg = dietaryRules.fruitsVeggies[Math.floor(Math.random() * dietaryRules.fruitsVeggies.length)] || 'vegetable';
-//        const fat = dietaryRules.fats[Math.floor(Math.random() * dietaryRules.fats.length)] || 'healthy fat';
-//        
-//        const name = `${protein.split('(')[0].trim()} with ${carb.split('(')[0].trim()}`;
-//        let notes = `Include: ${fruitVeg.split('(')[0].trim()} prepared with ${fat.split('(')[0].trim()}. `;
-//        
-//        // Add restrictions
-//        if (dietaryRules.restricted.length > 0) {
-//            notes += `Avoid: ${dietaryRules.restricted.join(', ')}. `;
-//        }
-//        
-//        // Add prep notes
-//        notes += 'Batch-cook when possible, use toaster oven/stovetop, keep at room temp or cold.';
-//        
-//        suggestions.push({ name, time, notes: notes.trim() });
-//    });
-//    
-//    renderSuggestions(suggestions);
+// [CAj-AUTO] Original generateSuggestions commented out.
+////function generateSuggestions() {
+////    if (dietaryRules.mealTimes.length === 0) {
+////        alert('Please upload a base meal plan with meal times first.');
+////        return;
+////    }
+////    
+////    const suggestions = [];
+////    const shuffledTimes = [...dietaryRules.mealTimes].sort(() => Math.random() - 0.5).slice(0, Math.min(3, dietaryRules.mealTimes.length));
+////    
+////    shuffledTimes.forEach(time => {
+////        const currentTime = time.replace(/[^\d:]/g, '');
+////        const currentHour = parseInt(currentTime.split(':')[0]);
+////        
+////        // Check if after 5 PM (liquids only) - only if this rule exists in the plan
+////        if (currentHour >= 17 && dietaryRules.timingRules.some(rule => rule.rule && rule.rule.includes('liquid'))) {
+////            suggestions.push({
+////                name: 'Liquids Only',
+////                time: time,
+////                notes: 'Water, herbal tea, or other liquids only after 5:00 PM per meal timing rules.'
+////            });
+////            return;
+////        }
+////        
+////        // Generate meal from available food groups
+////        const protein = dietaryRules.proteins[Math.floor(Math.random() * dietaryRules.proteins.length)] || 'protein';
+////        const carb = dietaryRules.carbohydrates[Math.floor(Math.random() * dietaryRules.carbohydrates.length)] || 'carbohydrate';
+////        const fruitVeg = dietaryRules.fruitsVeggies[Math.floor(Math.random() * dietaryRules.fruitsVeggies.length)] || 'vegetable';
+////        const fat = dietaryRules.fats[Math.floor(Math.random() * dietaryRules.fats.length)] || 'healthy fat';
+////        
+////        const name = `${protein.split('(')[0].trim()} with ${carb.split('(')[0].trim()}`;
+////        let notes = `Include: ${fruitVeg.split('(')[0].trim()} prepared with ${fat.split('(')[0].trim()}. `;
+////        
+////        // Add restrictions
+////        if (dietaryRules.restricted.length > 0) {
+////            notes += `Avoid: ${dietaryRules.restricted.join(', ')}. `;
+////        }
+////        
+////        // Add prep notes
+////        notes += 'Batch-cook when possible, use toaster oven/stovetop, keep at room temp or cold.';
+////        
+////        suggestions.push({ name, time, notes: notes.trim() });
+////    });
+////    
+////    renderSuggestions(suggestions);
+////}
+//
+//function saveMeals() {
+//    localStorage.setItem('plannedMeals', JSON.stringify(meals));
 //}
-
-function saveMeals() {
-    localStorage.setItem('plannedMeals', JSON.stringify(meals));
-}
 
 function loadMeals() {
     const saved = localStorage.getItem('plannedMeals');

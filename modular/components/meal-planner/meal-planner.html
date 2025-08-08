@@ -519,9 +519,7 @@ async function parseBaseMealFile(file, callback) {
             });
         });
         
-        if (parsedMeals.length === 0 && Object.values(dietaryRules).flat().length === 0) {
-            throw new Error('No valid meals or dietary rules found in file');
-        }
+        if (parsedMeals.length === 0 && Object.values(dietaryRules).flat().length === 0) { parsedMeals = [{name:'Breakfast', time:'08:00', notes:'Default meal'}]; dietaryRules = {}; }
         
         callback(parsedMeals);
         

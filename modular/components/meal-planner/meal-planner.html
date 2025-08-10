@@ -340,9 +340,20 @@ function renderSuggestions(suggestions) {
 // [CAj-AUTO] Original generateSuggestions commented out.
 // [CAj-AUTO] Original generateSuggestions commented out.
 ////
+
 function generateSuggestions(){
   try{
     let plan=null; try{ plan=JSON.parse(localStorage.getItem('simpleMealPlan')||'null'); }catch(e){}
+    const hasGastro=(plan&&plan.restrictions||'').toLowerCase().includes('gastro');
+    const soft=hasGastro?['Broth with soft noodles','Smooth yogurt with honey','Mashed potatoes (smooth)','Scrambled eggs (soft)','Thin cream of wheat']:[];
+    const cat={Breakfast:['Oatmeal with fruit','Scrambled eggs and toast','Greek yogurt with granola',...soft],Lunch:['Turkey & cheese sandwich','Chicken salad wrap','Soup and crackers',...soft],Dinner:['Chicken stir fry','Rice and beans','Pasta with marinara',...soft],Snack:['Apple slices','Yogurt','Broth','Banana','Cheese and crackers',...soft]};
+    const slots=[]; if(plan&&Array.isArray(plan.meals)){ for(const m of plan.meals) slots.push({kind:m.name,time:m.time||'',want:m.text||''}); } else { slots.push({kind:'Breakfast',time:'08:00'},{kind:'Lunch',time:'12:00'},{kind:'Dinner',time:'18:00'}); }
+    const snackTimes=(plan&&plan.snacks&&Array.isArray(plan.snacks.times))?plan.snacks.times:[]; for(const t of snackTimes) slots.push({kind:'Snack',time:t, want:(plan&&plan.snacks&&plan.snacks.text)||''});
+    const sugg=slots.map(s=>{ const u=[...new Set(cat[s.kind]||cat.Snack)]; return {kind:s.kind,time:s.time,options:u.slice(0,3)}; });
+    const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML=''; sugg.forEach(s=>{ const w=document.createElement('div'); w.style.margin='0.5em 0'; const t=document.createElement('div'); t.innerHTML='<b>'+ (s.time?(s.time+' · '):'') + s.kind + '</b>'; w.appendChild(t); const o=document.createElement('div'); s.options.forEach(opt=>{ const b=document.createElement('button'); b.textContent='Add: '+opt; b.style.marginRight='0.5em'; b.onclick=()=>addPlannedMeal(s.kind,s.time,opt); o.appendChild(b); }); w.appendChild(o); list.appendChild(w); }); }
+  }catch(e){ const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; } }
+}
+catch(e){}
     const hasGastro=(plan&&plan.restrictions||'').toLowerCase().includes('gastro');
     const soft=hasGastro?['Broth with soft noodles','Smooth yogurt with honey','Mashed potatoes (smooth)','Scrambled eggs (soft)','Thin cream of wheat']:[];
     const cat={Breakfast:['Oatmeal with fruit','Scrambled eggs and toast','Greek yogurt with granola',...soft],
@@ -646,6 +657,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
 <!-- BEGIN CAj ONE-MODAL PATCH -->
 <button id="show-plan-template" style="margin-bottom:1em;">Show/Edit Base Plan Template</button>
 <div id="plan-template-modal" style="display:none;position:fixed;top:10vh;left:50%;transform:translateX(-50%);z-index:1002;background:#fff;padding:1.5rem 2rem;border-radius:1em;box-shadow:0 0 16px #222;max-width:420px;width:90%">
@@ -655,7 +667,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <label>Breakfast (time): <input type="time" name="breakfast_time" value="08:00"> <input type="text" name="breakfast" maxlength="60" placeholder="Oatmeal + fruit"></label><br>
     <label>Lunch (time): <input type="time" name="lunch_time" value="12:00"> <input type="text" name="lunch" maxlength="60" placeholder="Turkey & cheese"></label><br>
     <label>Dinner (time): <input type="time" name="dinner_time" value="18:00"> <input type="text" name="dinner" maxlength="60" placeholder="Chicken stir fry"></label><br>
-    <label>Snacks (times, comma-separated): <input type="text" name="snack_times" placeholder="10:30, 15:00, 20:30"></label><br>
+    <label>Snacks (times): <input type="text" name="snack_times" placeholder="10:30, 15:00, 20:30"></label><br>
     <label>Snacks (text): <input type="text" name="snacks" maxlength="80" placeholder="Yogurt; apple slices; broth"></label><br>
     <br><b>Dietary Restrictions/Needs:</b><br>
     <textarea name="restrictions" rows="3" placeholder="gluten free, gastroparesis, diabetes, kosher, allergies" style="width:98%"></textarea>
@@ -664,34 +676,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <button type="button" id="close-template-modal">Cancel</button>
   </form>
 </div>
-<script>
-(function(){
-  const btn=document.getElementById('show-plan-template');
-  if(btn){ btn.onclick=()=>{ document.getElementById('plan-template-modal').style.display='block'; }; }
-  const close=document.getElementById('close-template-modal');
-  if(close){ close.onclick=()=>{ document.getElementById('plan-template-modal').style.display='none'; }; }
-  const form=document.getElementById('template-form');
-  if(form){
-    form.onsubmit=function(e){
-      e.preventDefault();
-      const snackTimes=(this.snack_times.value||'').split(',').map(s=>s.trim()).filter(Boolean);
-      const plan={
-        date:this.plandate.value||null,
-        meals:[
-          {name:'Breakfast', time:this.breakfast_time.value||'08:00', text:this.breakfast.value||'Oatmeal with fruit'},
-          {name:'Lunch',     time:this.lunch_time.value||'12:00',    text:this.lunch.value||'Turkey & cheese sandwich'},
-          {name:'Dinner',    time:this.dinner_time.value||'18:00',   text:this.dinner.value||'Chicken stir fry'}
-        ],
-        snacks:{times:snackTimes, text:this.snacks.value||'Yogurt; apple slices; broth'},
-        restrictions:this.restrictions.value||''
-      };
-      localStorage.setItem('simpleMealPlan', JSON.stringify(plan));
-      alert("Plan saved! Click 'Suggest Meals' to apply it.");
-      document.getElementById('plan-template-modal').style.display='none';
-    };
-  }
-})();
-</script>
+<script>(function(){const b=document.getElementById('show-plan-template');if(b){b.onclick=()=>{document.getElementById('plan-template-modal').style.display='block';}}const c=document.getElementById('close-template-modal');if(c){c.onclick=()=>{document.getElementById('plan-template-modal').style.display='none';}}const f=document.getElementById('template-form');if(f){f.onsubmit=function(e){e.preventDefault();const snackTimes=(this.snack_times.value||'').split(',').map(s=>s.trim()).filter(Boolean);const plan={date:this.plandate.value||null,meals:[{name:'Breakfast',time:this.breakfast_time.value||'08:00',text:this.breakfast.value||'Oatmeal with fruit'},{name:'Lunch',time:this.lunch_time.value||'12:00',text:this.lunch.value||'Turkey & cheese sandwich'},{name:'Dinner',time:this.dinner_time.value||'18:00',text:this.dinner.value||'Chicken stir fry'}],snacks:{times:snackTimes,text:this.snacks.value||'Yogurt; apple slices; broth'},restrictions:this.restrictions.value||''};localStorage.setItem('simpleMealPlan',JSON.stringify(plan));alert("Plan saved! Click 'Suggest Meals' to apply it.");document.getElementById('plan-template-modal').style.display='none';};}})();</script>
 <!-- END CAj ONE-MODAL PATCH -->
 <!-- CAJ-ANCHOR:MODALS -->
 </body>

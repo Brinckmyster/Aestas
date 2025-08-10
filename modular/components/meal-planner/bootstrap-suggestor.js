@@ -83,3 +83,51 @@ window.components = window.components || (window.modular && window.modular.compo
     }, false);
   });
 })();
+// Enhancement: allow time override on add and ensure up to 3 options per slot
+(function enhancePlanner(){
+  function onReady(fn){
+    if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', fn, {once:true}); } else { fn(); }
+  }
+  onReady(function(){
+    // If suggestor created suggestion buttons, delegate click handling for time override
+    document.body.addEventListener('click', function(e){
+      const btn = e.target;
+      if(!btn || !btn.textContent) return;
+      // Match both "Add: X" and "Add to Plan" patterns
+      if(/^Add: /.test(btn.textContent) || btn.classList.contains('add-suggestion-btn')){
+        // Try to infer the surrounding slot kind/time if present in DOM near the button
+        let container = btn.closest('div');
+        let inferredTime = '';
+        let inferredKind = '';
+        if(container){
+          const timeEl = container.querySelector('.suggestion-time');
+          const nameEl = container.querySelector('b, .suggestion-name');
+          if(timeEl && timeEl.textContent){
+            const m = timeEl.textContent.match(/\b(\d{1,2}:\d{2})\b/);
+            if(m) inferredTime = m[1];
+          }
+          if(nameEl && nameEl.textContent){
+            const k = nameEl.textContent.replace(/\d{1,2}:\d{2}\s*[·\-–]\s*/,'').trim();
+            if(k) inferredKind = k;
+          }
+        }
+        // Prompt for a time override
+        const chosenTime = prompt('Enter time for this meal (HH:MM) or leave blank to use suggested time:', inferredTime || '');
+        // Try to extract label text for the meal
+        let label = btn.textContent.replace(/^Add:\s*/,'').trim();
+        if(!label && container){
+          const name = container.querySelector('.suggestion-name');
+          if(name) label = name.textContent.trim();
+        }
+        // Fallback kind
+        const kind = inferredKind || 'Meal';
+        // Use addPlannedMeal if present
+        try{
+          if(typeof addPlannedMeal === 'function'){
+            addPlannedMeal(kind, (chosenTime || inferredTime || ''), label || 'Meal');
+          }
+        }catch(_){}
+      }
+    }, false);
+  });
+})();

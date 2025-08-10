@@ -8,14 +8,12 @@ window.modular.components = window.modular.components || {};
     window.basePlan = window.basePlan || {};
   }
 })();
-// Fallback categories (only if not already defined)
 window.cat = window.cat || {
   Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
   Lunch: ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
   Dinner: ["Chicken stir fry","Rice and beans","Pasta with marinara"],
   Snack: ["Apple slices","Yogurt","Broth"]
 };
-// After globals are ready, load the real suggestor
 (function(){
   var s = document.createElement('script');
   s.src = '/Academic-Allies/modular/components/meal-planner/universal-suggestor.js';

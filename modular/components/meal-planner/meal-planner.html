@@ -700,10 +700,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <script>
 (function(){
   if(!window.cat){
-      Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
-      Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-      Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
-      Snack:     ["Apple slices","Yogurt","Broth"]
     };
   }
   function safeSuggest(){
@@ -721,19 +717,15 @@ document.addEventListener('DOMContentLoaded', function () {
 </html>
 <style>
   .suggest-btn, .reset-btn, .upload-btn, #add-meal-form button {
-    cursor: pointer; transition: transform .06s ease, opacity .12s ease;
     box-shadow: 0 1px 2px rgba(0,0,0,.18);
   }
   .suggest-btn:hover, .reset-btn:hover, .upload-btn:hover { opacity: .9; }
-  .btn-clicked { transform: scale(.97); }
 </style>
 <script>
 (function(){
-  function flash(el){ if(!el) return; el.classList.add('btn-clicked'); setTimeout(()=>el.classList.remove('btn-clicked'),120); }
   function safeSuggest(){
     try {
       if (typeof generateSuggestions === 'function') {
-        console.log('[AA] Suggest triggered');
         generateSuggestions();
       } else {
         console.warn('[AA] generateSuggestions not found');
@@ -755,6 +747,67 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
   // Run once now and once on DOM ready
+  if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
+  document.addEventListener('DOMContentLoaded', ()=>{ wireOnce(); safeSuggest(); });
+})();
+</script>
+<script>
+(function(){
+  // Fallbacks to prevent reference errors in suggestor
+  window.cat = window.cat || {
+    Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
+    Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
+    Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
+    Snack:     ["Apple slices","Yogurt","Broth"]
+  };
+  // Minimal base plan so suggestor logic that references it does not crash
+  window.basePlan = window.basePlan || {
+    date: null,
+    meals: [
+      { name: "Breakfast", time: "08:00", text: "Oatmeal with fruit" },
+      { name: "Lunch",     time: "12:00", text: "Turkey & cheese sandwich" },
+      { name: "Dinner",    time: "18:00", text: "Chicken stir fry" }
+    ],
+    snacks: { times: ["10:00","15:00"], text: "Yogurt; apple slices; broth" },
+    restrictions: ""
+  };
+
+  function flash(el){ if(!el) return; try{ el.classList.add('btn-clicked'); setTimeout(()=>el.classList.remove('btn-clicked'),120); }catch(_){} }
+  function safeSuggest(){
+    try {
+      if (typeof generateSuggestions === 'function') {
+        console.log('[AA] Suggest triggered');
+        generateSuggestions();
+      } else {
+        console.warn('[AA] generateSuggestions not found');
+      }
+    } catch(e){ console.error('[AA] Suggest error', e); }
+  }
+  function markOnce(el){
+    if (!el) return false;
+    try {
+      if (!el.dataset) el.dataset = {};
+      if (el.dataset.caj) return false;
+      el.dataset.caj = '1';
+      return true;
+    } catch(_) { return true; }
+  }
+  function wireOnce(){
+    const s = document.getElementById('suggest-meals');
+    if (markOnce(s)){ s && s.addEventListener('click', ()=>{ flash(s); safeSuggest(); }); }
+    const r = document.getElementById('reset-meals');
+    if (markOnce(r)){ r && r.addEventListener('click', ()=>{ flash(r); console.log('[AA] Reset clicked'); }); }
+
+    const sugRoot = document.getElementById('suggestions-list') || document;
+    if (markOnce(sugRoot)){
+      sugRoot.addEventListener('click', (e)=>{
+        const b = e.target && e.target.closest ? e.target.closest('button') : null;
+        if(!b) return;
+        const txt = (b.textContent||'').trim();
+        if (/^(Add|ADD)/.test(txt)) { flash(b); console.log('[AA] Add clicked:', txt); }
+      });
+    }
+  }
   if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
   document.addEventListener('DOMContentLoaded', ()=>{ wireOnce(); safeSuggest(); });
 })();

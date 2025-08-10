@@ -673,7 +673,14 @@ document.addEventListener('DOMContentLoaded', function () {
         generateSuggestions();
     });
 });
-</script>
+document.addEventListener("DOMContentLoaded",()=>{
+  if(!document.getElementById("reset-plan")){
+    const tgt=document.querySelector("#planned-meals")||document.body;
+    const btn=document.createElement("button"); btn.id="reset-plan"; btn.textContent="Reset Plan";
+    btn.onclick=()=>{ try{ resetPlannedMeals(); }catch(e){} };
+    (tgt.parentElement||document.body).appendChild(btn);
+  }
+});
 
 <script src="universal-suggestor.js"></script>
 

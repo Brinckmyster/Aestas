@@ -40,36 +40,10 @@ fetch('../../shared-header.html')
         document.getElementById('shared-header-container').innerHTML = html;
     })
     .catch(error => console.log('Header not found, continuing without navigation'));
-document.addEventListener("DOMContentLoaded",()=>{ try{ generateSuggestions && generateSuggestions(); }catch(e){} });
+</script>
 
 <!-- Load pdf.js from CDN for PDF parsing -->
-function cajAddWithTime(kind, time, text){
-  const t = prompt("Use this time or change it (HH:MM)?", time||"");
-  addPlannedMeal(kind, (t||time||""), text);
-}
-document.addEventListener("DOMContentLoaded",()=>{
-  const list=document.getElementById("suggestions-list"); if(!list) return;
-  const mk=()=>{
-    list.querySelectorAll(".caj-add-hooked").forEach(b=>b.classList.remove("caj-add-hooked"));
-    list.querySelectorAll("button").forEach(b=>{
-      if(b.textContent && b.textContent.startsWith("Add:")){
-        if(!b.classList.contains("caj-add-hooked")){
-          b.classList.add("caj-add-hooked");
-          const wrap=b.closest("div");
-          let kind="Snack", time="";
-          const title=wrap && wrap.previousSibling && wrap.previousSibling.textContent || "";
-          const m=title.match(/^(\d\d:\d\d)\s*·\s*(.*)$/);
-          if(m){ time=m[1]; kind=m[2]; } else { kind=title.replace(/\s*·\s*.*/,).trim()||"Snack"; }
-          const text=b.textContent.replace(/^Add:\s*/,).trim();
-          b.onclick=()=>cajAddWithTime(kind,time,text);
-        }
-      }
-    });
-  };
-  // refresh hooks when suggestions render
-  const mo=new MutationObserver(mk); mo.observe(list,{childList:true,subtree:true}); mk();
-});
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
 <section id="meal-planner" class="meal-planner" aria-label="Meal Planner and Suggestion Tool">
     <h2>Meal Planner</h2>
@@ -673,14 +647,7 @@ document.addEventListener('DOMContentLoaded', function () {
         generateSuggestions();
     });
 });
-document.addEventListener("DOMContentLoaded",()=>{
-  if(!document.getElementById("reset-plan")){
-    const tgt=document.querySelector("#planned-meals")||document.body;
-    const btn=document.createElement("button"); btn.id="reset-plan"; btn.textContent="Reset Plan";
-    btn.onclick=()=>{ try{ resetPlannedMeals(); }catch(e){} };
-    (tgt.parentElement||document.body).appendChild(btn);
-  }
-});
+</script>
 
 <script src="universal-suggestor.js"></script>
 

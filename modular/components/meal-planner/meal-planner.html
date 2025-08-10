@@ -677,243 +677,11 @@ async function parseBaseMealFile(file, callback) {
 <script>(function(){const b=document.getElementById('show-plan-template');if(b){b.onclick=()=>{document.getElementById('plan-template-modal').style.display='block';}}const c=document.getElementById('close-template-modal');if(c){c.onclick=()=>{document.getElementById('plan-template-modal').style.display='none';}}const f=document.getElementById('template-form');if(f){f.onsubmit=function(e){e.preventDefault();const snackTimes=(this.snack_times.value||'').split(',').map(s=>s.trim()).filter(Boolean);const plan={date:this.plandate.value||null,meals:[{name:'Breakfast',time:this.breakfast_time.value||'08:00',text:this.breakfast.value||'Oatmeal with fruit'},{name:'Lunch',time:this.lunch_time.value||'12:00',text:this.lunch.value||'Turkey & cheese sandwich'},{name:'Dinner',time:this.dinner_time.value||'18:00',text:this.dinner.value||'Chicken stir fry'}],snacks:{times:snackTimes,text:this.snacks.value||'Yogurt; apple slices; broth'},restrictions:this.restrictions.value||''};localStorage.setItem('simpleMealPlan',JSON.stringify(plan));alert("Plan saved! Click 'Suggest Meals' to apply it.");document.getElementById('plan-template-modal').style.display='none';};}})();</script>
 <!-- END CAj ONE-MODAL PATCH -->
 <!-- CAJ-ANCHOR:MODALS -->
-<script>
-(function(){
-  // Safe categories fallback so universal-suggestor never throws
-  if(!window.cat){ window.cat={
-    Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt"],
-    Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-    Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
-    Snack:["Apple slices","Yogurt","Broth"]
-  }; }
-  function safeSuggest(){ try{ if(typeof generateSuggestions==="function"){ generateSuggestions(); } }catch(e){} }
-  if(document.readyState!=="loading") safeSuggest();
-    var b=document.getElementById("suggest-meals"); if(b){ b.onclick=safeSuggest; }
-  });
-})();
-</script>
-</body>
-<script>
-(function(){
-  if(!window.cat){
-    };
-  }
-  function safeSuggest(){
-    try { if (typeof generateSuggestions === "function") { generateSuggestions(); } } catch(e) {}
-  }
-  if (document.readyState !== "loading") safeSuggest();
-  
-  
-    var b = document.getElementById("suggest-meals");
-    if (b) b.onclick = safeSuggest;
-  });
-})();
-</script>
 </body>
 </html>
-<style>
-  .suggest-btn, .reset-btn, .upload-btn, #add-meal-form button {
-    box-shadow: 0 1px 2px rgba(0,0,0,.18);
-  }
-  .suggest-btn:hover, .reset-btn:hover, .upload-btn:hover { opacity: .9; }
-</style>
 <script>
 (function(){
-  function safeSuggest(){
-    try {
-      if (typeof generateSuggestions === 'function') {
-        generateSuggestions();
-      } else {
-        console.warn('[AA] generateSuggestions not found');
-      }
-    } catch(e){ console.error('[AA] Suggest error', e); }
-  }
-  function wireOnce(){
-    const s = document.getElementById('suggest-meals');
-    if (s && !s.dataset.caj){ s.dataset.caj='1'; s.addEventListener('click', ()=>{ flash(s); safeSuggest(); }); }
-    const r = document.getElementById('reset-meals');
-    if (r && !r.dataset.caj){ r.dataset.caj='1'; r.addEventListener('click', ()=>{ flash(r); console.log('[AA] Reset clicked'); }); }
-    const sugRoot = document.getElementById('suggestions-list') || document;
-    if (!sugRoot.dataset.caj){ 
-      sugRoot.dataset.caj='1';
-      sugRoot.addEventListener('click', (e)=>{
-        const b = e.target.closest('button'); if(!b) return;
-        if (/^(Add|ADD)/.test((b.textContent||'').trim())) { flash(b); console.log('[AA] Add clicked:', (b.textContent||'').trim()); }
-      });
-    }
-  }
-  // Run once now and once on DOM ready
-  if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
-})();
-</script>
-<script>
-(function(){
-  // Fallbacks to prevent reference errors in suggestor
-  window.cat = window.cat || {
-    Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
-    Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-    Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
-    Snack:     ["Apple slices","Yogurt","Broth"]
-  };
-  // Minimal base plan so suggestor logic that references it does not crash
-  window.basePlan = window.basePlan || {
-    date: null,
-    meals: [
-      { name: "Breakfast", time: "08:00", text: "Oatmeal with fruit" },
-      { name: "Lunch",     time: "12:00", text: "Turkey & cheese sandwich" },
-      { name: "Dinner",    time: "18:00", text: "Chicken stir fry" }
-    ],
-    snacks: { times: ["10:00","15:00"], text: "Yogurt; apple slices; broth" },
-    restrictions: ""
-  };
-
-  function safeSuggest(){
-    try {
-      if (typeof generateSuggestions === 'function') {
-        generateSuggestions();
-      } else {
-        console.warn('[AA] generateSuggestions not found');
-      }
-    } catch(e){ console.error('[AA] Suggest error', e); }
-  }
-  function markOnce(el){
-    if (!el) return false;
-    try {
-      if (!el.dataset) el.dataset = {};
-      if (el.dataset.caj) return false;
-      el.dataset.caj = '1';
-      return true;
-    } catch(_) { return true; }
-  }
-  function wireOnce(){
-    const s = document.getElementById('suggest-meals');
-    if (markOnce(s)){ s && s.addEventListener('click', ()=>{ flash(s); safeSuggest(); }); }
-    const r = document.getElementById('reset-meals');
-    if (markOnce(r)){ r && r.addEventListener('click', ()=>{ flash(r); console.log('[AA] Reset clicked'); }); }
-
-    const sugRoot = document.getElementById('suggestions-list') || document;
-    if (markOnce(sugRoot)){
-      sugRoot.addEventListener('click', (e)=>{
-        const b = e.target && e.target.closest ? e.target.closest('button') : null;
-        if(!b) return;
-        const txt = (b.textContent||'').trim();
-        if (/^(Add|ADD)/.test(txt)) { flash(b); console.log('[AA] Add clicked:', txt); }
-      });
-    }
-  }
-  if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
-})();
-</script>
-<script>
-(function(){
-  const S = document.getElementById('aa-status-text');
-  function setStatus(txt, ok){ if(S){ S.textContent = txt; S.style.color = ok? '#9f9' : '#ffb'; } }
-  // Safe fallbacks so suggestor code can run
-  window.cat = window.cat || {
-    Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
-    Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-    Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
-    Snack:     ["Apple slices","Yogurt","Broth"]
-  };
-  window.basePlan = window.basePlan || {
-    date: null,
-    meals: [
-      { name: "Breakfast", time: "08:00", text: "Oatmeal with fruit" },
-      { name: "Lunch",     time: "12:00", text: "Turkey & cheese sandwich" },
-      { name: "Dinner",    time: "18:00", text: "Chicken stir fry" }
-    ],
-    snacks: { times: ["10:00","15:00"], text: "Yogurt; apple slices; broth" },
-    restrictions: ""
-  };
-
-  function safeSuggest(){
-    try{
-      if(typeof generateSuggestions === 'function'){
-        setStatus('Suggesting meals…', true);
-        generateSuggestions();
-        setStatus('Suggestions rendered (click Suggest to refresh).', true);
-      }else{
-        setStatus('generateSuggestions not found. Will retry on ready.', false);
-      }
-    }catch(e){
-      setStatus('Suggest error: '+ (e && e.message ? e.message : e), false);
-      console.error('[AA] Suggest error', e);
-    }
-  }
-
-  function wireOnce(){
-    const s = document.getElementById('suggest-meals');
-    if (s && !s.dataset) s.dataset = {};
-    const r = document.getElementById('reset-meals');
-    if (r && !r.dataset) r.dataset = {};
-  }
-
-  if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
-})();
-</script>
-<script>
-(function(){
-  // Safe fallbacks so suggestor never crashes
-  window.cat = window.cat || {
-    Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
-    Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-    Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
-    Snack:     ["Apple slices","Yogurt","Broth"]
-  };
-  window.basePlan = window.basePlan || {
-    date: null,
-    meals: [
-      { name: "Breakfast", time: "08:00", text: "Oatmeal with fruit" },
-      { name: "Lunch",     time: "12:00", text: "Turkey & cheese sandwich" },
-      { name: "Dinner",    time: "18:00", text: "Chicken stir fry" }
-    ],
-    snacks: { times: ["10:00","15:00"], text: "Yogurt; apple slices; broth" },
-    restrictions: ""
-  };
-
-  function flash(el){ try{ el && el.classList && (el.classList.add('btn-clicked'), setTimeout(()=>el.classList.remove('btn-clicked'),120)); }catch(_){} }
-  function safeSuggest(){
-    try{
-      if(typeof generateSuggestions === 'function'){
-        console.log('[CAj] Suggest triggered');
-        generateSuggestions();
-      } else {
-        console.warn('[CAj] generateSuggestions not found yet');
-      }
-    }catch(e){ console.error('[CAj] Suggest error', e); }
-  }
-  function markOnce(el){
-    if(!el) return false;
-    try { el.dataset = el.dataset || {}; if(el.dataset.caj) return false; el.dataset.caj='1'; return true; }
-    catch(_){ return true; }
-  }
-  function wireOnce(){
-    const s = document.getElementById('suggest-meals');
-    if (markOnce(s)){ s && s.addEventListener('click', ()=>{ flash(s); safeSuggest(); }); }
-    const r = document.getElementById('reset-meals');
-    if (markOnce(r)){ r && r.addEventListener('click', ()=>{ flash(r); console.log('[CAj] Reset clicked'); }); }
-    const sugRoot = document.getElementById('suggestions-list') || document;
-    if (markOnce(sugRoot)){
-      sugRoot.addEventListener('click', (e)=>{
-        const b = e.target && e.target.closest ? e.target.closest('button') : null;
-        if(!b) return;
-        const txt = (b.textContent||'').trim();
-        if (/^(Add|ADD)/.test(txt)) { flash(b); console.log('[CAj] Add clicked:', txt); }
-      });
-    }
-  }
-  if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
-})();
-</script>
-<style>
-  .btn-clicked { transform: scale(.97); transition: transform .06s ease; }
-  .suggest-btn, .reset-btn, .upload-btn, #add-meal-form button {
-    cursor: pointer; transition: transform .06s ease, opacity .12s ease; box-shadow: 0 1px 2px rgba(0,0,0,.18);
-  }
-  .suggest-btn:hover, .reset-btn:hover, .upload-btn:hover { opacity:.9; }
-</style>
-<script>
-(function(){
+  // Fallbacks to prevent reference errors in universal-suggestor.js
   window.cat = window.cat || {
     Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
     Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
@@ -934,14 +702,18 @@ async function parseBaseMealFile(file, callback) {
   function bindOnce(){
     var s = document.getElementById('suggest-meals');
     if (s) {
-      if (!s.dataset) s.dataset = {};
-      if (!s.dataset.caj) {
-        s.dataset.caj = '1';
-        s.addEventListener('click', function(){ try{ if(typeof generateSuggestions==='function'){ generateSuggestions(); } }catch(_){}; });
+      try { s.dataset = s.dataset || {}; } catch(_) {}
+      if (!s.dataset || !s.dataset.caj) {
+        if (s.dataset) s.dataset.caj = '1';
+        s.addEventListener('click', function(){
+          try { if (typeof generateSuggestions === 'function') { generateSuggestions(); } } catch(_) {}
+        });
       }
     }
   }
-  function runOnce(){ try{ if(typeof generateSuggestions==='function'){ generateSuggestions(); } }catch(_){} }
+  function runOnce(){
+    try { if (typeof generateSuggestions === 'function') { generateSuggestions(); } } catch(_) {}
+  }
 
   if (document.readyState !== 'loading'){ bindOnce(); runOnce(); }
   document.addEventListener('DOMContentLoaded', function(){ bindOnce(); runOnce(); });

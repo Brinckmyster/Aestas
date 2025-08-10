@@ -6,6 +6,9 @@
     <title>Meal Planner - Academic Allies</title>
 </head>
 <body>
+<div id="aa-status" style="position:sticky;top:0;z-index:9999;background:#111;color:#fff;padding:.4rem .6rem;font:12px/1.2 system-ui;border-bottom:1px solid #333">
+  <span>AA Status:</span> <span id="aa-status-text">initializing…</span>
+</div>
 <div id="shared-header-container"></div>
 <script>
 function getPlannedMeals(){ try{return JSON.parse(localStorage.getItem('plannedMeals')||'[]');}catch(e){return[];} }
@@ -808,6 +811,56 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   }
+  if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
+  document.addEventListener('DOMContentLoaded', ()=>{ wireOnce(); safeSuggest(); });
+})();
+</script>
+<script>
+(function(){
+  const S = document.getElementById('aa-status-text');
+  function setStatus(txt, ok){ if(S){ S.textContent = txt; S.style.color = ok? '#9f9' : '#ffb'; } }
+  // Safe fallbacks so suggestor code can run
+  window.cat = window.cat || {
+    Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
+    Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
+    Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
+    Snack:     ["Apple slices","Yogurt","Broth"]
+  };
+  window.basePlan = window.basePlan || {
+    date: null,
+    meals: [
+      { name: "Breakfast", time: "08:00", text: "Oatmeal with fruit" },
+      { name: "Lunch",     time: "12:00", text: "Turkey & cheese sandwich" },
+      { name: "Dinner",    time: "18:00", text: "Chicken stir fry" }
+    ],
+    snacks: { times: ["10:00","15:00"], text: "Yogurt; apple slices; broth" },
+    restrictions: ""
+  };
+
+  function safeSuggest(){
+    try{
+      if(typeof generateSuggestions === 'function'){
+        setStatus('Suggesting meals…', true);
+        generateSuggestions();
+        setStatus('Suggestions rendered (click Suggest to refresh).', true);
+      }else{
+        setStatus('generateSuggestions not found. Will retry on ready.', false);
+      }
+    }catch(e){
+      setStatus('Suggest error: '+ (e && e.message ? e.message : e), false);
+      console.error('[AA] Suggest error', e);
+    }
+  }
+
+  function wireOnce(){
+    const s = document.getElementById('suggest-meals');
+    if (s && !s.dataset) s.dataset = {};
+    if (s && !s.dataset.caj){ s.dataset.caj='1'; s.addEventListener('click', ()=>{ s.classList.add('btn-clicked'); setTimeout(()=>s.classList.remove('btn-clicked'),120); safeSuggest(); }); }
+    const r = document.getElementById('reset-meals');
+    if (r && !r.dataset) r.dataset = {};
+    if (r && !r.dataset.caj){ r.dataset.caj='1'; r.addEventListener('click', ()=>{ r.classList.add('btn-clicked'); setTimeout(()=>r.classList.remove('btn-clicked'),120); setStatus('Reset clicked', true); }); }
+  }
+
   if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
   document.addEventListener('DOMContentLoaded', ()=>{ wireOnce(); safeSuggest(); });
 })();

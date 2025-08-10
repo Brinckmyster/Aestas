@@ -365,7 +365,6 @@ function generateSuggestions(){
         wrap.appendChild(opts);
         list.appendChild(wrap);
       });
-  }catch(e){
     const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; }
   }
 }
@@ -660,16 +659,6 @@ async function parseBaseMealFile(file, callback) {
 <!-- CAJ-ANCHOR:MODALS -->
 <script>(function(){
   try{ if(typeof generateSuggestions==="function"){ generateSuggestions(); } }catch(e){}
-  var b=document.getElementById("suggest-meals");
-  if(b){ b.onclick=function(){ try{ generateSuggestions(); }catch(e){} }; }
-});</script>
-<script>(function(){
-  window.cat = window.cat || {
     Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
     Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
     Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
-    Snack:["Apple slices","Yogurt","Broth"]
-  };
-})();</script>
-</body>
-</html>

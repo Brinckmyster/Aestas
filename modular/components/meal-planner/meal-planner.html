@@ -680,4 +680,26 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- END CAj ONE-MODAL PATCH -->
 <!-- CAJ-ANCHOR:MODALS -->
 </body>
+<script>
+(function(){
+  if(!window.cat){
+    window.cat = {
+      Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
+      Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
+      Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
+      Snack:     ["Apple slices","Yogurt","Broth"]
+    };
+  }
+  function safeSuggest(){
+    try { if (typeof generateSuggestions === "function") { generateSuggestions(); } } catch(e) {}
+  }
+  if (document.readyState !== "loading") safeSuggest();
+  document.addEventListener("DOMContentLoaded", safeSuggest);
+  document.addEventListener("DOMContentLoaded", function(){
+    var b = document.getElementById("suggest-meals");
+    if (b) b.onclick = safeSuggest;
+  });
+})();
+</script>
+</body>
 </html>

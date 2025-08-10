@@ -611,7 +611,6 @@ async function parseBaseMealFile(file, callback) {
 
 <script>window.modular=window.modular||{};</script>
 <script>(function(){window.cat=window.cat||{Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],Snack:["Apple slices","Yogurt","Broth"]};})();</script>
-<script src="/Academic-Allies/modular/components/meal-planner/universal-suggestor.js"></script>
 
 
 
@@ -641,3 +640,6 @@ async function parseBaseMealFile(file, callback) {
 <script>(function(){const b=document.getElementById('show-plan-template');if(b){b.onclick=()=>{document.getElementById('plan-template-modal').style.display='block';}}const c=document.getElementById('close-template-modal');if(c){c.onclick=()=>{document.getElementById('plan-template-modal').style.display='none';}}const f=document.getElementById('template-form');if(f){f.onsubmit=function(e){e.preventDefault();const snackTimes=(this.snack_times.value||'').split(',').map(s=>s.trim()).filter(Boolean);const plan={date:this.plandate.value||null,meals:[{name:'Breakfast',time:this.breakfast_time.value||'08:00',text:this.breakfast.value||'Oatmeal with fruit'},{name:'Lunch',time:this.lunch_time.value||'12:00',text:this.lunch.value||'Turkey & cheese sandwich'},{name:'Dinner',time:this.dinner_time.value||'18:00',text:this.dinner.value||'Chicken stir fry'}],snacks:{times:snackTimes,text:this.snacks.value||'Yogurt; apple slices; broth'},restrictions:this.restrictions.value||''};localStorage.setItem('simpleMealPlan',JSON.stringify(plan));alert("Plan saved! Click 'Suggest Meals' to apply it.");document.getElementById('plan-template-modal').style.display='none';};}})();</script>
 <!-- END CAj ONE-MODAL PATCH -->
 <!-- CAJ-ANCHOR:MODALS -->
+<script src="/Academic-Allies/modular/components/meal-planner/bootstrap-suggestor.js"></script>
+</body>
+</html>

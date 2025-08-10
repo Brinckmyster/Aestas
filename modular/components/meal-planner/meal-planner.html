@@ -692,6 +692,13 @@ window.cat = window.cat || {
 };
 </script>
 <script>
+
+  try { if (typeof generateSuggestions === "function") { generateSuggestions(); } } catch(e) {}
+  var b = document.getElementById("suggest-meals");
+  if (b) { b.onclick = function(){ try { generateSuggestions(); } catch(e){} }; }
+});
+</script>
+<script>
 document.addEventListener("DOMContentLoaded", function(){
   try { if (typeof generateSuggestions === "function") { generateSuggestions(); } } catch(e) {}
   var b = document.getElementById("suggest-meals");

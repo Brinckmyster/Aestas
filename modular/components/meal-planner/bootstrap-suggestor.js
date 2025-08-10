@@ -34,3 +34,4 @@ window.cat = window.cat || {
     load();
   }
 })();
+window.components = window.components || (window.modular && window.modular.components) || {};

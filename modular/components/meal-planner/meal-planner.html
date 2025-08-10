@@ -684,7 +684,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- CAJ-ANCHOR:MODALS -->
 <script>
 </script>
-window.cat = window.cat || {
   Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
   Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
   Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
@@ -704,6 +703,14 @@ document.addEventListener("DOMContentLoaded", function(){
   var b = document.getElementById("suggest-meals");
   if (b) { b.onclick = function(){ try { generateSuggestions(); } catch(e){} }; }
 });
+</script>
+<script>
+if(!window.cat) window.cat={
+  Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt"],
+  Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
+  Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
+  Snack:["Apple slices","Yogurt","Broth"]
+};
 </script>
 </body>
 </html>

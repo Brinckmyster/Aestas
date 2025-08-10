@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Planner - Academic Allies</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ctext y=%2714%27 font-size=%2714%27%3E🍽%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 <div id="shared-header-container"></div>
@@ -31,6 +30,7 @@ function resetPlannedMeals(){ setPlannedMeals([]); renderPlannedMeals(); }
   }
   const r=document.getElementById('reset-plan'); if(r){ r.onclick=resetPlannedMeals; }
   renderPlannedMeals();
+});
 
 // Auto-load shared header from modular repo
 fetch('../../shared-header.html')
@@ -39,7 +39,7 @@ fetch('../../shared-header.html')
         document.getElementById('shared-header-container').innerHTML = html;
     })
     .catch(error => console.log('Header not found, continuing without navigation'));
-document.addEventListener("DOMContentLoaded",function(){ try{ if(typeof generateSuggestions==="function"){ generateSuggestions(); } }catch(e){} });
+</script>
 
 <!-- Load pdf.js from CDN for PDF parsing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
@@ -291,7 +291,7 @@ function renderMeals() {
 }
 
 function renderSuggestions(suggestions) {
-    list = document.getElementById('suggestion-list');
+    const list = document.getElementById('suggestion-list');
     list.innerHTML = '';
     suggestions.forEach(meal => {
         const div = document.createElement('div');
@@ -349,9 +349,17 @@ function generateSuggestions(){
     const slots=[]; if(plan&&Array.isArray(plan.meals)){ for(const m of plan.meals) slots.push({kind:m.name,time:m.time||'',want:m.text||''}); } else { slots.push({kind:'Breakfast',time:'08:00'},{kind:'Lunch',time:'12:00'},{kind:'Dinner',time:'18:00'}); }
     const snackTimes=(plan&&plan.snacks&&Array.isArray(plan.snacks.times))?plan.snacks.times:[]; for(const t of snackTimes) slots.push({kind:'Snack',time:t, want:(plan&&plan.snacks&&plan.snacks.text)||''});
     const sugg=slots.map(s=>{ const u=[...new Set(cat[s.kind]||cat.Snack)]; return {kind:s.kind,time:s.time,options:u.slice(0,3)}; });
-    list=document.getElementById('suggestions-list'); if(list){ list.innerHTML=''; sugg.forEach(s=>{ const w=document.createElement('div'); w.style.margin='0.5em 0'; const t=document.createElement('div'); t.innerHTML='<b>'+ (s.time?(s.time+' · '):'') + s.kind + '</b>'; w.appendChild(t); const o=document.createElement('div'); s.options.forEach(opt=>{ const b=document.createElement('button'); b.textContent='Add: '+opt; b.style.marginRight='0.5em'; b.onclick=()=>addPlannedMeal(s.kind,s.time,opt); o.appendChild(b); }); w.appendChild(o); list.appendChild(w); }); }
-  }catch(e){ list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; } }
+    const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML=''; sugg.forEach(s=>{ const w=document.createElement('div'); w.style.margin='0.5em 0'; const t=document.createElement('div'); t.innerHTML='<b>'+ (s.time?(s.time+' · '):'') + s.kind + '</b>'; w.appendChild(t); const o=document.createElement('div'); s.options.forEach(opt=>{ const b=document.createElement('button'); b.textContent='Add: '+opt; b.style.marginRight='0.5em'; b.onclick=()=>addPlannedMeal(s.kind,s.time,opt); o.appendChild(b); }); w.appendChild(o); list.appendChild(w); }); }
+  }catch(e){ const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; } }
 }
+catch(e){}
+    const hasGastro=(plan&&plan.restrictions||'').toLowerCase().includes('gastro');
+    const soft=hasGastro?['Broth with soft noodles','Smooth yogurt with honey','Mashed potatoes (smooth)','Scrambled eggs (soft)','Thin cream of wheat']:[];
+    const cat={Breakfast:['Oatmeal with fruit','Scrambled eggs and toast','Greek yogurt with granola',...soft],
+               Lunch:['Turkey & cheese sandwich','Chicken salad wrap','Soup and crackers',...soft],
+               Dinner:['Chicken stir fry','Rice and beans','Pasta with marinara',...soft],
+               Snack:['Apple slices','Yogurt','Broth','Banana','Cheese and crackers',...soft]};
+    const slots=[];
     if(plan&&Array.isArray(plan.meals)){ for(const m of plan.meals) slots.push({kind:m.name,time:m.time||'',want:m.text||''}); }
     else { slots.push({kind:'Breakfast',time:'08:00'},{kind:'Lunch',time:'12:00'},{kind:'Dinner',time:'18:00'}); }
     const snackTimes=(plan&&plan.snacks&&Array.isArray(plan.snacks.times))?plan.snacks.times:[];
@@ -359,7 +367,7 @@ function generateSuggestions(){
 
     const sugg=slots.map(s=>{ const u=[...new Set(cat[s.kind]||cat.Snack)]; return {kind:s.kind,time:s.time,options:u.slice(0,3)}; });
 
-    list=document.getElementById('suggestions-list');
+    const list=document.getElementById('suggestions-list');
     if(list){
       list.innerHTML='';
       sugg.forEach(s=>{
@@ -376,8 +384,8 @@ function generateSuggestions(){
         list.appendChild(wrap);
       });
     }
-0
-    list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; }
+  }catch(e){
+    const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; }
   }
 }
 
@@ -669,50 +677,18 @@ async function parseBaseMealFile(file, callback) {
 <script>(function(){const b=document.getElementById('show-plan-template');if(b){b.onclick=()=>{document.getElementById('plan-template-modal').style.display='block';}}const c=document.getElementById('close-template-modal');if(c){c.onclick=()=>{document.getElementById('plan-template-modal').style.display='none';}}const f=document.getElementById('template-form');if(f){f.onsubmit=function(e){e.preventDefault();const snackTimes=(this.snack_times.value||'').split(',').map(s=>s.trim()).filter(Boolean);const plan={date:this.plandate.value||null,meals:[{name:'Breakfast',time:this.breakfast_time.value||'08:00',text:this.breakfast.value||'Oatmeal with fruit'},{name:'Lunch',time:this.lunch_time.value||'12:00',text:this.lunch.value||'Turkey & cheese sandwich'},{name:'Dinner',time:this.dinner_time.value||'18:00',text:this.dinner.value||'Chicken stir fry'}],snacks:{times:snackTimes,text:this.snacks.value||'Yogurt; apple slices; broth'},restrictions:this.restrictions.value||''};localStorage.setItem('simpleMealPlan',JSON.stringify(plan));alert("Plan saved! Click 'Suggest Meals' to apply it.");document.getElementById('plan-template-modal').style.display='none';};}})();</script>
 <!-- END CAj ONE-MODAL PATCH -->
 <!-- CAJ-ANCHOR:MODALS -->
-<script>
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-  try { if (typeof generateSuggestions === "function") { generateSuggestions(); } } catch(e) {}
-  var b = document.getElementById("suggest-meals");
-  if (b) { b.onclick = function(){ try { generateSuggestions(); } catch(e){} }; }
-});
-</script>
-<script>
-(function(){
-  window.basePlan = window.basePlan || {
-    date:null,
-    meals:[
-      {name:"Breakfast",time:"08:00",text:"Oatmeal with fruit"},
-      {name:"Lunch",time:"12:00",text:"Turkey & cheese sandwich"},
-      {name:"Dinner",time:"18:00",text:"Chicken stir fry"}
-    ],
-    snacks:{times:["10:00","15:00"],text:"Yogurt; apple slices; broth"},
-    restrictions:""
-})();
-</script>
-</script>
-<script>
-    Snack:["Apple slices","Yogurt","Broth"]
-})();
-</script>
-<script>
-(function(){
+<script>(function(){
   window.cat = window.cat || {
     Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
     Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
     Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
     Snack:["Apple slices","Yogurt","Broth"]
   };
-})();
-</script>
-<script>
-window.cat = window.cat || {
-  Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
-  Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-  Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
-  Snack:     ["Apple slices","Yogurt","Broth"]
-};
-</script>
+})();</script>
+<script>document.addEventListener("DOMContentLoaded",function(){
+  try{ if(typeof generateSuggestions==="function"){ generateSuggestions(); } }catch(e){}
+  var b=document.getElementById("suggest-meals");
+  if(b){ b.onclick=function(){ try{ generateSuggestions(); }catch(e){} }; }
+});</script>
 </body>
 </html>

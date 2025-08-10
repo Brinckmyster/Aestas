@@ -43,7 +43,33 @@ fetch('../../shared-header.html')
 document.addEventListener("DOMContentLoaded",()=>{ try{ generateSuggestions && generateSuggestions(); }catch(e){} });
 
 <!-- Load pdf.js from CDN for PDF parsing -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+function cajAddWithTime(kind, time, text){
+  const t = prompt("Use this time or change it (HH:MM)?", time||"");
+  addPlannedMeal(kind, (t||time||""), text);
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  const list=document.getElementById("suggestions-list"); if(!list) return;
+  const mk=()=>{
+    list.querySelectorAll(".caj-add-hooked").forEach(b=>b.classList.remove("caj-add-hooked"));
+    list.querySelectorAll("button").forEach(b=>{
+      if(b.textContent && b.textContent.startsWith("Add:")){
+        if(!b.classList.contains("caj-add-hooked")){
+          b.classList.add("caj-add-hooked");
+          const wrap=b.closest("div");
+          let kind="Snack", time="";
+          const title=wrap && wrap.previousSibling && wrap.previousSibling.textContent || "";
+          const m=title.match(/^(\d\d:\d\d)\s*·\s*(.*)$/);
+          if(m){ time=m[1]; kind=m[2]; } else { kind=title.replace(/\s*·\s*.*/,).trim()||"Snack"; }
+          const text=b.textContent.replace(/^Add:\s*/,).trim();
+          b.onclick=()=>cajAddWithTime(kind,time,text);
+        }
+      }
+    });
+  };
+  // refresh hooks when suggestions render
+  const mo=new MutationObserver(mk); mo.observe(list,{childList:true,subtree:true}); mk();
+});
+
 
 <section id="meal-planner" class="meal-planner" aria-label="Meal Planner and Suggestion Tool">
     <h2>Meal Planner</h2>

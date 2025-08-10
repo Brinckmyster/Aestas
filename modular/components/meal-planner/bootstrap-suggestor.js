@@ -20,3 +20,4 @@ window.cat = window.cat || {
   s.defer = true;
   document.head.appendChild(s);
 })();
+window.modular.components.mealPlanner = window.modular.components.mealPlanner || {};

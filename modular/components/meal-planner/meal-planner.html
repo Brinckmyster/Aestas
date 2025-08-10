@@ -27,7 +27,6 @@ function renderPlannedMeals(){
 function addPlannedMeal(kind,time,text){ const a=getPlannedMeals(); a.push({kind,time:time||'',text}); setPlannedMeals(a); renderPlannedMeals(); }
 function removePlannedMeal(i){ const a=getPlannedMeals(); if(i>=0&&i<a.length){ a.splice(i,1); setPlannedMeals(a); renderPlannedMeals(); } }
 function resetPlannedMeals(){ setPlannedMeals([]); renderPlannedMeals(); }
-document.addEventListener('DOMContentLoaded', ()=>{
   if(!document.getElementById('planned-meals')){
     const tgt=document.querySelector('main')||document.body; const sec=document.createElement('section');
     sec.innerHTML='<h3>Your Plan</h3><div id="planned-meals"></div><button id="reset-plan">Reset Plan</button>'; tgt.appendChild(sec);
@@ -602,7 +601,6 @@ async function parseBaseMealFile(file, callback) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
     loadMeals();
     loadBaseMeals();
     renderMeals();
@@ -693,8 +691,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }; }
   function safeSuggest(){ try{ if(typeof generateSuggestions==="function"){ generateSuggestions(); } }catch(e){} }
   if(document.readyState!=="loading") safeSuggest();
-  document.addEventListener("DOMContentLoaded", safeSuggest);
-  document.addEventListener("DOMContentLoaded", function(){
     var b=document.getElementById("suggest-meals"); if(b){ b.onclick=safeSuggest; }
   });
 })();
@@ -751,7 +747,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   // Run once now and once on DOM ready
   if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
-  document.addEventListener('DOMContentLoaded', ()=>{ wireOnce(); safeSuggest(); });
 })();
 </script>
 <script>
@@ -775,11 +770,9 @@ document.addEventListener('DOMContentLoaded', function () {
     restrictions: ""
   };
 
-  function flash(el){ if(!el) return; try{ el.classList.add('btn-clicked'); setTimeout(()=>el.classList.remove('btn-clicked'),120); }catch(_){} }
   function safeSuggest(){
     try {
       if (typeof generateSuggestions === 'function') {
-        console.log('[AA] Suggest triggered');
         generateSuggestions();
       } else {
         console.warn('[AA] generateSuggestions not found');
@@ -812,7 +805,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
   if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
-  document.addEventListener('DOMContentLoaded', ()=>{ wireOnce(); safeSuggest(); });
 })();
 </script>
 <script>
@@ -855,13 +847,72 @@ document.addEventListener('DOMContentLoaded', function () {
   function wireOnce(){
     const s = document.getElementById('suggest-meals');
     if (s && !s.dataset) s.dataset = {};
-    if (s && !s.dataset.caj){ s.dataset.caj='1'; s.addEventListener('click', ()=>{ s.classList.add('btn-clicked'); setTimeout(()=>s.classList.remove('btn-clicked'),120); safeSuggest(); }); }
     const r = document.getElementById('reset-meals');
     if (r && !r.dataset) r.dataset = {};
-    if (r && !r.dataset.caj){ r.dataset.caj='1'; r.addEventListener('click', ()=>{ r.classList.add('btn-clicked'); setTimeout(()=>r.classList.remove('btn-clicked'),120); setStatus('Reset clicked', true); }); }
   }
 
+  if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
+})();
+</script>
+<script>
+(function(){
+  // Safe fallbacks so suggestor never crashes
+  window.cat = window.cat || {
+    Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
+    Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
+    Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
+    Snack:     ["Apple slices","Yogurt","Broth"]
+  };
+  window.basePlan = window.basePlan || {
+    date: null,
+    meals: [
+      { name: "Breakfast", time: "08:00", text: "Oatmeal with fruit" },
+      { name: "Lunch",     time: "12:00", text: "Turkey & cheese sandwich" },
+      { name: "Dinner",    time: "18:00", text: "Chicken stir fry" }
+    ],
+    snacks: { times: ["10:00","15:00"], text: "Yogurt; apple slices; broth" },
+    restrictions: ""
+  };
+
+  function flash(el){ try{ el && el.classList && (el.classList.add('btn-clicked'), setTimeout(()=>el.classList.remove('btn-clicked'),120)); }catch(_){} }
+  function safeSuggest(){
+    try{
+      if(typeof generateSuggestions === 'function'){
+        console.log('[CAj] Suggest triggered');
+        generateSuggestions();
+      } else {
+        console.warn('[CAj] generateSuggestions not found yet');
+      }
+    }catch(e){ console.error('[CAj] Suggest error', e); }
+  }
+  function markOnce(el){
+    if(!el) return false;
+    try { el.dataset = el.dataset || {}; if(el.dataset.caj) return false; el.dataset.caj='1'; return true; }
+    catch(_){ return true; }
+  }
+  function wireOnce(){
+    const s = document.getElementById('suggest-meals');
+    if (markOnce(s)){ s && s.addEventListener('click', ()=>{ flash(s); safeSuggest(); }); }
+    const r = document.getElementById('reset-meals');
+    if (markOnce(r)){ r && r.addEventListener('click', ()=>{ flash(r); console.log('[CAj] Reset clicked'); }); }
+    const sugRoot = document.getElementById('suggestions-list') || document;
+    if (markOnce(sugRoot)){
+      sugRoot.addEventListener('click', (e)=>{
+        const b = e.target && e.target.closest ? e.target.closest('button') : null;
+        if(!b) return;
+        const txt = (b.textContent||'').trim();
+        if (/^(Add|ADD)/.test(txt)) { flash(b); console.log('[CAj] Add clicked:', txt); }
+      });
+    }
+  }
   if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
   document.addEventListener('DOMContentLoaded', ()=>{ wireOnce(); safeSuggest(); });
 })();
 </script>
+<style>
+  .btn-clicked { transform: scale(.97); transition: transform .06s ease; }
+  .suggest-btn, .reset-btn, .upload-btn, #add-meal-form button {
+    cursor: pointer; transition: transform .06s ease, opacity .12s ease; box-shadow: 0 1px 2px rgba(0,0,0,.18);
+  }
+  .suggest-btn:hover, .reset-btn:hover, .upload-btn:hover { opacity:.9; }
+</style>

@@ -38,16 +38,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 fetch('../../shared-header.html')
     .then(response => response.text())
     .then(html => {
-        document.getElementById('shared-header-container').innerHTML = html;
-    })
-    .catch(error => console.log('Header not found, continuing without navigation'));
-
-<!-- Load pdf.js from CDN for PDF parsing -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-
-<section id="meal-planner" class="meal-planner" aria-label="Meal Planner and Suggestion Tool">
-    <h2>Meal Planner</h2>
-    <div class="meal-upload">
         <label for="base-meal-file" class="upload-label">Upload Base Meal Plan:</label>
         <input type="file" id="base-meal-file" accept=".json,.txt,.csv,.pdf" aria-label="Upload base meal plan" />
         <button type="button" id="load-base-meal" class="upload-btn">Load Base Plan</button>
@@ -692,19 +682,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+
   try { if (typeof generateSuggestions === "function") { generateSuggestions(); } } catch(e) {}
   var b = document.getElementById("suggest-meals");
   if (b) { b.onclick = function(){ try { generateSuggestions(); } catch(e){} }; }
 });
-</script>
-<script>
-if(!window.cat) window.cat={
-  Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt"],
-  Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-  Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
-  Snack:["Apple slices","Yogurt","Broth"]
-};
-</script>
-</body>
 </html>
+</script>

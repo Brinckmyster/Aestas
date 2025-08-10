@@ -351,7 +351,6 @@ function generateSuggestions(){
     const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML=''; sugg.forEach(s=>{ const w=document.createElement('div'); w.style.margin='0.5em 0'; const t=document.createElement('div'); t.innerHTML='<b>'+ (s.time?(s.time+' · '):'') + s.kind + '</b>'; w.appendChild(t); const o=document.createElement('div'); s.options.forEach(opt=>{ const b=document.createElement('button'); b.textContent='Add: '+opt; b.style.marginRight='0.5em'; b.onclick=()=>addPlannedMeal(s.kind,s.time,opt); o.appendChild(b); }); w.appendChild(o); list.appendChild(w); }); }
   }catch(e){ const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; } }
 }
-catch(e){}
     if(plan&&Array.isArray(plan.meals)){ for(const m of plan.meals) slots.push({kind:m.name,time:m.time||'',want:m.text||''}); }
     else { slots.push({kind:'Breakfast',time:'08:00'},{kind:'Lunch',time:'12:00'},{kind:'Dinner',time:'18:00'}); }
     const snackTimes=(plan&&plan.snacks&&Array.isArray(plan.snacks.times))?plan.snacks.times:[];
@@ -639,7 +638,7 @@ async function parseBaseMealFile(file, callback) {
 });
 </script>
 
-<script src="universal-suggestor.js"></script>
+<script src="/Academic-Allies/modular/components/meal-planner/universal-suggestor.js"></script>
 
 
 
@@ -685,7 +684,6 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 <script>
 (function(){
-  window.cat = window.cat || {
     Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
     Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
     Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
@@ -700,6 +698,16 @@ document.addEventListener("DOMContentLoaded", function(){
     ],
     snacks:{times:["10:00","15:00"],text:"Yogurt; apple slices; broth"},
     restrictions:""
+  };
+})();
+</script>
+<script>
+(function(){
+  window.cat = window.cat || {
+    Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
+    Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
+    Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
+    Snack:["Apple slices","Yogurt","Broth"]
   };
 })();
 </script>

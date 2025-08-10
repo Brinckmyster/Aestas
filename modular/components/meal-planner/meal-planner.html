@@ -58,9 +58,6 @@ fetch('../../shared-header.html')
         <button type="button" id="reset-meals" class="reset-btn" aria-label="Reset daily meals">Reset</button>
         <button type="button" id="suggest-meals" class="suggest-btn" aria-label="Generate meal suggestions">Suggest Meals</button>
     </div>
-<div id="caj-suggest-wrap" style="margin:.5rem 0 0 0;">
-  <button type="button" id="suggest-meals" class="suggest-btn" aria-label="Generate meal suggestions">Suggest Meals</button>
-</div>
     <form id="add-meal-form" class="add-meal-form" autocomplete="off">
         <label for="meal-name">Meal</label>
         <input type="text" id="meal-name" name="meal-name" required aria-required="true" maxlength="40" />
@@ -722,3 +719,43 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 </body>
 </html>
+<style>
+  .suggest-btn, .reset-btn, .upload-btn, #add-meal-form button {
+    cursor: pointer; transition: transform .06s ease, opacity .12s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,.18);
+  }
+  .suggest-btn:hover, .reset-btn:hover, .upload-btn:hover { opacity: .9; }
+  .btn-clicked { transform: scale(.97); }
+</style>
+<script>
+(function(){
+  function flash(el){ if(!el) return; el.classList.add('btn-clicked'); setTimeout(()=>el.classList.remove('btn-clicked'),120); }
+  function safeSuggest(){
+    try {
+      if (typeof generateSuggestions === 'function') {
+        console.log('[AA] Suggest triggered');
+        generateSuggestions();
+      } else {
+        console.warn('[AA] generateSuggestions not found');
+      }
+    } catch(e){ console.error('[AA] Suggest error', e); }
+  }
+  function wireOnce(){
+    const s = document.getElementById('suggest-meals');
+    if (s && !s.dataset.caj){ s.dataset.caj='1'; s.addEventListener('click', ()=>{ flash(s); safeSuggest(); }); }
+    const r = document.getElementById('reset-meals');
+    if (r && !r.dataset.caj){ r.dataset.caj='1'; r.addEventListener('click', ()=>{ flash(r); console.log('[AA] Reset clicked'); }); }
+    const sugRoot = document.getElementById('suggestions-list') || document;
+    if (!sugRoot.dataset.caj){ 
+      sugRoot.dataset.caj='1';
+      sugRoot.addEventListener('click', (e)=>{
+        const b = e.target.closest('button'); if(!b) return;
+        if (/^(Add|ADD)/.test((b.textContent||'').trim())) { flash(b); console.log('[AA] Add clicked:', (b.textContent||'').trim()); }
+      });
+    }
+  }
+  // Run once now and once on DOM ready
+  if (document.readyState !== 'loading'){ wireOnce(); safeSuggest(); }
+  document.addEventListener('DOMContentLoaded', ()=>{ wireOnce(); safeSuggest(); });
+})();
+</script>

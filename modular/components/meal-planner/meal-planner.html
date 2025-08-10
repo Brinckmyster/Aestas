@@ -351,7 +351,6 @@ function generateSuggestions(){
     const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML=''; sugg.forEach(s=>{ const w=document.createElement('div'); w.style.margin='0.5em 0'; const t=document.createElement('div'); t.innerHTML='<b>'+ (s.time?(s.time+' · '):'') + s.kind + '</b>'; w.appendChild(t); const o=document.createElement('div'); s.options.forEach(opt=>{ const b=document.createElement('button'); b.textContent='Add: '+opt; b.style.marginRight='0.5em'; b.onclick=()=>addPlannedMeal(s.kind,s.time,opt); o.appendChild(b); }); w.appendChild(o); list.appendChild(w); }); }
   }catch(e){ const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; } }
 }
-    const hasGastro=(plan&&plan.restrictions||'').toLowerCase().includes('gastro');
       sugg.forEach(s=>{
         const wrap=document.createElement('div'); wrap.style.margin='0.5em 0';
         const title=document.createElement('div'); title.innerHTML='<b>'+ (s.time?(s.time+' · '):'') + s.kind + '</b>';
@@ -656,6 +655,3 @@ async function parseBaseMealFile(file, callback) {
 <!-- CAJ-ANCHOR:MODALS -->
 <script>(function(){
   try{ if(typeof generateSuggestions==="function"){ generateSuggestions(); } }catch(e){}
-    Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
-    Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-    Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],

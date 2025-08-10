@@ -375,7 +375,7 @@ function generateSuggestions(){
         list.appendChild(wrap);
       });
     }
-  }catch(e){
+0
     const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; }
   }
 }
@@ -669,11 +669,6 @@ async function parseBaseMealFile(file, callback) {
 <!-- END CAj ONE-MODAL PATCH -->
 <!-- CAJ-ANCHOR:MODALS -->
 <script>
-  Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
-  Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-  Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
-  Snack:["Apple slices","Yogurt","Broth"]
-};
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -684,11 +679,6 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 <script>
 (function(){
-    Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
-    Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-    Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
-    Snack:["Apple slices","Yogurt","Broth"]
-  };
   window.basePlan = window.basePlan || {
     date:null,
     meals:[
@@ -698,6 +688,15 @@ document.addEventListener("DOMContentLoaded", function(){
     ],
     snacks:{times:["10:00","15:00"],text:"Yogurt; apple slices; broth"},
     restrictions:""
+  };
+})();
+</script>
+<script>
+(function(){
+    Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
+    Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
+    Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
+    Snack:["Apple slices","Yogurt","Broth"]
   };
 })();
 </script>

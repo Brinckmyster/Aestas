@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Planner - Academic Allies</title>
-<link rel="icon" href="/Academic-Allies/modular/static/img/favicon.ico">
 </head>
 <body>
 <div id="shared-header-container"></div>
@@ -38,6 +37,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
 fetch('../../shared-header.html')
     .then(response => response.text())
     .then(html => {
+        document.getElementById('shared-header-container').innerHTML = html;
+    })
+    .catch(error => console.log('Header not found, continuing without navigation'));
+</script>
+
+<!-- Load pdf.js from CDN for PDF parsing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+<section id="meal-planner" class="meal-planner" aria-label="Meal Planner and Suggestion Tool">
+    <h2>Meal Planner</h2>
+    <div class="meal-upload">
         <label for="base-meal-file" class="upload-label">Upload Base Meal Plan:</label>
         <input type="file" id="base-meal-file" accept=".json,.txt,.csv,.pdf" aria-label="Upload base meal plan" />
         <button type="button" id="load-base-meal" class="upload-btn">Load Base Plan</button>
@@ -669,23 +679,5 @@ document.addEventListener('DOMContentLoaded', function () {
 <script>(function(){const b=document.getElementById('show-plan-template');if(b){b.onclick=()=>{document.getElementById('plan-template-modal').style.display='block';}}const c=document.getElementById('close-template-modal');if(c){c.onclick=()=>{document.getElementById('plan-template-modal').style.display='none';}}const f=document.getElementById('template-form');if(f){f.onsubmit=function(e){e.preventDefault();const snackTimes=(this.snack_times.value||'').split(',').map(s=>s.trim()).filter(Boolean);const plan={date:this.plandate.value||null,meals:[{name:'Breakfast',time:this.breakfast_time.value||'08:00',text:this.breakfast.value||'Oatmeal with fruit'},{name:'Lunch',time:this.lunch_time.value||'12:00',text:this.lunch.value||'Turkey & cheese sandwich'},{name:'Dinner',time:this.dinner_time.value||'18:00',text:this.dinner.value||'Chicken stir fry'}],snacks:{times:snackTimes,text:this.snacks.value||'Yogurt; apple slices; broth'},restrictions:this.restrictions.value||''};localStorage.setItem('simpleMealPlan',JSON.stringify(plan));alert("Plan saved! Click 'Suggest Meals' to apply it.");document.getElementById('plan-template-modal').style.display='none';};}})();</script>
 <!-- END CAj ONE-MODAL PATCH -->
 <!-- CAJ-ANCHOR:MODALS -->
-<script>
-</script>
-  Breakfast: ["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
-  Lunch:     ["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
-  Dinner:    ["Chicken stir fry","Rice and beans","Pasta with marinara"],
-  Snack:     ["Apple slices","Yogurt","Broth"]
-};
-</script>
-  var b = document.getElementById("suggest-meals");
-  if (b) { b.onclick = function(){ try { generateSuggestions(); } catch(e){} }; }
-});
-</script>
-<script>
-
-  try { if (typeof generateSuggestions === "function") { generateSuggestions(); } } catch(e) {}
-  var b = document.getElementById("suggest-meals");
-  if (b) { b.onclick = function(){ try { generateSuggestions(); } catch(e){} }; }
-});
+</body>
 </html>
-</script>

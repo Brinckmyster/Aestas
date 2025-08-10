@@ -131,3 +131,6 @@ window.components = window.components || (window.modular && window.modular.compo
     }, false);
   });
 })();
+// Compatibility shims for legacy globals used by older suggestor builds
+window.components = window.components || (window.modular && window.modular.components) || {};
+window.meal = window.meal || {};

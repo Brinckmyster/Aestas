@@ -495,3 +495,31 @@ try{ localStorage.setItem('aa_active_studentId','mary'); }catch(_){ }
     window.saveStudentPrefsPatch = window.saveStudentPrefsPatch || (sid, patch)=> dispatchStudentPatch(sid, patch);
   });
 })();
+// Client-side trigger: sends an unauthenticated repository_dispatch request proxy via GitHub's public API is not allowed.
+// Instead, we call a GitHub Pages GitHub API? Not possible without token.
+// SOP-safe approach: Use GitHub's Issue-ops trigger via the repository's public "Issues" webform? Also not ideal.
+// Alternative: Use a GitHub Actions workflow_dispatch via GitHub's UI? Not automatic.
+//
+// Final SOP-compliant approach: Reuse repository_dispatch but relay through a GitHub-hosted endpoint via a public link is not available.
+// Therefore, we implement a minimal GitHub Pages form that posts to a GitHub Action via GitHub Forms isn't supported.
+//
+// Practical solution under SOP: Use a lightweight JSON POST to an external-free endpoint isn't possible.
+//
+// Hence, we pivot: write a tiny JSON file via a standard PR from the client is also not allowed without token.
+//
+// Conclusion: Under SOP, the browser cannot directly trigger GitHub without a token. Use the Actions UI button to fire the bridge manually or rely on local CLI.
+//
+// Provide a visible owner-only info:
+//
+(function infoOnlyOwner(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  function isOwner(){ try { return localStorage.getItem('aa_owner_mode')==='1'; } catch(_){ return false; } }
+  onReady(function(){
+    if(!isOwner()) return;
+    var header = document.querySelector('#shared-header, header, .shared-header, nav') || document.body.firstElementChild || document.body;
+    var info = document.createElement('div');
+    info.style.cssText = 'margin:8px 0; padding:6px 10px; background:#333; color:#fff; border-radius:6px;';
+    info.textContent = 'To update prefs via SOP: Open GitHub > Actions > Dispatch Bridge > Run workflow (workflow_dispatch) with inputs: studentId=mary, patch={"Breakfast":{"Oatmeal (thin)":1}}';
+    header && header.parentNode ? header.parentNode.insertBefore(info, header.nextSibling) : document.body.insertBefore(info, document.body.firstChild);
+  });
+})();

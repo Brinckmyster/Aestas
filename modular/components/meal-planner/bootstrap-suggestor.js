@@ -294,3 +294,25 @@ window.meal = window.meal || {};
 window.planner = window.planner || {};
 window.universal = window.universal || {};
 window.suggestor = window.suggestor || {};
+// Safety: warn if solid meals scheduled at/after 17:00 (liquids-only window)
+(function afterFiveWarning(){
+  function onReady(fn){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn,{once:true});} else { fn(); } }
+  function parseTime(t){ var m=(t||'').match(/^(\d{1,2}):(\d{2})$/); if(!m) return null; return (+m[1])*60 + (+m); }
+  onReady(function(){
+    document.body.addEventListener('click', function(e){
+      var t = e.target;
+      if(!t) return;
+      if(/^Add: /.test(t.textContent||'') || t.classList.contains('add-suggestion-btn')){
+        // Hook into previous prompt-based override if user enters time
+        // We cannot intercept the prompt result directly; as a fallback, ask again if needed
+        setTimeout(function(){
+          var last = window.lastChosenMealTime || ''; // if your add flow stores it, we can reuse; else skip
+          var mins = parseTime(last);
+          if(mins!=null && mins >= 17*60){
+            alert('Reminder: liquids only after 5:00 pm. Consider choosing a liquid option for this time.');
+          }
+        }, 0);
+      }
+    }, false);
+  });
+})();

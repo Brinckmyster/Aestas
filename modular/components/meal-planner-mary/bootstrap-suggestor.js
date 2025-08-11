@@ -372,38 +372,6 @@ try{ localStorage.setItem('aa_active_studentId','mary'); }catch(_){ }
     }catch(_){}
   });
 })();
-// Mary UI badge/banner after shared header
-(function maryUiBannerAfterHeader(){
-  function onReady(fn){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn,{once:true});} else { fn(); } }
-  onReady(function(){
-    try{
-      // Title badge
-      if(document.title && document.title.indexOf("Mary")===-1){
-        document.title = "Mary’s " + document.title.replace(/^Mary’s\s*/,'');
-      }
-      var header = document.querySelector('#shared-header, header, .shared-header, nav') || document.body.firstElementChild || document.body;
-      var banner = document.createElement('div');
-      banner.textContent = "Mary’s Meal Planner — solids at 10:30/1:30/4:30, liquids only after 5pm; soft textures; strict corn/wheat rules.";
-      banner.style.cssText = "background:#5b8; color:#fff; padding:8px 12px; font-weight:600; border-radius:6px; margin:8px 0;";
-      if(header && header.parentNode){
-        header.parentNode.insertBefore(banner, header.nextSibling);
-      } else {
-        document.body.insertBefore(banner, document.body.firstChild);
-      }
-    }catch(_){}
-  });
-})();
-// Ensure Mary page displays times in 12-hour format
-(function twelveHourDisplayMary(){
-  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
-  function to12h(hhmm){
-    var m = (hhmm||'').match(/^(\d{1,2}):(\d{2})$/); if(!m) return hhmm;
-    var h = (+m[1])%24, mi = m, ampm = h>=12?'PM':'AM', h12 = h%12; if(h12===0) h12 = 12;
-    return h12 + ':' + mi + ' ' + ampm;
-  }
-  window.to12h = window.to12h || to12h;
-  onReady(function(){
-    try{
       document.querySelectorAll('.suggestion-time').forEach(function(el){
         var t = (el.textContent||'').trim(); var m = t.match(/(\d{1,2}:\d{2})/);
         if(m){ el.textContent = t.replace(m[1], to12h(m[2])); }
@@ -527,4 +495,22 @@ try{ localStorage.setItem('aa_active_studentId','mary'); }catch(_){ }
 (function scopeMaryOnly(){
   if(!/\/meal-planner-mary\/?$/i.test(location.pathname)) return;
   try{ console.info('[Planner] Mary profile active'); }catch(_){}
+})();
+// Mary banner directly after shared header (precise placement)
+(function maryUiBannerAfterHeader(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  onReady(function(){
+    try{
+      var header = document.querySelector('#shared-header') ||
+                   document.querySelector('header, .shared-header, nav');
+      var banner = document.createElement('div');
+      banner.textContent = "Mary’s Meal Planner — solids at 10:30/1:30/4:30, liquids only after 5pm; soft textures; strict corn/wheat rules.";
+      banner.style.cssText = "background:#2b7c5b; color:#fff; padding:10px 12px; font-weight:700; border-radius:6px; margin:10px 0;";
+      if(header && header.parentNode){
+        header.parentNode.insertBefore(banner, header.nextSibling);
+      } else {
+        document.body.insertBefore(banner, document.body.firstChild);
+      }
+    }catch(_){}
+  });
 })();

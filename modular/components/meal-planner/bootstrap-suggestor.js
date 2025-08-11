@@ -286,3 +286,11 @@ window.components = window.components || (window.modular && window.modular.compo
 window.meal = window.meal || {};
 window.planner = window.planner || {};
 window.universal = window.universal || {};
+// Final legacy safety shims (idempotent)
+window.modular = window.modular || {};
+window.modular.components = window.modular.components || {};
+window.components = window.components || window.modular.components;
+window.meal = window.meal || {};
+window.planner = window.planner || {};
+window.universal = window.universal || {};
+window.suggestor = window.suggestor || {};

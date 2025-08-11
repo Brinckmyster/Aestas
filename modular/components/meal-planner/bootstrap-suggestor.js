@@ -365,3 +365,74 @@ window.suggestor = window.suggestor || {};
     }catch(_){}
   });
 })();
+// Main Planner: standard base (seed only if empty) + 12-hour time display; ensure no Mary bleed
+(function mainStandardBase(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  function to12h(hhmm){
+    var m=(hhmm||'').match(/^(\d{1,2}):(\d{2})$/); if(!m) return hhmm;
+    var h=(+m[1])%24, mi=m, ampm=h>=12?'PM':'AM', h12=h%12||12; return h12+':'+mi+' '+ampm;
+  }
+  onReady(function(){
+    try{
+      // Remove any Mary-only markers just in case
+      if (window.maryTiming) { try{ delete window.maryTiming; } catch(_){ window.maryTiming=undefined; } }
+
+      // Seed a standard plan only if none exists
+      var hasPlan = false;
+      try { hasPlan = !!JSON.parse(localStorage.getItem('simpleMealPlan') || 'null'); } catch(_){}
+      if(!hasPlan){
+        var plan = {
+          date: null,
+          meals: [
+            { name:'Breakfast', time:'08:00', text:'Oatmeal with fruit' },
+            { name:'Lunch',     time:'12:00', text:'Turkey sandwich + veggies' },
+            { name:'Dinner',    time:'18:00', text:'Chicken, rice, and vegetables' }
+          ],
+          snacks: { times:['10:30','15:30'], text:'Fruit; yogurt; nuts; crackers + cheese; hummus + pita' },
+          restrictions: ''
+        };
+        localStorage.setItem('simpleMealPlan', JSON.stringify(plan));
+      }
+
+      // Provide a mainstream catalog (non-gentle, varied, pantry-friendly)
+      var Standard = {
+        Breakfast: [
+          'Oatmeal with fruit','Eggs and toast','Yogurt with granola','Smoothie (fruit + yogurt)','Pancakes (weekend)'
+        ],
+        Lunch: [
+          'Turkey sandwich + veggies','Rice bowl (chicken or beans)','Pasta marinara','Chicken salad wrap','Leftovers'
+        ],
+        Dinner: [
+          'Chicken, rice, and vegetables','Taco night (beef or beans)','Baked pasta','Stir-fry + rice','Sheet pan chicken + potatoes'
+        ],
+        Snack: [
+          'Fruit','Yogurt','Nuts','Crackers + cheese','Hummus + pita','Popcorn'
+        ]
+      };
+      // Initialize or merge without duplicates
+      window.cat = window.cat || {};
+      ['Breakfast','Lunch','Dinner','Snack'].forEach(function(k){
+        var base = Array.isArray(window.cat[k]) ? window.cat[k] : [];
+        var merged = Array.from(new Set([].concat(base, Standard[k]||[])));
+        window.cat[k] = merged;
+      });
+
+      // Convert visible times to 12-hour
+      (function to12hourUi(){
+        try{
+          document.querySelectorAll('.suggestion-time').forEach(function(el){
+            var t=(el.textContent||'').trim(), m=t.match(/(\d{1,2}:\d{2})/); if(m) el.textContent=t.replace(m[1], to12h(m[2]));
+          });
+          document.querySelectorAll('[data-time], .time-label, .meal-time').forEach(function(el){
+            var t=el.getAttribute('data-time') || (el.textContent||'').trim();
+            var m=(t||'').match(/^(\d{1,2}):(\d{2})$/);
+            if(m){ el.setAttribute('data-time-12', to12h(m)); if(/^\d{1,2}:\d{2}$/.test(t)) el.textContent = to12h(t); }
+          });
+        }catch(_){}
+      })();
+
+      // Console tag for clarity
+      try{ console.info('[Planner] Standard profile active'); }catch(_){}
+    }catch(_){}
+  });
+})();

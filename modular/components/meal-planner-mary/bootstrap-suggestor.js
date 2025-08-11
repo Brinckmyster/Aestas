@@ -523,3 +523,8 @@ try{ localStorage.setItem('aa_active_studentId','mary'); }catch(_){ }
     header && header.parentNode ? header.parentNode.insertBefore(info, header.nextSibling) : document.body.insertBefore(info, document.body.firstChild);
   });
 })();
+// Defensive: only run Mary integrations when URL path includes meal-planner-mary
+(function scopeMaryOnly(){
+  if(!/\/meal-planner-mary\/?$/i.test(location.pathname)) return;
+  try{ console.info('[Planner] Mary profile active'); }catch(_){}
+})();

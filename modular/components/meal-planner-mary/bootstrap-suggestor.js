@@ -419,3 +419,19 @@ try{ localStorage.setItem('aa_active_studentId','mary'); }catch(_){ }
     }catch(_){}
   });
 })();
+// Log GitHub dispatch result (owner-only write path)
+(function logDispatchResults(){
+  var orig = window.saveStudentPrefsPatch;
+  if (typeof orig === 'function') {
+    window.saveStudentPrefsPatch = async function(studentId, patch){
+      try{
+        var ok = await orig(studentId, patch);
+        console.info('[Prefs Dispatch]', studentId, ok ? 'OK' : 'Failed');
+        return ok;
+      }catch(e){
+        console.error('[Prefs Dispatch] Error', e && e.message || e);
+        return false;
+      }
+    };
+  }
+})();

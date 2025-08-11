@@ -393,3 +393,29 @@ try{ localStorage.setItem('aa_active_studentId','mary'); }catch(_){ }
     }catch(_){}
   });
 })();
+// Ensure Mary page displays times in 12-hour format
+(function twelveHourDisplayMary(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  function to12h(hhmm){
+    var m = (hhmm||'').match(/^(\d{1,2}):(\d{2})$/); if(!m) return hhmm;
+    var h = (+m[1])%24, mi = m, ampm = h>=12?'PM':'AM', h12 = h%12; if(h12===0) h12 = 12;
+    return h12 + ':' + mi + ' ' + ampm;
+  }
+  window.to12h = window.to12h || to12h;
+  onReady(function(){
+    try{
+      document.querySelectorAll('.suggestion-time').forEach(function(el){
+        var t = (el.textContent||'').trim(); var m = t.match(/(\d{1,2}:\d{2})/);
+        if(m){ el.textContent = t.replace(m[1], to12h(m[2])); }
+      });
+      document.querySelectorAll('[data-time], .time-label, .meal-time').forEach(function(el){
+        var t = el.getAttribute('data-time') || (el.textContent||'').trim();
+        var m = (t||'').match(/^(\d{1,2}):(\d{2})$/);
+        if(m){
+          el.setAttribute && el.setAttribute('data-time-12', to12h(m[0]));
+          if(/^\d{1,2}:\d{2}$/.test(t)) el.textContent = to12h(t);
+        }
+      });
+    }catch(_){}
+  });
+})();

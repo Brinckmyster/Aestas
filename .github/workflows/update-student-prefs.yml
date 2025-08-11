@@ -29,19 +29,14 @@ jobs:
         run: |
           set -e
           echo "$PAYLOAD" > payload.json
-          # Expected payload: { "studentId": "STUDENT_ID", "patch": { ... } }
           SID=$(jq -r '.studentId' payload.json)
           test -n "$SID"
           PATH_JSON="modular/data/prefs/students/${SID}.json"
           jq '.patch' payload.json > patch.json
-
-          # Ensure file exists
           if [ ! -f "$PATH_JSON" ]; then
             mkdir -p "$(dirname "$PATH_JSON")"
             echo '{}' > "$PATH_JSON"
           fi
-
-          # Merge patch into existing JSON (deep merge at top level)
           jq -s '.[0] * .[2]' "$PATH_JSON" patch.json > merged.json
           mv merged.json "$PATH_JSON"
 

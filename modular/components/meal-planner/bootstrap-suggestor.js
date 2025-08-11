@@ -333,3 +333,35 @@ window.suggestor = window.suggestor || {};
     }catch(_){}
   });
 })();
+// Time formatting: display 12-hour instead of 24-hour
+(function twelveHourDisplay(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  function to12h(hhmm){
+    var m = (hhmm||'').match(/^(\d{1,2}):(\d{2})$/); if(!m) return hhmm;
+    var h = (+m[1])%24, mi = m, ampm = h>=12?'PM':'AM', h12 = h%12; if(h12===0) h12 = 12;
+    return h12 + ':' + mi + ' ' + ampm;
+  }
+  // Expose globally for other modules
+  window.to12h = window.to12h || to12h;
+
+  onReady(function(){
+    try{
+      // Rewrite visible times in common locations
+      // 1) Any element with class .suggestion-time
+      document.querySelectorAll('.suggestion-time').forEach(function(el){
+        var t = (el.textContent||'').trim(); var m = t.match(/(\d{1,2}:\d{2})/);
+        if(m){ el.textContent = t.replace(m[1], to12h(m[2])); }
+      });
+      // 2) Common time labels inside planner rows
+      document.querySelectorAll('[data-time], .time-label, .meal-time').forEach(function(el){
+        var t = el.getAttribute('data-time') || (el.textContent||'').trim();
+        var m = (t||'').match(/^(\d{1,2}):(\d{2})$/);
+        if(m){
+          el.setAttribute && el.setAttribute('data-time-12', to12h(m[0]));
+          // If text looks like just HH:MM, replace it
+          if(/^\d{1,2}:\d{2}$/.test(t)) el.textContent = to12h(t);
+        }
+      });
+    }catch(_){}
+  });
+})();

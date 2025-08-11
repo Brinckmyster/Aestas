@@ -37,4 +37,3 @@ function generateSuggestions() {
   }
   renderSuggestions(suggestions);
 }
-EOF

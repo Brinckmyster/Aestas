@@ -134,3 +134,8 @@ window.components = window.components || (window.modular && window.modular.compo
 // Compatibility shims for legacy globals used by older suggestor builds
 window.components = window.components || (window.modular && window.modular.components) || {};
 window.meal = window.meal || {};
+// Legacy global shims (no-op if unused)
+window.planner = window.planner || {};
+// Already added previously, but safe to re-assert:
+window.components = window.components || (window.modular && window.modular.components) || {};
+window.meal = window.meal || {};

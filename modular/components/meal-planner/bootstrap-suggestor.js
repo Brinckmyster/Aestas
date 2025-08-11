@@ -218,3 +218,61 @@ window.meal = window.meal || {};
     }, false);
   });
 })();
+// Simple preference learning: track chosen items per kind; bias future suggestions
+(function preferenceLearning(){
+  var KEY = 'mealPrefStats'; // { Breakfast: { "Oatmeal with fruit": 2, ... }, Lunch: {...}, ... }
+  function loadPrefs(){
+    try { return JSON.parse(localStorage.getItem(KEY) || 'null') || {}; } catch(e){ return {}; }
+  }
+  function savePrefs(p){ try { localStorage.setItem(KEY, JSON.stringify(p)); }catch(e){} }
+  function record(kind, label){
+    if(!kind || !label) return;
+    var p = loadPrefs();
+    p[kind] = p[kind] || {};
+    p[kind][label] = (p[kind][label] || 0) + 1;
+    savePrefs(p);
+  }
+  function biasOptions(kind, options){
+    // Sort options by preference count desc, then by original order
+    var p = loadPrefs()[kind] || {};
+    return options.slice().sort(function(a,b){
+      var da = p[a] || 0, db = p[b] || 0;
+      if(db !== da) return db - da;
+      return 0;
+    });
+  }
+  // Hook Add clicks to record preferences
+  function onReady(fn){
+    if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', fn, {once:true}); } else { fn(); }
+  }
+  onReady(function(){
+    document.body.addEventListener('click', function(e){
+      var t = e.target;
+      if(!t) return;
+      if(/^Add: /.test(t.textContent||'') || t.classList.contains('add-suggestion-btn')){
+        // Find inferred kind and label
+        var container = t.closest('div');
+        var inferredKind = '';
+        var label = (t.textContent||'').replace(/^Add:\s*/,'').trim();
+        if(container){
+          var nameEl = container.querySelector('b, .suggestion-name');
+          if(nameEl){ inferredKind = nameEl.textContent.replace(/\b\d{1,2}:\d{2}\s*[·\-–]\s*/,'').trim(); }
+          // Normalize kind
+          if(/breakfast/i.test(inferredKind)) inferredKind = 'Breakfast';
+          else if(/lunch/i.test(inferredKind)) inferredKind = 'Lunch';
+          else if(/dinner/i.test(inferredKind)) inferredKind = 'Dinner';
+          else if(/snack/i.test(inferredKind)) inferredKind = 'Snack';
+        }
+        record(inferredKind || 'Meal', label || 'Meal');
+      }
+    }, false);
+  });
+
+  // Bias the cat list in-place before our three-per-kind enhancer runs
+  (function biasCatNow(){
+    if(!window.cat) return;
+    ['Breakfast','Lunch','Dinner','Snack'].forEach(function(k){
+      if(Array.isArray(window.cat[k])) window.cat[k] = biasOptions(k, window.cat[k]);
+    });
+  })();
+})();

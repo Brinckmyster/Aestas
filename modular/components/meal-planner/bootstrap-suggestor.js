@@ -276,3 +276,8 @@ window.meal = window.meal || {};
     });
   })();
 })();
+// Legacy shims to prevent ReferenceError from older suggestor paths
+window.universal = window.universal || {};
+window.components = window.components || (window.modular && window.modular.components) || {};
+window.meal = window.meal || {};
+window.planner = window.planner || {};

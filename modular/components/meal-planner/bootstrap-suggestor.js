@@ -315,3 +315,21 @@ window.suggestor = window.suggestor || {};
     }catch(_){}
   });
 })();
+// Enforce standard catalog on main planner (avoid any Mary-specific gentle merges)
+(function enforceStandardCatalogMain(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  onReady(function(){
+    try{
+      if(window.location.pathname.indexOf('/meal-planner/')!==-1){
+        // If a 'gentle' marker exists from Mary logic, strip it
+        if(window.maryTiming){ try{ delete window.maryTiming; }catch(_){ window.maryTiming = undefined; } }
+        // If cat looks overridden, lightly normalize: keep existing entries, but prefer standard list if provided globally
+        if(window.standardCat && typeof window.standardCat === 'object'){
+          ['Breakfast','Lunch','Dinner','Snack'].forEach(function(k){
+            if(Array.isArray(window.standardCat[k])) window.cat[k] = window.standardCat[k].slice();
+          });
+        }
+      }
+    }catch(_){}
+  });
+})();

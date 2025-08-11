@@ -435,3 +435,63 @@ try{ localStorage.setItem('aa_active_studentId','mary'); }catch(_){ }
     };
   }
 })();
+// Owner controls with URL-based token setter (no code edits needed)
+(function ownerControlsUrlSetter(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  function q(name){ try{ return new URLSearchParams(location.search).get(name) || ''; }catch(_){ return ''; } }
+  function isOwner(){ try { return localStorage.getItem('aa_owner_mode')==='1'; } catch(_){ return false; } }
+  function setOwner(v){ try { localStorage.setItem('aa_owner_mode', v?'1':''); } catch(_){ } }
+  function setToken(t){ try { if(t) localStorage.setItem('aa_github_pat', t); } catch(_){ } }
+  function getToken(){ try { return localStorage.getItem('aa_github_pat') || ''; } catch(_){ return ''; } }
+  async function dispatchStudentPatch(studentId, patch){
+    const token = getToken();
+    if(!token){ console.error('No token in localStorage (aa_github_pat)'); return false; }
+    const res = await fetch('https://api.github.com/repos/Brinckmyster/Academic-Allies/dispatches', {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ event_type:'update_student_prefs', client_payload:{ studentId, patch } })
+    });
+    console.info('[Dispatch]', studentId, 'status', res.status);
+    return res.ok;
+  }
+  onReady(function(){
+    // URL activation: ?owner=1 enables owner mode; ?pat=TOKEN sets token locally once
+    var owner = q('owner'), pat = q('pat');
+    if(owner==='1') setOwner(true);
+    if(pat) setToken(pat);
+
+    if(!isOwner()) return;
+
+    // Inject owner controls after shared header
+    try{
+      var header = document.querySelector('#shared-header, header, .shared-header, nav') || document.body.firstElementChild || document.body;
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'margin:8px 0; display:flex; gap:8px; flex-wrap:wrap;';
+      var btnTest = document.createElement('button');
+      btnTest.textContent = 'Owner: Test Prefs Dispatch (Mary)';
+      btnTest.style.cssText = 'padding:6px 10px; font-weight:600; background:#444; color:#fff; border-radius:6px;';
+      btnTest.onclick = function(){
+        dispatchStudentPatch('mary', { Breakfast: { 'Oatmeal (thin)': 1 } }).then(function(ok){
+          alert(ok ? 'Dispatch sent (check Actions)' : 'Dispatch failed (see console)');
+        });
+      };
+      var btnOwner = document.createElement('button');
+      btnOwner.textContent = 'Owner Mode ON';
+      btnOwner.style.cssText = 'padding:6px 10px; background:#2b7; color:#fff; border-radius:6px;';
+      btnOwner.onclick = function(){ setOwner(true); alert('Owner mode enabled.'); };
+
+      var btnSet = document.createElement('button');
+      btnSet.textContent = 'Set Student = mary';
+      btnSet.style.cssText = 'padding:6px 10px; background:#579; color:#fff; border-radius:6px;';
+      btnSet.onclick = function(){ try{ localStorage.setItem('aa_active_studentId','mary'); alert('Student set to mary'); }catch(_){} };
+
+      wrap.appendChild(btnOwner);
+      wrap.appendChild(btnSet);
+      wrap.appendChild(btnTest);
+      header && header.parentNode ? header.parentNode.insertBefore(wrap, header.nextSibling) : document.body.insertBefore(wrap, document.body.firstChild);
+    }catch(e){ console.error(e); }
+
+    // Expose for other flows
+    window.saveStudentPrefsPatch = window.saveStudentPrefsPatch || (sid, patch)=> dispatchStudentPatch(sid, patch);
+  });
+})();

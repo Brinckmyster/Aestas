@@ -1,0 +1,18 @@
+name: Validate Paths
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-doubled-paths:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail on doubled /Academic-Allies/ path
+        run: |
+          set -e
+          if grep -RIn "/Academic-Allies/Academic-Allies/" --include="*.{html,htm,css,js}" .; then
+            echo "::error::Found doubled /Academic-Allies/Academic-Allies/ paths. Fix before merging."
+            exit 1
+          fi

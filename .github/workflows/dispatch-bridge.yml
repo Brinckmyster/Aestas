@@ -1,6 +1,7 @@
 name: Dispatch Bridge
 
 on:
+  workflow_dispatch:
   repository_dispatch:
     types: [student_prefs_request]
 

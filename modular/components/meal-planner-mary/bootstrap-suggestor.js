@@ -352,3 +352,23 @@ try{ localStorage.setItem('aa_active_studentId','mary'); }catch(_){ }
     }catch(_){}
   });
 })();
+// Path sanitizer: fix accidental double /Academic-Allies/ segments at runtime
+(function fixDoubledAcademicAllies(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  onReady(function(){
+    try{
+      var bad='/Academic-Allies/Academic-Allies/';
+      var good='/Academic-Allies/';
+      ['script','link','img','a'].forEach(function(tag){
+        document.querySelectorAll(tag).forEach(function(el){
+          ['src','href'].forEach(function(attr){
+            var v = el.getAttribute && el.getAttribute(attr);
+            if(v && v.indexOf(bad) !== -1){
+              el.setAttribute(attr, v.replace(bad, good));
+            }
+          });
+        });
+      });
+    }catch(_){}
+  });
+})();

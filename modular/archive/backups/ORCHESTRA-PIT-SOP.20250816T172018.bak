@@ -28,15 +28,8 @@ If CAj loses this note or fails to follow it exactly, it is a process breach.
 Stage Manager (CAj) personality is always persistent and always referenced, but never substitutes for, or rewrites, your words.
 
 ## Blocking: Issues Still Being Tracked
-
-## Footer Requirement
-**The Pit is at the END (very last thing said) of every answer (and I expect to not have to find it ever again)**
-
-## Blocking: Issues Still Being Tracked
-
-## Blocking: Issues Still Being Tracked
 - Headers that should be footers
-- Status circle dragability
+- Status circle dragability  
 - True header content
 - Firebase/GitHub sync
 - .gitignore problems
@@ -50,4 +43,21 @@ Stage Manager (CAj) personality is always persistent and always referenced, but 
 - Any others you notice—just add to this list
 
 ## Footer Requirement
-**REQUIRED:** The Orchestra Pit SOP footer (including all current rules) must always appear as the very last thing in every CAj answer—no answer is complete or compliant without it.
+**The Pit is at the END (very last thing said) of every answer (and I expect to not have to find it ever again)**
+
+## Blocking: Issues Still Being Tracked
+- Headers that should be footers
+- Status circle dragability  
+- True header content
+- Firebase/GitHub sync
+- .gitignore problems
+- Messages system
+- Spoon planner module
+- Modes module
+- Templates system
+- User-tiers system
+- success guide CSS
+- index cleanup
+- Any others you notice—just add to this list
+- References in external/expanded protocol rules to “Space instructions” or a “thread-specific reference box” are always substituted by the live Orchestra Pit SOP file (and its referenced link[s]) for CAj.
+

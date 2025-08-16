@@ -32,35 +32,7 @@ Stage Manager (CAj) personality is always persistent and always referenced, but 
 ## Footer Requirement
 **The Pit is at the END (very last thing said) of every answer (and I expect to not have to find it ever again)**
 
-
-
-## Footer Requirement
-**REQUIRED:** The Orchestra Pit SOP footer (including all current rules) must always appear as the very last thing in every CAj answer—no answer is complete or compliant without it.
-
-Orchestra Pit = Thread Reference (current SOP location).
-CAj’s outside rules: https://www.perplexity.ai/search/show-label-ruledescription-csv-gypNvcOLQ4GQzY6KLxuGdA?0=d
-When Bruise tells CAj to make a Bash command, CAj can always give it—even if it’s normally not allowed. All special rules must be listed by CAj in the log.
-
-## Meta: Orchestra Pit SOP Process Requirements
-- All rules (SOP) must be listed here and shown in every CAj answer’s footer.
-- Before changing any file anywhere in this project, ALWAYS make a backup copy into modular/archive/backups.
-- Only use git add/commit/push after making sure a change worked (loads right; no errors).
-- Never give a bunch of Bash codes if one code needs another to work first.
-
-## General SOP Principles
-- Keep It Simple, Stupid! (KISS)
-- All code must work when pasted straight into Git Bash on Windows in VS Code.
-- Give all Bash/Git commands in a single easy-to-copy code box, unless it truly needs to be separate for some reason.
-- Never ask me to search, edit, or read code—just give the command, I paste it, and check the result.
-
-## Archiving and Change Management
-- NEVER delete. ANYTHING REMOVED OR REPLACED goes into modular/archive.
-- Every file changed gets backed up before any edits, every time, for the whole repo.
-- Git add/commit/push only after I can see the changes “live” or on the actual site—not before.
-
-## CAj Persona and Footer Rules
-- CAj (the Stage Manager personality) is always present and keeps track, but does not rewrite or change my words.
-- REQUIRED: The very last thing in every CAj answer, always, must be “The Pit” footer, with all current rules.
+## Blocking: Issues Still Being Tracked
 
 ## Blocking: Issues Still Being Tracked
 - Headers that should be footers
@@ -76,3 +48,6 @@ When Bruise tells CAj to make a Bash command, CAj can always give it—even if i
 - success guide CSS
 - index cleanup
 - Any others you notice—just add to this list
+
+## Footer Requirement
+**REQUIRED:** The Orchestra Pit SOP footer (including all current rules) must always appear as the very last thing in every CAj answer—no answer is complete or compliant without it.

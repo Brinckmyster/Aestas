@@ -44,7 +44,7 @@ When Bruise tells CAj to make a Bash command, CAj can always give it—even if i
 ## Meta: Orchestra Pit SOP Process Requirements
 - All rules (SOP) must be listed here and shown in every CAj answer’s footer.
 - Before changing any file anywhere in this project, ALWAYS make a backup copy into modular/archive/backups.
-- Only push changes to the repo when you are ready for them to go live. No “local” check is needed—changes go live as soon as you push.
+- Only use git add/commit/push after making sure a change worked (loads right; no errors).
 - Never give a bunch of Bash codes if one code needs another to work first.
 
 ## General SOP Principles

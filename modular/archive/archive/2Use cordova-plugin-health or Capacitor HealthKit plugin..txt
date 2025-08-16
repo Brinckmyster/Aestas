@@ -1,0 +1,16 @@
+// For iOS (HealthKit)
+async function getSleepDataIOS() {
+  if (window.plugins && window.plugins.health) {
+    window.plugins.health.requestAuthorization(
+      [{ read: ['HKCategoryTypeIdentifierSleepAnalysis', 'HKQuantityTypeIdentifierHeartRate'] }],
+      () => {
+        window.plugins.health.queryAggregated({
+          startDate: new Date(Date.now() - 7*24*60*60*1000),
+          endDate: new Date(),
+          dataType: 'sleep'
+        }, data => {
+          // Use sleep data for automation
+        }, err => { /* handle error */ });
+      }, err => { /* handle error */ });
+  }
+}

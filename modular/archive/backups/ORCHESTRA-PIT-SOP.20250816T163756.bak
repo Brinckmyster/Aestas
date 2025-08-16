@@ -45,18 +45,3 @@ Stage Manager (CAj) personality is always persistent and always referenced, but 
 
 ## Footer Requirement
 **The Pit is at the END (very last thing said) of every answer (and I expect to not have to find it ever again)**
-
-## Blocking: Issues Still Being Tracked
-- Headers that should be footers
-- Status circle dragability  
-- True header content
-- Firebase/GitHub sync
-- .gitignore problems
-- Messages system
-- Spoon planner module
-- Modes module
-- Templates system
-- User-tiers system
-- success guide CSS
-- index cleanup
-- Any others you notice—just add to this list

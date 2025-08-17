@@ -573,13 +573,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <script src="universal-suggestor.js"></script>
 <!-- BEGIN CAj TEMPLATE BUILDER PATCH -->
 <button id="show-plan-template" style="margin-bottom: 1em;">Show Editable Base Plan Template</button>
-  if(ev.target.classList.contains("remove-btn")){
     var li=ev.target.closest("li");
     var name=li.querySelector(".meal-name").textContent;
     meals=meals.filter(m=>m.name!==name);
     saveMeals();
-document.getElementById("meal-list").addEventListener("click",function(ev){
-  if(ev.target.classList.contains("remove-btn")){
     var li=ev.target.closest("li");
     var name=li.querySelector(".meal-name").textContent;
     meals=meals.filter(m=>m.name!==name);

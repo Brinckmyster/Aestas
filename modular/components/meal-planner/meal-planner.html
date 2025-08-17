@@ -6,7 +6,6 @@
     <title>Meal Planner - Academic Allies</title>
 </head>
 <body>
-<div id="shared-header-container"></div>
 <script>
 // Auto-load shared header from modular repo
 fetch('../../shared-header.html')
@@ -26,13 +25,11 @@ fetch('../../shared-header.html')
         <label for="base-meal-file" class="upload-label">Upload Base Meal Plan:</label>
         <input type="file" id="base-meal-file" accept=".json,.txt,.csv,.pdf" aria-label="Upload base meal plan" />
         <button type="button" id="load-base-meal" class="upload-btn">Load Base Plan</button>
-    </div>
     <p class="file-types">File types accepted: .json, .txt, .csv, .pdf</p>
     <div class="meal-summary" aria-live="polite">
         <span id="meals-today">Meals Planned Today: <strong>0</strong></span>
         <button type="button" id="reset-meals" class="reset-btn" aria-label="Reset daily meals">Reset</button>
         <button type="button" id="suggest-meals" class="suggest-btn" aria-label="Generate meal suggestions">Suggest Meals</button>
-    </div>
     <form id="add-meal-form" class="add-meal-form" autocomplete="off">
         <label for="meal-name">Meal</label>
         <input type="text" id="meal-name" name="meal-name" required aria-required="true" maxlength="40" />
@@ -42,7 +39,6 @@ fetch('../../shared-header.html')
         <input type="text" id="meal-notes" name="meal-notes" maxlength="80" />
         <button type="submit" class="add-btn">Add Meal</button>
     </form>
-    <div id="suggestion-list" class="suggestion-list" aria-label="Meal Suggestions"></div>
     <ul id="meal-list" class="meal-list" aria-label="Planned Meals"></ul>
 </section>
 
@@ -649,17 +645,6 @@ document.getElementById('suggest-meals').onclick = function() {
 <!-- END CAj TEMPLATE BUILDER PATCH -->
 
 <!-- BEGIN CAj PATCH -->
-<div id="plan-template-modal" style="display:none;position:fixed;top:10vh;left:50%;transform:translateX(-50%);z-index:1002;background:#fff;padding:1.5rem 2rem;border-radius:1em;box-shadow:0 0 16px #222;">
-<h3>Meal Plan Template</h3>
-<form id="template-form">
-<label>Breakfast: <input type="text" name="breakfast" maxlength="40"></label><br>
-<label>Lunch: <input type="text" name="lunch" maxlength="40"></label><br>
-<label>Dinner: <input type="text" name="dinner" maxlength="40"></label><br>
-<label>Snacks: <input type="text" name="snacks" maxlength="40"></label><br>
-<button type="submit">Save Plan</button>
-<button type="button" id="close-template-modal">Cancel</button>
-</form>
-</div>
 <script>
 document.getElementById('show-plan-template').onclick=function(){document.getElementById('plan-template-modal').style.display='block'};
 document.getElementById('close-template-modal').onclick=function(){document.getElementById('plan-template-modal').style.display='none'};
@@ -669,21 +654,6 @@ document.getElementById('suggest-meals').onclick=function(){let plan=null,out=[]
 <!-- END CAj PATCH -->
 
 <!-- BEGIN CAj ONE-MODAL PATCH -->
-<div id="plan-template-modal" style="display:none;position:fixed;top:10vh;left:50%;transform:translateX(-50%);z-index:1002;background:#fff;padding:1.5rem 2rem;border-radius:1em;box-shadow:0 0 16px #222;max-width:400px">
-<h3>Meal Plan Template</h3>
-<form id="template-form">
-<b>Date:</b> <input type="date" name="plandate" id="plandate"/><br>
-<label>Breakfast: <input type="text" name="breakfast" maxlength="40"></label><br>
-<label>Lunch: <input type="text" name="lunch" maxlength="40"></label><br>
-<label>Dinner: <input type="text" name="dinner" maxlength="40"></label><br>
-<label>Snacks: <input type="text" name="snacks" maxlength="40"></label><br>
-<br><b>Dietary Restrictions/Needs:</b><br>
-<textarea name="restrictions" rows="3" placeholder="gluten free, gastroparesis, kosher, diabetes, allergies, other needs" style="width:98%"></textarea>
-<br>
-<button type="submit">Save Plan</button>
-<button type="button" id="close-template-modal">Cancel</button>
-</form>
-</div>
 <script>
 // Show/hide modal logic
 document.getElementById('show-plan-template').onclick=function(){

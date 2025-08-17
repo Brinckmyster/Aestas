@@ -1,22 +1,22 @@
 {
-    "Breakfast": [
-        "Scrambled eggs, toast",
-        "Oatmeal, fruit",
-        "Greek yogurt, granola"
-    ],
-    "Lunch": [
-        "Turkey sandwich",
-        "Chicken salad",
-        "Grilled cheese w/ soup"
-    ],
-    "Dinner": [
-        "Beef stew",
-        "Chicken stir fry",
-        "Pasta bolognese"
-    ],
-    "Snacks": [
-        "String cheese",
-        "Trail mix",
-        "Apple slices with peanut butter"
-    ]
+  "Breakfast": [
+    "Scrambled eggs & toast",
+    "Oatmeal & banana",
+    "Yogurt & granola"
+  ],
+  "Lunch": [
+    "Turkey sandwich",
+    "Veggie salad",
+    "Chicken noodle soup"
+  ],
+  "Dinner": [
+    "Spaghetti & meatballs",
+    "Grilled chicken & rice",
+    "Vegetable stir fry"
+  ],
+  "Snacks": [
+    "Trail mix",
+    "Apple slices",
+    "String cheese"
+  ]
 }

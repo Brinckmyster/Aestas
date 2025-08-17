@@ -576,6 +576,16 @@ document.addEventListener('DOMContentLoaded', function () {
     var li=ev.target.closest("li");
     var name=li.querySelector(".meal-name").textContent;
     meals=meals.filter(m=>m.name!==name);
+document.getElementById("meal-list").addEventListener("click", function(ev) {
+  if (ev.target.classList.contains("remove-btn")) {
+    var li = ev.target.closest("li");
+    var name = li.querySelector(".meal-name").textContent;
+    meals = meals.filter(m => m.name !== name);
+    saveMeals();
+    renderMeals();
+    updateMealsDisplay();
+  }
+});
     saveMeals();
     var li=ev.target.closest("li");
     var name=li.querySelector(".meal-name").textContent;

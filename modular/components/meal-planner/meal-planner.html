@@ -168,7 +168,6 @@ fetch('../../shared-header.html')
     color: #555;
     font-size: 0.95em;
 }
-.remove-btn, .add-suggestion-btn {
     background: #bdbdbd;
     color: #22223b;
     border: none;
@@ -178,8 +177,6 @@ fetch('../../shared-header.html')
     cursor: pointer;
     transition: background 0.2s;
 }
-.remove-btn:hover, .add-suggestion-btn:hover { background: #a3a3a3; }
-.remove-btn:focus, .add-suggestion-btn:focus { outline: 2px solid #ef4444; }
 @media (max-width: 700px) {
     .meal-planner { padding: 1em; }
     .add-meal-form {
@@ -573,25 +570,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <script src="universal-suggestor.js"></script>
 <!-- BEGIN CAj TEMPLATE BUILDER PATCH -->
 <button id="show-plan-template" style="margin-bottom: 1em;">Show Editable Base Plan Template</button>
-    var name=li.querySelector(".meal-name").textContent;
-document.getElementById("meal-list").addEventListener("click", function(ev) {
-  if (ev.target.classList.contains("remove-btn")) {
-document.getElementById("meal-list").addEventListener("click", function(ev) {
-  if (ev.target.classList.contains("remove-btn")) {
-    var li = ev.target.closest("li");
-    var name = li.querySelector(".meal-name").textContent;
-    meals = meals.filter(m => m.name !== name);
-    saveMeals();
-    renderMeals();
-    updateMealsDisplay();
   }
 });
-    var li = ev.target.closest("li");
-    var name = li.querySelector(".meal-name").textContent;
-    meals = meals.filter(m => m.name !== name);
   }
 });
-    var name=li.querySelector(".meal-name").textContent;
   }
 });
   }

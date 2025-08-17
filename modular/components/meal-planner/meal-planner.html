@@ -48,131 +48,26 @@ fetch('../../shared-header.html')
 
 <style>
 .meal-planner {
-    background: #f8fafc;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    max-width: 600px;
-    margin: 2rem auto;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
 .meal-planner h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #22223b;
 .meal-upload {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    margin-bottom: 0.5em;
-.upload-label { font-weight: 600; }
 .upload-btn {
-    background: #3b82f6;
-    color: #fff;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.4em 1.2em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
-.upload-btn:hover { background: #2563eb; }
 .file-types {
-    font-size: 0.9em;
-    color: #555;
-    margin-bottom: 1em;
 .meal-summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    font-size: 1.1em;
-    gap: 1em;
 .reset-btn {
-    background: #ef4444;
-    color: #fff;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.4em 1em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
-.reset-btn:hover { background: #dc2626; }
 .suggest-btn {
-    background: #22c55e;
-    color: #fff;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.4em 1em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
-.suggest-btn:hover { background: #16a34a; }
 .add-meal-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em 1em;
-    align-items: flex-end;
-    margin-bottom: 1rem;
 .add-meal-form label {
-    flex: 1 1 100px;
-    font-weight: 600;
 .add-meal-form input {
-    flex: 2 1 120px;
-    padding: 0.3em;
-    border-radius: 0.3em;
-    border: 1px solid #bdbdbd;
 .add-btn {
-    background: #22c55e;
-    color: #fff;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.5em 1.2em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
-.add-btn:hover { background: #16a34a; }
 .meal-list, .suggestion-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
 .meal-item, .suggestion-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #fff;
-    border-radius: 0.5em;
-    padding: 0.7em 1em;
-    margin-bottom: 0.5em;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 .meal-info, .suggestion-info {
-    display: flex;
-    flex-direction: column;
 .meal-name, .suggestion-name {
-    font-weight: 600;
-    color: #22223b;
 .meal-time, .suggestion-time {
-    color: #3b82f6;
-    font-size: 0.95em;
 .meal-notes, .suggestion-notes {
-    color: #555;
-    font-size: 0.95em;
-    background: #bdbdbd;
-    color: #22223b;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.3em 0.9em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
 @media (max-width: 700px) {
-    .meal-planner { padding: 1em; }
     .add-meal-form {
-        flex-direction: column;
-        gap: 0.5em 0;
-    }
     .meal-summary {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5em;
-    }
 </style>
 
 <script>
@@ -550,19 +445,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-  <script>let basePlan = null;</script>
 <script src="universal-suggestor.js"></script>
 <!-- BEGIN CAj TEMPLATE BUILDER PATCH -->
-<button id="show-plan-template" style="margin-bottom: 1em;">Show Editable Base Plan Template</button>
-  }
-});
-  }
-});
-  }
-});
-  }
-});
-<div id="plan-template-modal" style="display:none;position:fixed;top:10vh;left:50%;transform:translateX(-50%);z-index:1002;background:#fff;padding:1.5rem 2rem;border-radius:1em;box-shadow:0 0 16px #222;">
   <h3>Meal Plan Template</h3>
   <form id="template-form">
     <label>Breakfast: <input type="text" name="breakfast" maxlength="40"></label><br>
@@ -706,3 +590,20 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var mealList=document.getElementById("meal-list");
+  if(mealList){
+    mealList.addEventListener("click", function(ev) {
+      if(ev.target.classList.contains("remove-btn")){
+        var li=ev.target.closest("li");
+        var name=li.querySelector(".meal-name").textContent;
+        meals=meals.filter(m=>m.name!==name);
+        saveMeals();
+        renderMeals();
+        updateMealsDisplay();
+      }
+    });
+  }
+});
+</script>

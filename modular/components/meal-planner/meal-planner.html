@@ -160,6 +160,21 @@
 </style>
 
 <script>
+fetch("base-meal-plan.json")\
+
+  .then(response => response.json())\
+
+  .then(plan => {\
+
+    if(localStorage.getItem("plannedMeals") === null || localStorage.getItem("plannedMeals") === "") {\
+
+      localStorage.setItem("plannedMeals", JSON.stringify(plan));\
+
+    }\
+
+  })\
+
+  .catch(error => console.log("Base plan load failed:", error));
 // Meal Planner Component Logic
 
 let meals = [];

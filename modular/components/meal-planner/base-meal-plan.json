@@ -1,38 +1,6 @@
 {
-    "Breakfast": [
-        "Scrambled eggs, toast, orange juice",
-        "Oatmeal with blueberries and honey",
-        "Greek yogurt, mixed fruit, granola",
-        "Pancakes, bacon, sliced bananas",
-        "Bagel with cream cheese, apple",
-        "Egg sandwich with ham and cheese",
-        "Cereal with milk, strawberries"
-    ],
-    "Lunch": [
-        "Turkey sandwich, lettuce, tomato, carrot sticks",
-        "Chicken Caesar salad, whole-grain roll",
-        "Ham and cheese wrap, cucumber slices",
-        "Grilled cheese sandwich, tomato soup",
-        "Grilled chicken breast, brown rice, broccoli",
-        "Beef tacos with lettuce, cheese, salsa",
-        "Pasta primavera, breadstick"
-    ],
-    "Dinner": [
-        "Roast beef, mashed potatoes, green beans",
-        "Grilled salmon, quinoa, mixed vegetables",
-        "BBQ chicken, corn on the cob, salad",
-        "Pulled pork, sweet potato fries, coleslaw",
-        "Baked tilapia, rice pilaf, steamed peas",
-        "Spaghetti with meat sauce, garlic bread",
-        "Homemade pizza (pepperoni, veggies, cheese)"
-    ],
-    "Snacks": [
-        "String cheese",
-        "Trail mix",
-        "Apple slices with peanut butter",
-        "Yogurt cup",
-        "Crackers and hummus",
-        "Grapes",
-        "Pretzels"
-    ]
+  "Breakfast":["Scrambled eggs, toast","Oatmeal, fruit","Greek yogurt, granola"],
+  "Lunch":["Turkey sandwich","Chicken salad","Grilled cheese w/ soup"],
+  "Dinner":["Beef stew","Chicken stir fry","Pasta bolognese"],
+  "Snacks":["String cheese","Trail mix","Apple slices with peanut butter"]
 }

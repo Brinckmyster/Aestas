@@ -573,30 +573,17 @@ document.addEventListener('DOMContentLoaded', function () {
 <script src="universal-suggestor.js"></script>
 <!-- BEGIN CAj TEMPLATE BUILDER PATCH -->
 <button id="show-plan-template" style="margin-bottom: 1em;">Show Editable Base Plan Template</button>
-    var li=ev.target.closest("li");
     var name=li.querySelector(".meal-name").textContent;
-    meals=meals.filter(m=>m.name!==name);
 document.getElementById("meal-list").addEventListener("click", function(ev) {
   if (ev.target.classList.contains("remove-btn")) {
     var li = ev.target.closest("li");
     var name = li.querySelector(".meal-name").textContent;
     meals = meals.filter(m => m.name !== name);
-    saveMeals();
-    renderMeals();
-    updateMealsDisplay();
   }
 });
-    saveMeals();
-    var li=ev.target.closest("li");
     var name=li.querySelector(".meal-name").textContent;
-    meals=meals.filter(m=>m.name!==name);
-    saveMeals();
-    renderMeals();
-    updateMealsDisplay();
   }
 });
-    renderMeals();
-    updateMealsDisplay();
   }
 });
 <div id="plan-template-modal" style="display:none;position:fixed;top:10vh;left:50%;transform:translateX(-50%);z-index:1002;background:#fff;padding:1.5rem 2rem;border-radius:1em;box-shadow:0 0 16px #222;">

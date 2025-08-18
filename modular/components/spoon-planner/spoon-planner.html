@@ -541,47 +541,12 @@ document.getElementById('add-task-btn').addEventListener('click', function() {
 updateSpoonsDisplay();
 </script>
 <script>
-document.getElementById("add-task-btn").addEventListener("click", function() {
-  const name = document.getElementById("task-name").value.trim();
-  const spoonsNeeded = parseInt(document.getElementById("task-spoons").value, 10);
-  if (!name || isNaN(spoonsNeeded)) {
-    alert("Please enter a task name and a valid number of spoons.");
-    return;
-  }
-  if (!window.tasks) window.tasks = [];
-  window.tasks.push({ name, spoons: spoonsNeeded });
-  // Optionally: update spoons remaining and render tasks here.
-});
-</script>
-<script>
-document.getElementById("add-task-btn").addEventListener("click", function() {
-  const name = document.getElementById("task-name").value.trim();
-  const spoonsNeeded = parseInt(document.getElementById("task-spoons").value, 10);
-  if (!name || isNaN(spoonsNeeded)) {
-    alert("Please enter a task name and a valid number of spoons.");
-    return;
-  }
-  if (!window.tasks) window.tasks = [];
-  window.tasks.push({ name, spoons: spoonsNeeded });
-  // Optionally: update spoons remaining and render tasks here.
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded",function(){
-  var btn = document.getElementById("add-task-btn");
-  if(btn){
-    btn.addEventListener("click", function(){
-      var name = document.getElementById("task-name").value.trim();
-      var spoons = parseInt(document.getElementById("task-spoons").value,10);
-      if(!name||isNaN(spoons)){
-        alert("Task and spoons required.");
-        return;
-      }
-      if(!window.tasks)window.tasks=[];
-      window.tasks.push({name: name, spoons: spoons});
-      // Optionally: update list/display here
-      alert("Task Added: " + name + " — " + spoons + " spoons");
+      taskList.innerHTML="";
+      window.tasks.forEach(function(task){
+        var li=document.createElement("li");
+        li.textContent=task.name+" — "+task.spoons+" spoons";
+        taskList.appendChild(li);
+      });
     });
   }
 });

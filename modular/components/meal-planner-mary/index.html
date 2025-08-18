@@ -351,7 +351,6 @@ function resetPlannedMeals(){ setPlannedMeals([]); renderPlannedMeals(); }
   renderPlannedMeals();
 
 // Auto-load shared header from modular repo
-fetch('../../shared-header.html')
     .then(response => response.text())
     .then(html => {
         document.getElementById('shared-header-container').innerHTML = html;

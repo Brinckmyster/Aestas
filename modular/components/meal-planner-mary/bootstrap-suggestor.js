@@ -146,7 +146,7 @@ window.meal = window.meal || {};
   }
   function normalizeKind(text){
     if(!text) return '';
-    // Strip leading time prefix (e.g., "08:00 · Breakfast")
+    // Strip leading time prefix (e.g., "8:00 AM · Breakfast")
     return text.replace(/\b\d{1,2}:\d{2}\s*[·\-–]\s*/,'').trim();
   }
   function ensureThreePerKind(){

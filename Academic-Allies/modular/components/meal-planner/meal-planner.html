@@ -1,7 +1,327 @@
-<link rel="icon" href="https://academic-allies-dev.web.app/Academic-Allies/modular/icons/badge-admin-yellow-center.png">
+<header class="site-header" role="banner">
+  <div class="header-content">
+    <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
+    <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/home.png" width="48" height="48" title="Academic Allies Home"/>
+    </a>
+      <span class="tagline" title="Academic Allies
+Your disability accommodations and support network">Your disability accommodations and support network</span>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="/Academic-Allies/modular/components/calendar/calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="/Academic-Allies/modular/emergency.html" title="Emergency Contact">Emergency Contact</a></li>
+        <li><a href="/Academic-Allies/modular/checkin.html" title="Daily Check-In">Daily Check-In</a></li>
+        <li><a href="/Academic-Allies/modular/icon-gallery.html" title="Icon Gallery">Icon Gallery</a></li>
+        <li><a href="/Academic-Allies/modular/static/sitemap.html" title="Site Map">Site Map</a></li>
+      </ul>
+    </nav>
+    
+    <div class="header-controls">
+      <!-- Google Sign-In Container -->
+      <div id="googleSignInContainer"></div>
+      
+      <!-- JS-Draggable Status Circle -->
+      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
+    </div>
+  </div>
+  
+  <!-- Status Circle Container -->
+  <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
+  
+  <!-- Google Identity Services -->
+  <script async defer src="https://accounts.google.com/gsi/client"></script>
+  
+  <!-- Google Sign-In JavaScript -->
+  <script>
+    // Initialize Google Sign-In when the API loads
+    window.onload = function() {
+      google.accounts.id.initialize({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID',
+        callback: handleCredentialResponse
+      });
+      
+      google.accounts.id.renderButton(
+        document.getElementById('googleSignInContainer'),
+        {
+          theme: 'outline',
+          size: 'medium',
+          type: 'standard',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          text: 'signin_with'
+        }
+      );
+    };
+    
+    function handleCredentialResponse(response) {
+      // Handle the signed-in user info
+      console.log('Encoded JWT ID token: ' + response.credential);
+      // Add your sign-in logic here
+    }
+  </script>
+<script src="/Academic-Allies/modular/js/draggable.js"></script>
+</header>
+
+<style>
+.site-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  padding: 12px 20px;
+}
+
+.header-content {
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+
+.home-link:hover {
+  color: #0066cc;
+}
+
+.home-icon {
+  margin-right: 8px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 20px;
+}
+
+.nav-list li {
+  margin: 0;
+}
+
+.nav-list a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.nav-list a:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#status-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #dc3545;
+  cursor: pointer;
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+#status-circle:hover {
+  background-color: #c82333;
+}
+
+#status-circle.signed-in {
+  background-color: #28a745;
+}
+
+#status-circle.signed-in:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+  justify-content: flex-start;
+    gap: 15px;
+  }
+  
+  .nav-list {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+}</style>
+<header class="site-header" role="banner">
+  <div class="header-content">
+    <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
+    <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/home.png" width="48" height="48" title="Academic Allies Home"/>
+    </a>
+      <span class="tagline" title="Academic Allies
+Your disability accommodations and support network">Your disability accommodations and support network</span>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="/Academic-Allies/modular/components/calendar/calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="/Academic-Allies/modular/emergency.html" title="Emergency Contact">Emergency Contact</a></li>
+        <li><a href="/Academic-Allies/modular/checkin.html" title="Daily Check-In">Daily Check-In</a></li>
+        <li><a href="/Academic-Allies/modular/icon-gallery.html" title="Icon Gallery">Icon Gallery</a></li>
+        <li><a href="/Academic-Allies/modular/static/sitemap.html" title="Site Map">Site Map</a></li>
+      </ul>
+    </nav>
+    
+    <div class="header-controls">
+      <!-- Google Sign-In Container -->
+      <div id="googleSignInContainer"></div>
+      
+      <!-- JS-Draggable Status Circle -->
+      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
+    </div>
+  </div>
+  
+  <!-- Status Circle Container -->
+  <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
+  
+  <!-- Google Identity Services -->
+  <script async defer src="https://accounts.google.com/gsi/client"></script>
+  
+  <!-- Google Sign-In JavaScript -->
+  <script>
+    // Initialize Google Sign-In when the API loads
+    window.onload = function() {
+      google.accounts.id.initialize({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID',
+        callback: handleCredentialResponse
+      });
+      
+      google.accounts.id.renderButton(
+        document.getElementById('googleSignInContainer'),
+        {
+          theme: 'outline',
+          size: 'medium',
+          type: 'standard',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          text: 'signin_with'
+        }
+      );
+    };
+    
+    function handleCredentialResponse(response) {
+      // Handle the signed-in user info
+      console.log('Encoded JWT ID token: ' + response.credential);
+      // Add your sign-in logic here
+    }
+  </script>
+<script src="/Academic-Allies/modular/js/draggable.js"></script>
+</header>
+
+<style>
+.site-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  padding: 12px 20px;
+}
+
+.header-content {
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+
+.home-link:hover {
+  color: #0066cc;
+}
+
+.home-icon {
+  margin-right: 8px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 20px;
+}
+
+.nav-list li {
+  margin: 0;
+}
+
+.nav-list a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.nav-list a:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#status-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #dc3545;
+  cursor: pointer;
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+#status-circle:hover {
+  background-color: #c82333;
+}
+
+#status-circle.signed-in {
+  background-color: #28a745;
+}
+
+#status-circle.signed-in:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+  justify-content: flex-start;
+    gap: 15px;
+  }
+  
+  .nav-list {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+}</style>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>.meal-planner {background: #f8fafc; border-radius: 1rem; padding: 1.5rem; max-width: 600px; margin: 2rem auto; box-shadow: 0 2px 8px rgba(0,0,0,0.07);}.meal-planner h2 {font-size: 1.5rem; margin-bottom: 1rem; color: #22223b;}.meal-upload {display: flex; align-items: center; gap: 1em; margin-bottom: 0.5em;}.upload-label { font-weight: 600; }.upload-btn {background: #3b82f6; color: #fff; border: none; border-radius: 0.5em; padding: 0.4em 1.2em; font-size: 1em; cursor: pointer; transition: background 0.2s;}.upload-btn:hover { background: #2563eb; }.file-types {font-size: 0.9em; color: #555; margin-bottom: 1em;}.meal-summary {display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 1.1em; gap: 1em;}.reset-btn {background: #ef4444; color: #fff; border: none; border-radius: 0.5em; padding: 0.4em 1em; font-size: 1em; cursor: pointer; transition: background 0.2s;}.reset-btn:hover { background: #dc2626; }.suggest-btn {background: #22c55e; color: #fff; border: none; border-radius: 0.5em; padding: 0.4em 1em; font-size: 1em; cursor: pointer; transition: background 0.2s;}.suggest-btn:hover { background: #16a34a; }.add-meal-form {display: flex; flex-wrap: wrap; gap: 0.5em 1em; align-items: flex-end; margin-bottom: 1rem;}.add-meal-form label {flex: 1 1 100px; font-weight: 600;}.add-meal-form input {flex: 2 1 120px; padding: 0.3em; border-radius: 0.3em; border: 1px solid #bdbdbd;}.add-btn {background: #22c55e; color: #fff; border: none; border-radius: 0.5em; padding: 0.5em 1.2em; font-size: 1em; cursor: pointer; transition: background 0.2s;}.add-btn:hover { background: #16a34a; }.meal-list, .suggestion-list {list-style: none; padding: 0; margin: 0;}.meal-item, .suggestion-item {display: flex; align-items: center; justify-content: space-between; background: #fff; border-radius: 0.5em; padding: 0.7em 1em; margin-bottom: 0.5em; box-shadow: 0 1px 3px rgba(0,0,0,0.03);}.meal-info, .suggestion-info {display: flex; flex-direction: column;}.meal-name, .suggestion-name {font-weight: 600; color: #22223b;}.meal-time, .suggestion-time {color: #3b82f6; font-size: 0.95em;}.meal-notes, .suggestion-notes {color: #555; font-size: 0.95em;}.remove-btn, .add-suggestion-btn {background: #bdbdbd; color: #22223b; border: none; border-radius: 0.5em; padding: 0.3em 0.9em; font-size: 1em; cursor: pointer; transition: background 0.2s;}.remove-btn:hover, .add-suggestion-btn:hover { background: #a3a3a3; }.remove-btn:focus, .add-suggestion-btn:focus { outline: 2px solid #ef4444; }@media (max-width: 700px) {.meal-planner { padding: 1em; } .add-meal-form {flex-direction: column; gap: 0.5em 0;} .meal-summary {flex-direction: column; align-items: flex-start; gap: 0.5em; }}</style>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../calendar/calendar.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Planner - Academic Allies</title>
@@ -9,31 +329,7 @@
 <body>
 <div id="shared-header-container"></div>
 <script>
-function getPlannedMeals(){ try{return JSON.parse(localStorage.getItem('plannedMeals')||'[]');}catch(e){return[];} }
-function setPlannedMeals(a){ localStorage.setItem('plannedMeals', JSON.stringify(a||[])); }
-function renderPlannedMeals(){
-  const el=document.getElementById('planned-meals'); if(!el) return;
-  const meals=getPlannedMeals(); el.innerHTML='';
-  if(!meals.length){ el.innerHTML='<div>No meals planned yet.</div>'; return; }
-  meals.forEach((m,i)=>{
-    const row=document.createElement('div'); row.style.margin='0.25em 0';
-    row.innerHTML=(m.time?(m.time+' · '):'')+'<b>'+m.kind+':</b> '+m.text+' ';
-    const btn=document.createElement('button'); btn.textContent='Remove'; btn.onclick=()=>{ removePlannedMeal(i); };
-    row.appendChild(btn); el.appendChild(row);
-  });
-}
-function addPlannedMeal(kind,time,text){ const a=getPlannedMeals(); a.push({kind,time:time||'',text}); setPlannedMeals(a); renderPlannedMeals(); }
-function removePlannedMeal(i){ const a=getPlannedMeals(); if(i>=0&&i<a.length){ a.splice(i,1); setPlannedMeals(a); renderPlannedMeals(); } }
-function resetPlannedMeals(){ setPlannedMeals([]); renderPlannedMeals(); }
-  if(!document.getElementById('planned-meals')){
-    const tgt=document.querySelector('main')||document.body; const sec=document.createElement('section');
-    sec.innerHTML='<h3>Your Plan</h3><div id="planned-meals"></div><button id="reset-plan">Reset Plan</button>'; tgt.appendChild(sec);
-  }
-  const r=document.getElementById('reset-plan'); if(r){ r.onclick=resetPlannedMeals; }
-  renderPlannedMeals();
-
 // Auto-load shared header from modular repo
-fetch('../../shared-header.html')
     .then(response => response.text())
     .then(html => {
         document.getElementById('shared-header-container').innerHTML = html;
@@ -44,19 +340,17 @@ fetch('../../shared-header.html')
 <!-- Load pdf.js from CDN for PDF parsing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
-<section id="meal-planner" class="meal-planner" aria-label="Meal Planner and Suggestion Tool">
+<section id="meal-planner" class="main-card big-tabs meal-planner" aria-label="Meal Planner and Suggestion Tool">
     <h2>Meal Planner</h2>
     <div class="meal-upload">
         <label for="base-meal-file" class="upload-label">Upload Base Meal Plan:</label>
         <input type="file" id="base-meal-file" accept=".json,.txt,.csv,.pdf" aria-label="Upload base meal plan" />
         <button type="button" id="load-base-meal" class="upload-btn">Load Base Plan</button>
-    </div>
     <p class="file-types">File types accepted: .json, .txt, .csv, .pdf</p>
     <div class="meal-summary" aria-live="polite">
         <span id="meals-today">Meals Planned Today: <strong>0</strong></span>
         <button type="button" id="reset-meals" class="reset-btn" aria-label="Reset daily meals">Reset</button>
         <button type="button" id="suggest-meals" class="suggest-btn" aria-label="Generate meal suggestions">Suggest Meals</button>
-    </div>
     <form id="add-meal-form" class="add-meal-form" autocomplete="off">
         <label for="meal-name">Meal</label>
         <input type="text" id="meal-name" name="meal-name" required aria-required="true" maxlength="40" />
@@ -66,160 +360,31 @@ fetch('../../shared-header.html')
         <input type="text" id="meal-notes" name="meal-notes" maxlength="80" />
         <button type="submit" class="add-btn">Add Meal</button>
     </form>
-    <div id="suggestion-list" class="suggestion-list" aria-label="Meal Suggestions"></div>
     <ul id="meal-list" class="meal-list" aria-label="Planned Meals"></ul>
 </section>
 
 <style>
 .meal-planner {
-    background: #f8fafc;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    max-width: 600px;
-    margin: 2rem auto;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-}
 .meal-planner h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #22223b;
-}
 .meal-upload {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    margin-bottom: 0.5em;
-}
-.upload-label { font-weight: 600; }
 .upload-btn {
-    background: #3b82f6;
-    color: #fff;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.4em 1.2em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.upload-btn:hover { background: #2563eb; }
 .file-types {
-    font-size: 0.9em;
-    color: #555;
-    margin-bottom: 1em;
-}
 .meal-summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    font-size: 1.1em;
-    gap: 1em;
-}
 .reset-btn {
-    background: #ef4444;
-    color: #fff;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.4em 1em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.reset-btn:hover { background: #dc2626; }
 .suggest-btn {
-    background: #22c55e;
-    color: #fff;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.4em 1em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.suggest-btn:hover { background: #16a34a; }
 .add-meal-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em 1em;
-    align-items: flex-end;
-    margin-bottom: 1rem;
-}
 .add-meal-form label {
-    flex: 1 1 100px;
-    font-weight: 600;
-}
 .add-meal-form input {
-    flex: 2 1 120px;
-    padding: 0.3em;
-    border-radius: 0.3em;
-    border: 1px solid #bdbdbd;
-}
 .add-btn {
-    background: #22c55e;
-    color: #fff;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.5em 1.2em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.add-btn:hover { background: #16a34a; }
 .meal-list, .suggestion-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
 .meal-item, .suggestion-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #fff;
-    border-radius: 0.5em;
-    padding: 0.7em 1em;
-    margin-bottom: 0.5em;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-}
 .meal-info, .suggestion-info {
-    display: flex;
-    flex-direction: column;
-}
 .meal-name, .suggestion-name {
-    font-weight: 600;
-    color: #22223b;
-}
 .meal-time, .suggestion-time {
-    color: #3b82f6;
-    font-size: 0.95em;
-}
 .meal-notes, .suggestion-notes {
-    color: #555;
-    font-size: 0.95em;
-}
-.remove-btn, .add-suggestion-btn {
-    background: #bdbdbd;
-    color: #22223b;
-    border: none;
-    border-radius: 0.5em;
-    padding: 0.3em 0.9em;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.remove-btn:hover, .add-suggestion-btn:hover { background: #a3a3a3; }
-.remove-btn:focus, .add-suggestion-btn:focus { outline: 2px solid #ef4444; }
 @media (max-width: 700px) {
-    .meal-planner { padding: 1em; }
     .add-meal-form {
-        flex-direction: column;
-        gap: 0.5em 0;
-    }
     .meal-summary {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5em;
-    }
-}
 </style>
 
 <script>
@@ -278,12 +443,7 @@ function renderMeals() {
         removeBtn.type = 'button';
         removeBtn.setAttribute('aria-label', `Remove meal ${meal.name}`);
         removeBtn.textContent = 'Remove';
-        removeBtn.addEventListener('click', () => {
-            meals.splice(idx, 1);
-            saveMeals();
-            renderMeals();
-            updateMealsDisplay();
-        });
+
         
         li.appendChild(removeBtn);
         list.appendChild(li);
@@ -338,21 +498,11 @@ function renderSuggestions(suggestions) {
 
 // [CAj-AUTO] Original generateSuggestions commented out.
 // [CAj-AUTO] Original generateSuggestions commented out.
-////
-
-function generateSuggestions(){
-  try{
-    let plan=null; try{ plan=JSON.parse(localStorage.getItem('simpleMealPlan')||'null'); }catch(e){}
-    const hasGastro=(plan&&plan.restrictions||'').toLowerCase().includes('gastro');
-    const soft=hasGastro?['Broth with soft noodles','Smooth yogurt with honey','Mashed potatoes (smooth)','Scrambled eggs (soft)','Thin cream of wheat']:[];
-    const cat={Breakfast:['Oatmeal with fruit','Scrambled eggs and toast','Greek yogurt with granola',...soft],Lunch:['Turkey & cheese sandwich','Chicken salad wrap','Soup and crackers',...soft],Dinner:['Chicken stir fry','Rice and beans','Pasta with marinara',...soft],Snack:['Apple slices','Yogurt','Broth','Banana','Cheese and crackers',...soft]};
-    const slots=[]; if(plan&&Array.isArray(plan.meals)){ for(const m of plan.meals) slots.push({kind:m.name,time:m.time||'',want:m.text||''}); } else { slots.push({kind:'Breakfast',time:'08:00'},{kind:'Lunch',time:'12:00'},{kind:'Dinner',time:'18:00'}); }
-    const snackTimes=(plan&&plan.snacks&&Array.isArray(plan.snacks.times))?plan.snacks.times:[]; for(const t of snackTimes) slots.push({kind:'Snack',time:t, want:(plan&&plan.snacks&&plan.snacks.text)||''});
-    const sugg=slots.map(s=>{ const u=[...new Set(cat[s.kind]||cat.Snack)]; return {kind:s.kind,time:s.time,options:u.slice(0,3)}; });
-    const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML=''; sugg.forEach(s=>{ const w=document.createElement('div'); w.style.margin='0.5em 0'; const t=document.createElement('div'); t.innerHTML='<b>'+ (s.time?(s.time+' · '):'') + s.kind + '</b>'; w.appendChild(t); const o=document.createElement('div'); s.options.forEach(opt=>{ const b=document.createElement('button'); b.textContent='Add: '+opt; b.style.marginRight='0.5em'; b.onclick=()=>addPlannedMeal(s.kind,s.time,opt); o.appendChild(b); }); w.appendChild(o); list.appendChild(w); }); }
-  }catch(e){ const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; } }
-}
-
+////function generateSuggestions() {
+////    if (dietaryRules.mealTimes.length === 0) {
+////        alert('Please upload a base meal plan with meal times first.');
+////        return;
+////    }
 ////    
 ////    const suggestions = [];
 ////    const shuffledTimes = [...dietaryRules.mealTimes].sort(() => Math.random() - 0.5).slice(0, Math.min(3, dietaryRules.mealTimes.length));
@@ -562,6 +712,7 @@ async function parseBaseMealFile(file, callback) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
     loadMeals();
     loadBaseMeals();
     renderMeals();
@@ -608,41 +759,168 @@ async function parseBaseMealFile(file, callback) {
     document.getElementById('suggest-meals').addEventListener('click', function () {
         generateSuggestions();
     });
+});
 </script>
 
-<script>window.modular=window.modular||{};</script>
-<script>(function(){window.cat=window.cat||{Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],Snack:["Apple slices","Yogurt","Broth"]};})();</script>
-
-
-
-
-
-
-
-
-<!-- BEGIN CAj ONE-MODAL PATCH -->
-<button id="show-plan-template" style="margin-bottom:1em;">Show/Edit Base Plan Template</button>
-<div id="plan-template-modal" style="display:none;position:fixed;top:10vh;left:50%;transform:translateX(-50%);z-index:1002;background:#fff;padding:1.5rem 2rem;border-radius:1em;box-shadow:0 0 16px #222;max-width:420px;width:90%">
+<script src="universal-suggestor.js"></script>
+<!-- BEGIN CAj TEMPLATE BUILDER PATCH -->
   <h3>Meal Plan Template</h3>
   <form id="template-form">
-    <label>Date: <input type="date" name="plandate" id="plandate"></label><br>
-    <label>Breakfast (time): <input type="time" name="breakfast_time" value="08:00"> <input type="text" name="breakfast" maxlength="60" placeholder="Oatmeal + fruit"></label><br>
-    <label>Lunch (time): <input type="time" name="lunch_time" value="12:00"> <input type="text" name="lunch" maxlength="60" placeholder="Turkey & cheese"></label><br>
-    <label>Dinner (time): <input type="time" name="dinner_time" value="18:00"> <input type="text" name="dinner" maxlength="60" placeholder="Chicken stir fry"></label><br>
-    <label>Snacks (times): <input type="text" name="snack_times" placeholder="10:30, 15:00, 20:30"></label><br>
-    <label>Snacks (text): <input type="text" name="snacks" maxlength="80" placeholder="Yogurt; apple slices; broth"></label><br>
-    <br><b>Dietary Restrictions/Needs:</b><br>
-    <textarea name="restrictions" rows="3" placeholder="gluten free, gastroparesis, diabetes, kosher, allergies" style="width:98%"></textarea>
-    <br>
+    <label>Breakfast: <input type="text" name="breakfast" maxlength="40"></label><br>
+    <label>Lunch: <input type="text" name="lunch" maxlength="40"></label><br>
+    <label>Dinner: <input type="text" name="dinner" maxlength="40"></label><br>
+    <label>Snacks: <input type="text" name="snacks" maxlength="40"></label><br>
     <button type="submit">Save Plan</button>
     <button type="button" id="close-template-modal">Cancel</button>
   </form>
 </div>
-<script>(function(){const b=document.getElementById('show-plan-template');if(b){b.onclick=()=>{document.getElementById('plan-template-modal').style.display='block';}}const c=document.getElementById('close-template-modal');if(c){c.onclick=()=>{document.getElementById('plan-template-modal').style.display='none';}}const f=document.getElementById('template-form');if(f){f.onsubmit=function(e){e.preventDefault();const snackTimes=(this.snack_times.value||'').split(',').map(s=>s.trim()).filter(Boolean);const plan={date:this.plandate.value||null,meals:[{name:'Breakfast',time:this.breakfast_time.value||'08:00',text:this.breakfast.value||'Oatmeal with fruit'},{name:'Lunch',time:this.lunch_time.value||'12:00',text:this.lunch.value||'Turkey & cheese sandwich'},{name:'Dinner',time:this.dinner_time.value||'18:00',text:this.dinner.value||'Chicken stir fry'}],snacks:{times:snackTimes,text:this.snacks.value||'Yogurt; apple slices; broth'},restrictions:this.restrictions.value||''};localStorage.setItem('simpleMealPlan',JSON.stringify(plan));alert("Plan saved! Click 'Suggest Meals' to apply it.");document.getElementById('plan-template-modal').style.display='none';};}})();</script>
+<script>
+document.getElementById('show-plan-template').onclick = function() {
+  document.getElementById('plan-template-modal').style.display = 'block';
+}
+document.getElementById('close-template-modal').onclick = function() {
+  document.getElementById('plan-template-modal').style.display = 'none';
+}
+document.getElementById('template-form').onsubmit = function(e){
+  e.preventDefault();
+  let plan = {
+    breakfast: this.breakfast.value || "Oatmeal with fruit",
+    lunch: this.lunch.value || "Turkey & cheese sandwich",
+    dinner: this.dinner.value || "Rice and chicken stir fry",
+    snacks: this.snacks.value || "Yogurt, apple slices"
+  };
+  localStorage.setItem('simpleMealPlan', JSON.stringify(plan));
+  alert("Plan saved! Click 'Suggest Meals' to use it.");
+  document.getElementById('plan-template-modal').style.display = 'none';
+}
+</script>
+<script>
+document.getElementById('suggest-meals').onclick = function() {
+  let plan = null, out = [];
+  try { plan = JSON.parse(localStorage.getItem('simpleMealPlan')); } catch{}
+  if (plan && Object.keys(plan).length > 0) {
+    out = [
+      {name:"Breakfast",time:"08:00",notes:plan.breakfast},
+      {name:"Lunch",time:"12:00",notes:plan.lunch},
+      {name:"Dinner",time:"18:00",notes:plan.dinner},
+      {name:"Snacks",time:"15:30",notes:plan.snacks}
+    ];
+  } else {
+    out = [
+      {name:"Oatmeal with fruit",time:"08:00",notes:"Breakfast. Classic and easy."},
+      {name:"Turkey & cheese sandwich",time:"12:00",notes:"Lunch. Use bread/turkey/cheese or equivalent."},
+      {name:"Chicken stir fry with rice",time:"18:00",notes:"Dinner. Quick, reheats well."},
+      {name:"Apple slices + yogurt",time:"15:30",notes:"Snack."}
+    ];
+  }
+  let sugDiv = document.getElementById('suggestion-list');
+  sugDiv.innerHTML = "";
+  out.forEach(m=>{
+    let d = document.createElement('div');
+    d.className = "suggestion-item";
+    d.innerHTML = `<b>${m.name}</b> <span>at ${m.time}</span><br><i>${typeof m.notes === "string" ? m.notes : (m.notes ${m.notes}${m.notes} m.notes.notes ? m.notes.notes : "")}</i>`;
+    sugDiv.appendChild(d);
+  });
+}
+</script>
+<!-- END CAj TEMPLATE BUILDER PATCH -->
+
+<!-- BEGIN CAj PATCH -->
+<script>
+document.getElementById('show-plan-template').onclick=function(){document.getElementById('plan-template-modal').style.display='block'};
+document.getElementById('close-template-modal').onclick=function(){document.getElementById('plan-template-modal').style.display='none'};
+document.getElementById('template-form').onsubmit=function(e){e.preventDefault();let plan={breakfast:this.breakfast.value||"Oatmeal with fruit",lunch:this.lunch.value||"Turkey & cheese sandwich",dinner:this.dinner.value||"Rice and chicken stir fry",snacks:this.snacks.value||"Yogurt, apple slices"};localStorage.setItem('simpleMealPlan',JSON.stringify(plan));alert("Plan saved! Click 'Suggest Meals' to use it.");document.getElementById('plan-template-modal').style.display='none';};
+document.getElementById('suggest-meals').onclick=function(){let plan=null,out=[];try{plan=JSON.parse(localStorage.getItem('simpleMealPlan'))}catch{}if(plan&&Object.keys(plan).length>0){out=[{name:"Breakfast",time:"08:00",notes:plan.breakfast},{name:"Lunch",time:"12:00",notes:plan.lunch},{name:"Dinner",time:"18:00",notes:plan.dinner},{name:"Snacks",time:"15:30",notes:plan.snacks}];}else{out=[{name:"Oatmeal with fruit",time:"08:00",notes:"Breakfast. Classic and easy."},{name:"Turkey & cheese sandwich",time:"12:00",notes:"Lunch. Use bread/turkey/cheese or equivalent."},{name:"Chicken stir fry with rice",time:"18:00",notes:"Dinner. Quick, reheats well."},{name:"Apple slices + yogurt",time:"15:30",notes:"Snack."}];}let sugDiv=document.getElementById('suggestion-list');sugDiv.innerHTML="";out.forEach(m=>{let d=document.createElement('div');d.className="suggestion-item";d.innerHTML=`<b>${m.name}</b> <span>at ${m.time}</span><br><i>${typeof m.notes === "string" ? m.notes : (m.notes ${m.notes}${m.notes} m.notes.notes ? m.notes.notes : "")}</i>`;sugDiv.appendChild(d);});};
+</script>
+<!-- END CAj PATCH -->
+
+<!-- BEGIN CAj ONE-MODAL PATCH -->
+<script>
+// Show/hide modal logic
+document.getElementById('show-plan-template').onclick=function(){
+  let m=document.getElementById('plan-template-modal'); m.style.display='block';
+  let p=JSON.parse(localStorage.getItem('simpleMealPlan')||'{}');
+  Object.assign(document.getElementById('template-form'), p);
+}
+document.getElementById('close-template-modal').onclick=function(){
+  document.getElementById('plan-template-modal').style.display='none';
+};
+// Save plan, keyed by date, meal, and restrictions for full persistence
+document.getElementById('template-form').onsubmit=function(e){
+  e.preventDefault();
+  let p={breakfast:this.breakfast.value||"Oatmeal",lunch:this.lunch.value||"Turkey sandwich",dinner:this.dinner.value||"Rice/chicken",snacks:this.snacks.value||"Fruit/yogurt", restrictions:this.restrictions.value||"None", plandate: this.plandate.value||new Date().toISOString().slice(0,10)};
+  localStorage.setItem('simpleMealPlan',JSON.stringify(p));
+  alert("Plan saved! Click 'Suggest Meals' to use it.");
+  document.getElementById('plan-template-modal').style.display='none';
+};
+// Suggest meals for plan date/time; each suggestion gets "Add to Plan"
+document.getElementById('suggest-meals').onclick=function(){
+  let p=JSON.parse(localStorage.getItem('simpleMealPlan')||'{}');
+  let date=p.plandate||new Date().toISOString().slice(0,10);
+  let restxt=(p.restrictions&&p.restrictions!=='None')?`<br><b>Note:</b> ${p.restrictions}`:'';
+  let out=[
+    {name:'Breakfast', time:'08:00', notes:p.breakfast||'Oatmeal', date:date},
+    {name:'Lunch', time:'12:00', notes:p.lunch||'Turkey sandwich', date:date},
+    {name:'Dinner', time:'18:00', notes:p.dinner||'Rice/chicken', date:date},
+    {name:'Snacks', time:'15:30', notes:p.snacks||'Fruit/yogurt', date:date}
+  ];
+  let sugDiv=document.getElementById('suggestion-list');
+  sugDiv.innerHTML="";
+  out.forEach(function(m){
+    let d=document.createElement('div');
+    d.className="suggestion-item";
+    d.innerHTML=`<b>${m.name}</b> <span>(${m.time} on ${m.date})</span><br><i>${typeof m.notes === "string" ? m.notes : (m.notes ${m.notes}${m.notes} m.notes.notes ? m.notes.notes : "")}${restxt}</i>
+    <br><button class='add-to-plan-btn' data-meal='${m.name}' data-time='${m.time}' data-notes="${encodeURIComponent(m.notes)}">Add to Plan</button>`;
+    sugDiv.appendChild(d);
+  });
+  setTimeout(function(){
+    document.querySelectorAll('.add-to-plan-btn').forEach(btn=>{
+      btn.onclick=function(){
+        let meal={name:this.getAttribute('data-meal'), time:this.getAttribute('data-time'), notes:decodeURIComponent(this.getAttribute('data-notes'))+(restxt?" "+restxt:"")};
+        // Add meal for current date to the planned meal list
+        let meals=JSON.parse(localStorage.getItem('plannedMeals')||'[]');
+        meals.push(meal); localStorage.setItem('plannedMeals',JSON.stringify(meals));
+        alert("Meal added for " + meal.time);
+      }
+    });
+  },50);
+};
+</script>
 <!-- END CAj ONE-MODAL PATCH -->
-<!-- CAJ-ANCHOR:MODALS -->
-<script src="/Academic-Allies/modular/components/meal-planner/bootstrap-suggestor.js"></script>
+
+<div id="suggestion-list"></div>
 </body>
 </html>
-<link rel="icon" href="https://academic-allies-dev.web.app/Academic-Allies/modular/icons/badge-admin-yellow-center.png">
-<link rel="icon" href="https://academic-allies-dev.web.app/Academic-Allies/modular/icons/badge-admin-yellow-center.png">
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("meal-list").addEventListener("click", function(ev) {
+    if (ev.target.classList.contains("remove-btn")) {
+      var li = ev.target.closest("li");
+      var name = li.querySelector(".meal-name").textContent;
+      meals = meals.filter(m => m.name !== name);
+      saveMeals();
+      renderMeals();
+      updateMealsDisplay();
+    }
+  });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var mealList=document.getElementById("meal-list");
+  if(mealList){
+    mealList.addEventListener("click", function(ev) {
+      if(ev.target.classList.contains("remove-btn")){
+        var li=ev.target.closest("li");
+        var name=li.querySelector(".meal-name").textContent;
+        meals=meals.filter(m=>m.name!==name);
+        saveMeals();
+        renderMeals();
+        updateMealsDisplay();
+      }
+    });
+  }
+});
+</script>

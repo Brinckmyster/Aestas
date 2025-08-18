@@ -294,25 +294,145 @@ window.meal = window.meal || {};
 window.planner = window.planner || {};
 window.universal = window.universal || {};
 window.suggestor = window.suggestor || {};
-// Safety: warn if solid meals scheduled at/after 17:00 (liquids-only window)
-(function afterFiveWarning(){
-  function onReady(fn){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn,{once:true});} else { fn(); } }
-  function parseTime(t){ var m=(t||'').match(/^(\d{1,2}):(\d{2})$/); if(!m) return null; return (+m[1])*60 + (+m); }
+// Path sanitizer: fix accidental double /Academic-Allies/ segments at runtime
+(function fixDoubledAcademicAllies(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
   onReady(function(){
-    document.body.addEventListener('click', function(e){
-      var t = e.target;
-      if(!t) return;
-      if(/^Add: /.test(t.textContent||'') || t.classList.contains('add-suggestion-btn')){
-        // Hook into previous prompt-based override if user enters time
-        // We cannot intercept the prompt result directly; as a fallback, ask again if needed
-        setTimeout(function(){
-          var last = window.lastChosenMealTime || ''; // if your add flow stores it, we can reuse; else skip
-          var mins = parseTime(last);
-          if(mins!=null && mins >= 17*60){
-            alert('Reminder: liquids only after 5:00 pm. Consider choosing a liquid option for this time.');
-          }
-        }, 0);
+    try{
+      var bad='/Academic-Allies/Academic-Allies/';
+      var good='/Academic-Allies/';
+      // Fix <script>, <link>, <img>, <a>
+      ['script','link','img','a'].forEach(function(tag){
+        document.querySelectorAll(tag).forEach(function(el){
+          ['src','href'].forEach(function(attr){
+            var v = el.getAttribute && el.getAttribute(attr);
+            if(v && v.indexOf(bad) !== -1){
+              el.setAttribute(attr, v.replace(bad, good));
+            }
+          });
+        });
+      });
+    }catch(_){}
+  });
+})();
+// Enforce standard catalog on main planner (avoid any Mary-specific gentle merges)
+(function enforceStandardCatalogMain(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  onReady(function(){
+    try{
+      if(window.location.pathname.indexOf('/meal-planner/')!==-1){
+        // If a 'gentle' marker exists from Mary logic, strip it
+        if(window.maryTiming){ try{ delete window.maryTiming; }catch(_){ window.maryTiming = undefined; } }
+        // If cat looks overridden, lightly normalize: keep existing entries, but prefer standard list if provided globally
+        if(window.standardCat && typeof window.standardCat === 'object'){
+          ['Breakfast','Lunch','Dinner','Snack'].forEach(function(k){
+            if(Array.isArray(window.standardCat[k])) window.cat[k] = window.standardCat[k].slice();
+          });
+        }
       }
-    }, false);
+    }catch(_){}
+  });
+})();
+// Time formatting: display 12-hour instead of 24-hour
+(function twelveHourDisplay(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  function to12h(hhmm){
+    var m = (hhmm||'').match(/^(\d{1,2}):(\d{2})$/); if(!m) return hhmm;
+    var h = (+m[1])%24, mi = m, ampm = h>=12?'PM':'AM', h12 = h%12; if(h12===0) h12 = 12;
+    return h12 + ':' + mi + ' ' + ampm;
+  }
+  // Expose globally for other modules
+  window.to12h = window.to12h || to12h;
+
+  onReady(function(){
+    try{
+      // Rewrite visible times in common locations
+      // 1) Any element with class .suggestion-time
+      document.querySelectorAll('.suggestion-time').forEach(function(el){
+        var t = (el.textContent||'').trim(); var m = t.match(/(\d{1,2}:\d{2})/);
+        if(m){ el.textContent = t.replace(m[1], to12h(m[2])); }
+      });
+      // 2) Common time labels inside planner rows
+      document.querySelectorAll('[data-time], .time-label, .meal-time').forEach(function(el){
+        var t = el.getAttribute('data-time') || (el.textContent||'').trim();
+        var m = (t||'').match(/^(\d{1,2}):(\d{2})$/);
+        if(m){
+          el.setAttribute && el.setAttribute('data-time-12', to12h(m[0]));
+          // If text looks like just HH:MM, replace it
+          if(/^\d{1,2}:\d{2}$/.test(t)) el.textContent = to12h(t);
+        }
+      });
+    }catch(_){}
+  });
+})();
+// Main Planner: standard base (seed only if empty) + 12-hour time display; ensure no Mary bleed
+(function mainStandardBase(){
+  function onReady(f){ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f,{once:true});} else { f(); } }
+  function to12h(hhmm){
+    var m=(hhmm||'').match(/^(\d{1,2}):(\d{2})$/); if(!m) return hhmm;
+    var h=(+m[1])%24, mi=m, ampm=h>=12?'PM':'AM', h12=h%12||12; return h12+':'+mi+' '+ampm;
+  }
+  onReady(function(){
+    try{
+      // Remove any Mary-only markers just in case
+      if (window.maryTiming) { try{ delete window.maryTiming; } catch(_){ window.maryTiming=undefined; } }
+
+      // Seed a standard plan only if none exists
+      var hasPlan = false;
+      try { hasPlan = !!JSON.parse(localStorage.getItem('simpleMealPlan') || 'null'); } catch(_){}
+      if(!hasPlan){
+        var plan = {
+          date: null,
+          meals: [
+            { name:'Breakfast', time:'08:00', text:'Oatmeal with fruit' },
+            { name:'Lunch',     time:'12:00', text:'Turkey sandwich + veggies' },
+            { name:'Dinner',    time:'18:00', text:'Chicken, rice, and vegetables' }
+          ],
+          snacks: { times:['10:30','15:30'], text:'Fruit; yogurt; nuts; crackers + cheese; hummus + pita' },
+          restrictions: ''
+        };
+        localStorage.setItem('simpleMealPlan', JSON.stringify(plan));
+      }
+
+      // Provide a mainstream catalog (non-gentle, varied, pantry-friendly)
+      var Standard = {
+        Breakfast: [
+          'Oatmeal with fruit','Eggs and toast','Yogurt with granola','Smoothie (fruit + yogurt)','Pancakes (weekend)'
+        ],
+        Lunch: [
+          'Turkey sandwich + veggies','Rice bowl (chicken or beans)','Pasta marinara','Chicken salad wrap','Leftovers'
+        ],
+        Dinner: [
+          'Chicken, rice, and vegetables','Taco night (beef or beans)','Baked pasta','Stir-fry + rice','Sheet pan chicken + potatoes'
+        ],
+        Snack: [
+          'Fruit','Yogurt','Nuts','Crackers + cheese','Hummus + pita','Popcorn'
+        ]
+      };
+      // Initialize or merge without duplicates
+      window.cat = window.cat || {};
+      ['Breakfast','Lunch','Dinner','Snack'].forEach(function(k){
+        var base = Array.isArray(window.cat[k]) ? window.cat[k] : [];
+        var merged = Array.from(new Set([].concat(base, Standard[k]||[])));
+        window.cat[k] = merged;
+      });
+
+      // Convert visible times to 12-hour
+      (function to12hourUi(){
+        try{
+          document.querySelectorAll('.suggestion-time').forEach(function(el){
+            var t=(el.textContent||'').trim(), m=t.match(/(\d{1,2}:\d{2})/); if(m) el.textContent=t.replace(m[1], to12h(m[2]));
+          });
+          document.querySelectorAll('[data-time], .time-label, .meal-time').forEach(function(el){
+            var t=el.getAttribute('data-time') || (el.textContent||'').trim();
+            var m=(t||'').match(/^(\d{1,2}):(\d{2})$/);
+            if(m){ el.setAttribute('data-time-12', to12h(m)); if(/^\d{1,2}:\d{2}$/.test(t)) el.textContent = to12h(t); }
+          });
+        }catch(_){}
+      })();
+
+      // Console tag for clarity
+      try{ console.info('[Planner] Standard profile active'); }catch(_){}
+    }catch(_){}
   });
 })();

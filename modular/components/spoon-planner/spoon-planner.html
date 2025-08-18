@@ -568,3 +568,63 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
+
+<!-- Add Task Handler Injected [CAj] -->
+<script>
+const DEFAULT_SPOONS = 12;
+let spoons = DEFAULT_SPOONS;
+let tasks = [];
+function updateSpoonsDisplay() {
+  const spoonsElem = document.getElementById('spoons-remaining');
+  const used = tasks.reduce((sum, t) => sum + t.spoons, 0);
+  const remaining = spoons - used;
+  spoonsElem.textContent = `Spoons Remaining: ${remaining}`;
+}
+function renderTasks() {
+  const list = document.getElementById('task-list');
+  list.innerHTML = '';
+  tasks.forEach(task => {
+    const li = document.createElement('li');
+    li.textContent = `${task.name} (${task.spoons} spoons)`;
+    list.appendChild(li);
+  });
+}
+document.getElementById('add-task-btn').addEventListener('click', function() {
+  const name = document.getElementById('task-name').value.trim();
+  const spoonsNeeded = parseInt(document.getElementById('task-spoons').value, 10);
+  if (!name || isNaN(spoonsNeeded)) {
+    alert("Please enter a task name and a valid number of spoons.");
+    return;
+  }
+  tasks.push({ name, spoons: spoonsNeeded });
+  renderTasks();
+  updateSpoonsDisplay();
+});
+updateSpoonsDisplay();
+</script>
+<script>
+document.getElementById("add-task-btn").addEventListener("click", function() {
+  const name = document.getElementById("task-name").value.trim();
+  const spoonsNeeded = parseInt(document.getElementById("task-spoons").value, 10);
+  if (!name || isNaN(spoonsNeeded)) {
+    alert("Please enter a task name and a valid number of spoons.");
+    return;
+  }
+  if (!window.tasks) window.tasks = [];
+  window.tasks.push({ name, spoons: spoonsNeeded });
+  // Optionally: update spoons remaining and render tasks here.
+});
+</script>
+<script>
+document.getElementById("add-task-btn").addEventListener("click", function() {
+  const name = document.getElementById("task-name").value.trim();
+  const spoonsNeeded = parseInt(document.getElementById("task-spoons").value, 10);
+  if (!name || isNaN(spoonsNeeded)) {
+    alert("Please enter a task name and a valid number of spoons.");
+    return;
+  }
+  if (!window.tasks) window.tasks = [];
+  window.tasks.push({ name, spoons: spoonsNeeded });
+  // Optionally: update spoons remaining and render tasks here.
+});
+</script>

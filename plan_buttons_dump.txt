@@ -1,0 +1,12 @@
+        <button type="button" id="load-base-meal" class="upload-btn">Load Base Plan</button>
+        <button type="button" id="reset-meals" class="reset-btn" aria-label="Reset daily meals">Reset</button>
+        <button type="button" id="suggest-meals" class="suggest-btn" aria-label="Generate meal suggestions">Suggest Meals</button>
+        <button type="submit" class="add-btn">Add Meal</button>
+<button id="show-plan-template" style="margin-bottom: 1em;">Show Editable Base Plan Template</button>
+    <button type="submit">Save Plan</button>
+    <button type="button" id="close-template-modal">Cancel</button>
+<button type="submit">Save Plan</button>
+<button type="button" id="close-template-modal">Cancel</button>
+<button type="submit">Save Plan</button>
+<button type="button" id="close-template-modal">Cancel</button>
+    <br><button class='add-to-plan-btn' data-meal='${m.name}' data-time='${m.time}' data-notes="${encodeURIComponent(m.notes)}">Add to Plan</button>`;

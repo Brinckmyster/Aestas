@@ -280,7 +280,6 @@ function renderMeals() {
         removeBtn.textContent = 'Remove';
         removeBtn.addEventListener('click', () => {
             meals.splice(idx, 1);
-            saveMeals();
             renderMeals();
             updateMealsDisplay();
         });
@@ -326,7 +325,6 @@ function renderSuggestions(suggestions) {
         addBtn.textContent = 'Add to Plan';
         addBtn.addEventListener('click', () => {
             meals.push({ ...meal });
-            saveMeals();
             renderMeals();
             updateMealsDisplay();
         });
@@ -440,7 +438,6 @@ function loadBaseMeals() {
 
 function resetMeals() {
     meals = [];
-    saveMeals();
     renderMeals();
     updateMealsDisplay();
 }
@@ -576,7 +573,6 @@ async function parseBaseMealFile(file, callback) {
         if (!name || !time) return;
         
         meals.push({ name, time, notes });
-        saveMeals();
         renderMeals();
         updateMealsDisplay();
         this.reset();

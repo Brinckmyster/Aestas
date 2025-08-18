@@ -1,4 +1,3 @@
-cat > modular/components/meal-planner/universal-suggestor.js <<'EOF'
 // Universal Meal Suggestor for Academic Allies
 // Inject this logic into your HTML (script tag, bottom) after let basePlan = null;
 // This replaces generateSuggestions() to ensure everyone sees real meals.

@@ -1,4 +1,5 @@
-<script src="/Academic-Allies/modular/shared-header.js"></script>
+<div id="shared-header"></div>
+<script>fetch("/Academic-Allies/modular/shared-header.html").then(r => r.text()).then(html => {document.getElementById("shared-header").innerHTML = html;});</script>
 <!-- Place this file in components/spoon-planner/spoon-planner.html -->
 <style>
 .spoon-planner {

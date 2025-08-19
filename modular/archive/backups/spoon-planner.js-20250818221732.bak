@@ -39,6 +39,7 @@ function updateSpoonsDisplay() {
   } else {
     spoonsElem.style.color = '';
   }
+}
 
 function renderTasks() {
   const list = document.getElementById('task-list');
@@ -77,9 +78,14 @@ function renderTasks() {
 
     list.appendChild(li);
   });
+}
+
+function saveSpoonTasks() {
   localStorage.setItem('spoonTasks', JSON.stringify(tasks));
+}
 
 function loadSpoonTasks() {
+  const saved = localStorage.getItem('spoonTasks');
   if (saved) {
     try {
       tasks = JSON.parse(saved);

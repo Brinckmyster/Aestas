@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 document.addEventListener("DOMContentLoaded",function(){
   var btn = document.getElementById("add-task-btn");
+var btn = document.getElementById("add-task-btn");
   var taskList = document.getElementById("task-list");
   if(btn && taskList){
     btn.addEventListener("click", function(){

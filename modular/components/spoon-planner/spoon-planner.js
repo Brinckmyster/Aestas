@@ -116,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
     tasks.push({ name, spoons: spoonsNeeded });
     saveSpoonTasks();
     renderTasks();
-    updateSpoonsDisplay();
     this.reset();
   });
 
@@ -124,9 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (confirm('Reset all tasks and spoons for today?')) {
       resetSpoons();
     }
-  });
-});
-      taskList.innerHTML="";
 });
 document.addEventListener("DOMContentLoaded",function(){
   var btn = document.getElementById("add-task-btn");

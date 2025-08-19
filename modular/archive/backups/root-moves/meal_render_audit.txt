@@ -1,0 +1,121 @@
+5:    <link rel="stylesheet" href="meal-planner.css">
+26:<section id="meal-planner" class="main-card big-tabs meal-planner" aria-label="Meal Planner and Suggestion Tool">
+28:    <div class="meal-upload">
+29:        <label for="base-meal-file" class="upload-label">Upload Base Meal Plan:</label>
+30:        <input type="file" id="base-meal-file" accept=".json,.txt,.csv,.pdf" aria-label="Upload base meal plan" />
+31:        <button type="button" id="load-base-meal" class="upload-btn">Load Base Plan</button>
+33:    <div class="meal-summary" aria-live="polite">
+34:        <span id="meals-today">Meals Planned Today: <strong>0</strong></span>
+35:        <button type="button" id="reset-meals" class="reset-btn" aria-label="Reset daily meals">Reset</button>
+36:        <button type="button" id="suggest-meals" class="suggest-btn" aria-label="Generate meal suggestions">Suggest Meals</button>
+37:    <form id="add-meal-form" class="add-meal-form" autocomplete="off">
+38:        <label for="meal-name">Meal</label>
+39:        <input type="text" id="meal-name" name="meal-name" required aria-required="true" maxlength="40" />
+40:        <label for="meal-time">Time</label>
+41:        <input type="time" id="meal-time" name="meal-time" required aria-required="true" />
+42:        <label for="meal-notes">Notes</label>
+43:        <input type="text" id="meal-notes" name="meal-notes" maxlength="80" />
+46:    <ul id="meal-list" class="meal-list" aria-label="Planned Meals"></ul>
+50:.meal-planner {
+51:.meal-planner h2 {
+52:.meal-upload {
+55:.meal-summary {
+58:.add-meal-form {
+59:.add-meal-form label {
+60:.add-meal-form input {
+62:.meal-list, .suggestion-list {
+63:.meal-item, .suggestion-item {
+64:.meal-info, .suggestion-info {
+65:.meal-name, .suggestion-name {
+66:.meal-time, .suggestion-time {
+67:.meal-notes, .suggestion-notes {
+69:    .add-meal-form {
+70:    .meal-summary {
+74:// CAj: Fixed meal planner logic for Mary's format and universal meal plans
+75:let meals = [];
+84:    mealTimes: [],
+90:    const mealsElem = document.getElementById('meals-today');
+91:    mealsElem.innerHTML = `Meals Planned Today: <strong>${meals.length}</strong>`;
+94:function renderMeals() {
+95:    const list = document.getElementById('meal-list');
+97:    meals.forEach((meal, idx) => {
+99:        li.className = 'meal-item';
+103:        info.className = 'meal-info';
+106:        name.className = 'meal-name';
+107:        name.textContent = meal.name;
+111:        time.className = 'meal-time';
+112:        time.textContent = `Time: ${meal.time}`;
+115:        if (meal.notes) {
+117:            notes.className = 'meal-notes';
+118:            notes.textContent = `Notes: ${meal.notes}`;
+127:        removeBtn.setAttribute('aria-label', `Remove meal ${meal.name}`);
+136:function renderSuggestions(suggestions) {
+139:    suggestions.forEach(meal => {
+148:        name.textContent = meal.name;
+153:        time.textContent = `Time: ${meal.time}`;
+156:        if (meal.notes) {
+159:            notes.textContent = `Notes: ${meal.notes}`;
+168:        addBtn.setAttribute('aria-label', `Add suggested meal ${meal.name} to plan`);
+171:            meals.push({ ...meal });
+173:            renderMeals();
+185:////    if (dietaryRules.mealTimes.length === 0) {
+186:////        alert('Please upload a base meal plan with meal times first.');
+191:////    const shuffledTimes = [...dietaryRules.mealTimes].sort(() => Math.random() - 0.5).slice(0, Math.min(3, dietaryRules.mealTimes.length));
+202:////                notes: 'Water, herbal tea, or other liquids only after 5:00 PM per meal timing rules.'
+207:////        // Generate meal from available food groups
+227:////    renderSuggestions(suggestions);
+231://    localStorage.setItem('plannedMeals', JSON.stringify(meals));
+238:            meals = JSON.parse(saved);
+240:            meals = [];
+268:                fats: [], restricted: [], mealTimes: [], timingRules: [], prep: []
+275:    meals = [];
+277:    renderMeals();
+314:            fats: [], restricted: [], mealTimes: [], timingRules: [], prep: []
+334:                    // Extract meal times (Solids: 10:30 am, 1:30 pm, 4:30 pm)
+346:                        dietaryRules.mealTimes.push(...times);
+380:        // Generate base meals for each meal time
+381:        dietaryRules.mealTimes.forEach(time => {
+385:                notes: 'Generated from base meal plan'
+389:        if (parsedMeals.length === 0 && Object.values(dietaryRules).flat().length === 0) { parsedMeals = [{name:'Breakfast', time:'08:00', notes:'Default meal'}]; dietaryRules = {}; }
+394:        alert(`Error parsing file: ${err.message}. Please ensure the file contains valid meal data or dietary rules.`);
+401:    renderMeals();
+404:    document.getElementById('add-meal-form').addEventListener('submit', function (e) {
+406:        const name = document.getElementById('meal-name').value.trim();
+407:        const time = document.getElementById('meal-time').value;
+408:        const notes = document.getElementById('meal-notes').value.trim();
+412:        meals.push({ name, time, notes });
+414:        renderMeals();
+419:    document.getElementById('reset-meals').addEventListener('click', function () {
+420:        if (confirm('Reset all planned meals for today?')) {
+425:    document.getElementById('load-base-meal').addEventListener('click', function () {
+426:        const fileInput = document.getElementById('base-meal-file');
+430:            alert('Please select a base meal plan file to upload.');
+437:            alert(`Base meal plan loaded with ${baseMeals.length} meal times and dietary rules! Click "Suggest Meals" to get suggestions.`);
+438:            renderSuggestions([]);
+442:    document.getElementById('suggest-meals').addEventListener('click', function () {
+470:    breakfast: this.breakfast.value || "Oatmeal with fruit",
+481:document.getElementById('suggest-meals').onclick = function() {
+493:      {name:"Oatmeal with fruit",time:"08:00",notes:"Breakfast. Classic and easy."},
+515:document.getElementById('template-form').onsubmit=function(e){e.preventDefault();let plan={breakfast:this.breakfast.value||"Oatmeal with fruit",lunch:this.lunch.value||"Turkey & cheese sandwich",dinner:this.dinner.value||"Rice and chicken stir fry",snacks:this.snacks.value||"Yogurt, apple slices"};localStorage.setItem('simpleMealPlan',JSON.stringify(plan));alert("Plan saved! Click 'Suggest Meals' to use it.");document.getElementById('plan-template-modal').style.display='none';};
+516:document.getElementById('suggest-meals').onclick=function(){let plan=null,out=[];try{plan=JSON.parse(localStorage.getItem('simpleMealPlan'))}catch{}if(plan&&Object.keys(plan).length>0){out=[{name:"Breakfast",time:"08:00",notes:plan.breakfast},{name:"Lunch",time:"12:00",notes:plan.lunch},{name:"Dinner",time:"18:00",notes:plan.dinner},{name:"Snacks",time:"15:30",notes:plan.snacks}];}else{out=[{name:"Oatmeal with fruit",time:"08:00",notes:"Breakfast. Classic and easy."},{name:"Turkey & cheese sandwich",time:"12:00",notes:"Lunch. Use bread/turkey/cheese or equivalent."},{name:"Chicken stir fry with rice",time:"18:00",notes:"Dinner. Quick, reheats well."},{name:"Apple slices + yogurt",time:"15:30",notes:"Snack."}];}let sugDiv=document.getElementById('suggestion-list');sugDiv.innerHTML="";out.forEach(m=>{let d=document.createElement('div');d.className="suggestion-item";d.innerHTML=`<b>${m.name}</b> <span>at ${m.time}</span><br><i>${m.notes}</i>`;sugDiv.appendChild(d);});};
+531:// Save plan, keyed by date, meal, and restrictions for full persistence
+534:  let p={breakfast:this.breakfast.value||"Oatmeal",lunch:this.lunch.value||"Turkey sandwich",dinner:this.dinner.value||"Rice/chicken",snacks:this.snacks.value||"Fruit/yogurt", restrictions:this.restrictions.value||"None", plandate: this.plandate.value||new Date().toISOString().slice(0,10)};
+539:// Suggest meals for plan date/time; each suggestion gets "Add to Plan"
+540:document.getElementById('suggest-meals').onclick=function(){
+545:    {name:'Breakfast', time:'08:00', notes:p.breakfast||'Oatmeal', date:date},
+556:    <br><button class='add-to-plan-btn' data-meal='${m.name}' data-time='${m.time}' data-notes="${encodeURIComponent(m.notes)}">Add to Plan</button>`;
+562:        let meal={name:this.getAttribute('data-meal'), time:this.getAttribute('data-time'), notes:decodeURIComponent(this.getAttribute('data-notes'))+(restxt?" "+restxt:"")};
+563:        // Add meal for current date to the planned meal list
+564:        let meals=JSON.parse(localStorage.getItem('plannedMeals')||'[]');
+565:        meals.push(meal); localStorage.setItem('plannedMeals',JSON.stringify(meals));
+566:        alert("Meal added for " + meal.time);
+580:  document.getElementById("meal-list").addEventListener("click", function(ev) {
+583:      var name = li.querySelector(".meal-name").textContent;
+584:      meals = meals.filter(m => m.name !== name);
+586:      renderMeals();
+595:  var mealList=document.getElementById("meal-list");
+596:  if(mealList){
+597:    mealList.addEventListener("click", function(ev) {
+600:        var name=li.querySelector(".meal-name").textContent;
+601:        meals=meals.filter(m=>m.name!==name);
+603:        renderMeals();

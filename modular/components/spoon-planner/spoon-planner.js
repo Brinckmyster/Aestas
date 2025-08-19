@@ -127,12 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
       taskList.innerHTML="";
-      window.tasks.forEach(function(task){
-        var li=document.createElement("li");
-        li.textContent=task.name+" — "+task.spoons+" spoons";
-        taskList.appendChild(li);
-      });
-    });
 });
 document.addEventListener("DOMContentLoaded",function(){
   var btn = document.getElementById("add-task-btn");

@@ -1,9 +1,0 @@
-// Use a JS library like ical.js to parse .ics files
-function handleICSUpload(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const icsData = e.target.result;
-    // Parse and render events
-  };
-  reader.readAsText(file);
-}

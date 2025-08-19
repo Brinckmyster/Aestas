@@ -4,7 +4,6 @@
       var spoons = parseInt(document.getElementById("task-spoons").value,10);
       if(!name||isNaN(spoons)){
         alert("Task and spoons required.");
-        return;
       }
       if(!window.tasks)window.tasks=[];
       window.tasks.push({name: name, spoons: spoons});

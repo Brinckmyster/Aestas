@@ -39,6 +39,7 @@ function updateSpoonsDisplay() {
   } else {
     spoonsElem.style.color = '';
   }
+}
 
 function renderTasks() {
   const list = document.getElementById('task-list');

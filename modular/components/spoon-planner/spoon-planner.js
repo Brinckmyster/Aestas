@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", function() {
   var btn = document.getElementById("add-task-btn");
 var btn = document.getElementById("add-task-btn");
   var taskList = document.getElementById("task-list");
@@ -19,4 +20,5 @@ var btn = document.getElementById("add-task-btn");
       });
     });
   }
+});
 });

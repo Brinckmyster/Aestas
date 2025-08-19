@@ -1,0 +1,538 @@
+<header class="site-header" role="banner">
+  <div class="header-content">
+    <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
+    <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/home.png" width="48" height="48" title="Academic Allies Home"/>
+    </a>
+      <span class="tagline" title="Academic Allies
+Your disability accommodations and support network">Your disability accommodations and support network</span>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="/Academic-Allies/modular/components/calendar/calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="/Academic-Allies/modular/emergency.html" title="Emergency Contact">Emergency Contact</a></li>
+        <li><a href="/Academic-Allies/modular/checkin.html" title="Daily Check-In">Daily Check-In</a></li>
+        <li><a href="/Academic-Allies/modular/icon-gallery.html" title="Icon Gallery">Icon Gallery</a></li>
+        <li><a href="/Academic-Allies/modular/static/sitemap.html" title="Site Map">Site Map</a></li>
+      </ul>
+    </nav>
+    
+    <div class="header-controls">
+      <!-- Google Sign-In Container -->
+      <div id="googleSignInContainer"></div>
+      
+      <!-- JS-Draggable Status Circle -->
+      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
+    </div>
+  </div>
+  
+  <!-- Status Circle Container -->
+  <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
+  
+  <!-- Google Identity Services -->
+  <script async defer src="https://accounts.google.com/gsi/client"></script>
+  
+  <!-- Google Sign-In JavaScript -->
+  <script>
+    // Initialize Google Sign-In when the API loads
+    window.onload = function() {
+      google.accounts.id.initialize({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID',
+        callback: handleCredentialResponse
+      });
+      
+      google.accounts.id.renderButton(
+        document.getElementById('googleSignInContainer'),
+        {
+          theme: 'outline',
+          size: 'medium',
+          type: 'standard',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          text: 'signin_with'
+        }
+      );
+    };
+    
+    function handleCredentialResponse(response) {
+      // Handle the signed-in user info
+      console.log('Encoded JWT ID token: ' + response.credential);
+      // Add your sign-in logic here
+    }
+  </script>
+<script src="/Academic-Allies/modular/js/draggable.js"></script>
+</header>
+
+<style>
+.site-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  padding: 12px 20px;
+}
+
+.header-content {
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+
+.home-link:hover {
+  color: #0066cc;
+}
+
+.home-icon {
+  margin-right: 8px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 20px;
+}
+
+.nav-list li {
+  margin: 0;
+}
+
+.nav-list a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.nav-list a:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#status-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #dc3545;
+  cursor: pointer;
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+#status-circle:hover {
+  background-color: #c82333;
+}
+
+#status-circle.signed-in {
+  background-color: #28a745;
+}
+
+#status-circle.signed-in:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+  justify-content: flex-start;
+    gap: 15px;
+  }
+  
+  .nav-list {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+}</style>
+<header class="site-header" role="banner">
+  <div class="header-content">
+    <a aria-label="Home" class="home-link" href="/Academic-Allies/" title="Go Home">
+    <img alt="Home" class="home-icon" src="/Academic-Allies/modular/icons/home.png" width="48" height="48" title="Academic Allies Home"/>
+    </a>
+      <span class="tagline" title="Academic Allies
+Your disability accommodations and support network">Your disability accommodations and support network</span>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="/Academic-Allies/modular/components/calendar/calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="/Academic-Allies/modular/emergency.html" title="Emergency Contact">Emergency Contact</a></li>
+        <li><a href="/Academic-Allies/modular/checkin.html" title="Daily Check-In">Daily Check-In</a></li>
+        <li><a href="/Academic-Allies/modular/icon-gallery.html" title="Icon Gallery">Icon Gallery</a></li>
+        <li><a href="/Academic-Allies/modular/static/sitemap.html" title="Site Map">Site Map</a></li>
+      </ul>
+    </nav>
+    
+    <div class="header-controls">
+      <!-- Google Sign-In Container -->
+      <div id="googleSignInContainer"></div>
+      
+      <!-- JS-Draggable Status Circle -->
+      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
+    </div>
+  </div>
+  
+  <!-- Status Circle Container -->
+  <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
+  
+  <!-- Google Identity Services -->
+  <script async defer src="https://accounts.google.com/gsi/client"></script>
+  
+  <!-- Google Sign-In JavaScript -->
+  <script>
+    // Initialize Google Sign-In when the API loads
+    window.onload = function() {
+      google.accounts.id.initialize({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID',
+        callback: handleCredentialResponse
+      });
+      
+      google.accounts.id.renderButton(
+        document.getElementById('googleSignInContainer'),
+        {
+          theme: 'outline',
+          size: 'medium',
+          type: 'standard',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          text: 'signin_with'
+        }
+      );
+    };
+    
+    function handleCredentialResponse(response) {
+      // Handle the signed-in user info
+      console.log('Encoded JWT ID token: ' + response.credential);
+      // Add your sign-in logic here
+    }
+  </script>
+<script src="/Academic-Allies/modular/js/draggable.js"></script>
+</header>
+
+<style>
+.site-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  padding: 12px 20px;
+}
+
+.header-content {
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+
+.home-link:hover {
+  color: #0066cc;
+}
+
+.home-icon {
+  margin-right: 8px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 20px;
+}
+
+.nav-list li {
+  margin: 0;
+}
+
+.nav-list a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.nav-list a:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#status-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #dc3545;
+  cursor: pointer;
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+#status-circle:hover {
+  background-color: #c82333;
+}
+
+#status-circle.signed-in {
+  background-color: #28a745;
+}
+
+#status-circle.signed-in:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+  justify-content: flex-start;
+    gap: 15px;
+  }
+  
+  .nav-list {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+}</style>
+<!-- Message System Component for Academic Allies -->
+<!-- Place this file in components/message-system/message-system.html -->
+
+<section id="message-system" class="message-system" aria-label="Support Messages">
+  <h2>Messages</h2>
+  <div class="messages-header">
+    <button type="button" id="refresh-messages" class="refresh-btn" aria-label="Refresh messages">Refresh</button>
+    <button type="button" id="compose-message" class="compose-btn" aria-label="Compose new message">New Message</button>
+  </div>
+  <ul id="message-list" class="message-list" aria-label="Message Thread">
+    <!-- Messages will be dynamically added here -->
+  </ul>
+  <form id="new-message-form" class="new-message-form" style="display:none;" autocomplete="off" aria-label="Compose Message">
+    <label for="message-content">Message</label>
+    <textarea id="message-content" name="message-content" rows="3" maxlength="500" required aria-required="true"></textarea>
+    <div class="form-actions">
+      <button type="submit" class="send-btn">Send</button>
+      <button type="button" id="cancel-compose" class="cancel-btn">Cancel</button>
+    </div>
+  </form>
+</section>
+
+<style>
+.message-system {
+  background: #f8fafc;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.message-system h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #22223b;
+}
+.messages-header {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+.refresh-btn, .compose-btn {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 0.5em;
+  padding: 0.4em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.refresh-btn:focus, .compose-btn:focus {
+  outline: 2px solid #6366f1;
+}
+.message-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1em 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.message-item {
+  background: #fff;
+  border-radius: 0.5em;
+  padding: 0.7em 1em;
+  margin-bottom: 0.5em;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+}
+.message-meta {
+  font-size: 0.9em;
+  color: #6b7280;
+  margin-bottom: 0.3em;
+}
+.message-content {
+  font-size: 1.05em;
+  color: #22223b;
+  word-break: break-word;
+}
+.new-message-form {
+  background: #e0e7ff;
+  border-radius: 0.5em;
+  padding: 1em;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.new-message-form label {
+  font-weight: 600;
+}
+.new-message-form textarea {
+  border-radius: 0.3em;
+  border: 1px solid #bdbdbd;
+  padding: 0.5em;
+  font-size: 1em;
+}
+.form-actions {
+  display: flex;
+  gap: 1em;
+  margin-top: 0.5em;
+}
+.send-btn {
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  border-radius: 0.5em;
+  padding: 0.5em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cancel-btn {
+  background: #bdbdbd;
+  color: #22223b;
+  border: none;
+  border-radius: 0.5em;
+  padding: 0.5em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.send-btn:focus, .cancel-btn:focus {
+  outline: 2px solid #3b82f6;
+}
+@media (max-width: 700px) {
+  .message-system {
+    padding: 1em;
+  }
+}
+</style>
+
+<script>
+// Message System Component Logic
+
+// Simulated local message storage; replace with real backend integration as needed
+let messages = [];
+
+function renderMessages() {
+  const list = document.getElementById('message-list');
+  list.innerHTML = '';
+  if (messages.length === 0) {
+    const empty = document.createElement('li');
+    empty.className = 'message-item';
+    empty.innerHTML = '<span class="message-meta">No messages yet.</span>';
+    list.appendChild(empty);
+    return;
+  }
+  messages.slice().reverse().forEach(msg => {
+    const li = document.createElement('li');
+    li.className = 'message-item';
+    const meta = document.createElement('div');
+    meta.className = 'message-meta';
+    meta.textContent = `${msg.sender} • ${msg.time}`;
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    content.textContent = msg.content;
+    li.appendChild(meta);
+    li.appendChild(content);
+    list.appendChild(li);
+  });
+}
+
+function saveMessages() {
+  localStorage.setItem('supportMessages', JSON.stringify(messages));
+}
+
+function loadMessages() {
+  const saved = localStorage.getItem('supportMessages');
+  if (saved) {
+    try {
+      messages = JSON.parse(saved);
+    } catch {
+      messages = [];
+    }
+  }
+}
+
+function showComposeForm(show) {
+  document.getElementById('new-message-form').style.display = show ? 'flex' : 'none';
+  if (show) {
+    document.getElementById('message-content').focus();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  loadMessages();
+  renderMessages();
+
+  document.getElementById('refresh-messages').addEventListener('click', function () {
+    loadMessages();
+    renderMessages();
+  });
+
+  document.getElementById('compose-message').addEventListener('click', function () {
+    showComposeForm(true);
+  });
+
+  document.getElementById('cancel-compose').addEventListener('click', function () {
+    showComposeForm(false);
+    document.getElementById('new-message-form').reset();
+  });
+
+  document.getElementById('new-message-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const content = document.getElementById('message-content').value.trim();
+    if (!content) return;
+    const now = new Date();
+    const time = now.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+    const sender = 'You'; // Replace with real user info as needed
+    messages.push({ sender, content, time });
+    saveMessages();
+    renderMessages();
+    showComposeForm(false);
+    this.reset();
+  });
+});
+</script>

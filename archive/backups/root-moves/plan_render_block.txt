@@ -1,0 +1,41 @@
+document.getElementById('close-template-modal').onclick = function() {
+  document.getElementById('plan-template-modal').style.display = 'none';
+}
+document.getElementById('template-form').onsubmit = function(e){
+  e.preventDefault();
+  let plan = {
+    breakfast: this.breakfast.value || "Oatmeal with fruit",
+    lunch: this.lunch.value || "Turkey & cheese sandwich",
+    dinner: this.dinner.value || "Rice and chicken stir fry",
+    snacks: this.snacks.value || "Yogurt, apple slices"
+  };
+  localStorage.setItem('simpleMealPlan', JSON.stringify(plan));
+  alert("Plan saved! Click 'Suggest Meals' to use it.");
+  document.getElementById('plan-template-modal').style.display = 'none';
+}
+</script>
+<script>
+document.getElementById('suggest-meals').onclick = function() {
+  let plan = null, out = [];
+  try { plan = JSON.parse(localStorage.getItem('simpleMealPlan')); } catch{}
+  if (plan && Object.keys(plan).length > 0) {
+    out = [
+      {name:"Breakfast",time:"08:00",notes:plan.breakfast},
+      {name:"Lunch",time:"12:00",notes:plan.lunch},
+      {name:"Dinner",time:"18:00",notes:plan.dinner},
+      {name:"Snacks",time:"15:30",notes:plan.snacks}
+    ];
+  } else {
+    out = [
+      {name:"Oatmeal with fruit",time:"08:00",notes:"Breakfast. Classic and easy."},
+      {name:"Turkey & cheese sandwich",time:"12:00",notes:"Lunch. Use bread/turkey/cheese or equivalent."},
+      {name:"Chicken stir fry with rice",time:"18:00",notes:"Dinner. Quick, reheats well."},
+      {name:"Apple slices + yogurt",time:"15:30",notes:"Snack."}
+    ];
+  }
+  let sugDiv = document.getElementById('suggestion-list');
+  sugDiv.innerHTML = "";
+  out.forEach(m=>{
+    let d = document.createElement('div');
+    d.className = "suggestion-item";
+    d.innerHTML = `<b>${m.name}</b> <span>at ${m.time}</span><br><i>${m.notes}</i>`;

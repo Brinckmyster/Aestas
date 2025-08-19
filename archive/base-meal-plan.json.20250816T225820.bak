@@ -1,0 +1,22 @@
+{
+    "Breakfast": [
+        "Scrambled eggs, toast",
+        "Oatmeal, fruit",
+        "Greek yogurt, granola"
+    ],
+    "Lunch": [
+        "Turkey sandwich",
+        "Chicken salad",
+        "Grilled cheese w/ soup"
+    ],
+    "Dinner": [
+        "Beef stew",
+        "Chicken stir fry",
+        "Pasta bolognese"
+    ],
+    "Snacks": [
+        "String cheese",
+        "Trail mix",
+        "Apple slices with peanut butter"
+    ]
+}

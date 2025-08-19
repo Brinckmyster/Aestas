@@ -7,7 +7,7 @@ const firebaseConfig = {
   messagingSenderId: "123456789012",
   appId: "1:123456789012:web:abcdef123456789012345678"
 };
-const GOOGLE_CLIENT_ID = "93996985456-ftjjdrj4t32h106o7cmstiuqut32vf0g.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "93996985456-ffj2euk9i4q41v88njuhpusk73mdb31j.apps.googleusercontent.com";
 const CAL_SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
 
 // Initialize Firebase

@@ -21,4 +21,3 @@ var btn = document.getElementById("add-task-btn");
     });
   }
 });
-});

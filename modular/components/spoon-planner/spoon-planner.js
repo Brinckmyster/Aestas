@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
   renderTasks();
   updateSpoonsDisplay();
 
-  document.getElementById('add-task-form').addEventListener('submit', function (e) {
+
     e.preventDefault();
     const name = document.getElementById('task-name').value.trim();
     const spoonsNeeded = parseInt(document.getElementById('task-spoons').value, 10);

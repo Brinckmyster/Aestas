@@ -1,0 +1,19 @@
+// For Android (Health Connect)
+async function getSleepData() {
+  if (window.plugins && window.plugins.health) {
+    window.plugins.health.isAvailable(success => {
+      window.plugins.health.requestAuthorization(
+        [{ read: ['sleep', 'heart_rate'] }],
+        () => {
+          window.plugins.health.queryAggregated({
+            startDate: new Date(Date.now() - 7*24*60*60*1000), // last 7 days
+            endDate: new Date(),
+            dataType: 'sleep'
+          }, data => {
+            // data is an array of sleep records
+            // Use this to auto-fill check-ins and trigger flags
+          }, err => { /* handle error */ });
+        }, err => { /* handle error */ });
+    });
+  }
+}

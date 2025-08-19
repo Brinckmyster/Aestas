@@ -1,0 +1,9 @@
+<script>
+// Auto-load shared header from modular repo
+fetch('../../shared-header.html')
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('shared-header-container').innerHTML = html;
+    })
+    .catch(error => console.log('Header not found, continuing without navigation'));
+</script>

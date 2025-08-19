@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/Academic-Allies/favicon.ico?v=44">
+<link rel="icon" href="/favicon.ico?v=3">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academic Allies – Site Map</title>
+  <link href="./css/style.css" rel="stylesheet" />
+</head>
+<body>
+  <!-- Header will be injected here -->
+  <div id="site-header"></div>
+  <!-- Google integration container -->
+  <div class="g_id_signin"></div>
+
+  <main id="sitemap-page">
+    <h2>Site Map</h2>
+    <div id="sitemap-content">
+      <ul>
+        <li><a href="/Academic-Allies/">Home</a></li>
+        <li><a href="./emergency.html">Emergency Contact</a></li>
+        <li><a href="./checkin.html">Daily Check-In</a></li>
+        <li><a href="/Academic-Allies/modular/components/calendar/calendar.html">Calendar</a></li>
+        <li><a href="./icon-gallery.html">Preview</a></li>
+        <li><a href="./sitemap.html">Site Map</a></li>
+        <li><a href="/Academic-Allies/modular/components/meal-planner-mary/">Mary's Meal Planner</a></li>
+</ul>
+    </div>
+  </main>
+
+  <!-- Fail-safe header loader (ensures all scripts run after insertion)-->
+  <script>
+    fetch('/Academic-Allies/modular/shared-header.html')
+      .then(response => response.text())
+      .then(html => {
+        const container = document.getElementById('site-header');
+        container.innerHTML = html;
+        // Execute any scripts found in the loaded header
+        const scripts = container.querySelectorAll('script');
+        scripts.forEach(oldScript => {
+          const newScript = document.createElement('script');
+          Array.from(oldScript.attributes).forEach(attr =>
+            newScript.setAttribute(attr.name, attr.value)
+          );
+          newScript.textContent = oldScript.textContent;
+          oldScript.replaceWith(newScript);
+        });
+      });
+  </script>
+</body>
+</html>
+*   • <a href="../components/components.html">Components (Demos)</a>

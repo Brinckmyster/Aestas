@@ -1,6 +1,5 @@
   var taskList = document.getElementById("task-list");
   if(btn && taskList){
-    btn.addEventListener("click", function(){
       var name = document.getElementById("task-name").value.trim();
       var spoons = parseInt(document.getElementById("task-spoons").value,10);
       if(!name||isNaN(spoons)){

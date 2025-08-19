@@ -1,5 +1,22 @@
-    // Initialize Google Sign-In when the API loads
-    window.onload = function() {
+  var taskList = document.getElementById("task-list");
+  if(btn && taskList){
+    btn.addEventListener("click", function(){
+      var name = document.getElementById("task-name").value.trim();
+      var spoons = parseInt(document.getElementById("task-spoons").value,10);
+      if(!name||isNaN(spoons)){
+        alert("Task and spoons required.");
+        return;
+      }
+      if(!window.tasks)window.tasks=[];
+      window.tasks.push({name: name, spoons: spoons});
+      taskList.innerHTML="";
+      window.tasks.forEach(function(task){
+        var li=document.createElement("li");
+        li.textContent=task.name+" — "+task.spoons+" spoons";
+        taskList.appendChild(li);
+      });
+    });
+  }
       google.accounts.id.initialize({
         client_id: 'YOUR_GOOGLE_CLIENT_ID',
         callback: handleCredentialResponse
@@ -39,7 +56,6 @@ function updateSpoonsDisplay() {
   } else {
     spoonsElem.style.color = '';
   }
-}
 
 function renderTasks() {
   const list = document.getElementById('task-list');
@@ -102,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
   renderTasks();
   updateSpoonsDisplay();
 
-  document.getElementById('add-task-form').addEventListener('submit', function (e) {
+
     e.preventDefault();
     const name = document.getElementById('task-name').value.trim();
     const spoonsNeeded = parseInt(document.getElementById('task-spoons').value, 10);
@@ -117,7 +133,6 @@ document.addEventListener('DOMContentLoaded', function () {
     tasks.push({ name, spoons: spoonsNeeded });
     saveSpoonTasks();
     renderTasks();
-    updateSpoonsDisplay();
     this.reset();
   });
 
@@ -125,18 +140,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (confirm('Reset all tasks and spoons for today?')) {
       resetSpoons();
     }
-  });
-});
-      taskList.innerHTML="";
-      window.tasks.forEach(function(task){
-        var li=document.createElement("li");
-        li.textContent=task.name+" — "+task.spoons+" spoons";
-        taskList.appendChild(li);
-      });
-    });
 });
 document.addEventListener("DOMContentLoaded",function(){
   var btn = document.getElementById("add-task-btn");
+var btn = document.getElementById("add-task-btn");
   var taskList = document.getElementById("task-list");
   if(btn && taskList){
     btn.addEventListener("click", function(){

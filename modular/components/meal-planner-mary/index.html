@@ -503,21 +503,54 @@ function renderSuggestions(suggestions) {
     });
 }
 
-// [CAj-AUTO] Original generateSuggestions commented out.
+
 // [CAj-AUTO] Original generateSuggestions commented out.
 ////
 
 function generateSuggestions(){
   try{
-    let plan=null; try{ plan=JSON.parse(localStorage.getItem('simpleMealPlan')||'null'); }catch(e){}
+    let plan=null; 
+      try{ plan=JSON.parse(localStorage.getItem('simpleMealPlan')||'null'); }
+      catch(e){}
     const hasGastro=(plan&&plan.restrictions||'').toLowerCase().includes('gastro');
     const soft=hasGastro?['Broth with soft noodles','Smooth yogurt with honey','Mashed potatoes (smooth)','Scrambled eggs (soft)','Thin cream of wheat']:[];
-    const cat={Breakfast:['Oatmeal with fruit','Scrambled eggs and toast','Greek yogurt with granola',...soft],Lunch:['Turkey & cheese sandwich','Chicken salad wrap','Soup and crackers',...soft],Dinner:['Chicken stir fry','Rice and beans','Pasta with marinara',...soft],Snack:['Apple slices','Yogurt','Broth','Banana','Cheese and crackers',...soft]};
-    const slots=[]; if(plan&&Array.isArray(plan.meals)){ for(const m of plan.meals) slots.push({kind:m.name,time:m.time||'',want:m.text||''}); } else { slots.push({kind:'Breakfast',time:'8:00 AM'},{kind:'Lunch',time:'12:00 PM'},{kind:'Dinner',time:'6:00 PM'}); }
-    const snackTimes=(plan&&plan.snacks&&Array.isArray(plan.snacks.times))?plan.snacks.times:[]; for(const t of snackTimes) slots.push({kind:'Snack',time:t, want:(plan&&plan.snacks&&plan.snacks.text)||''});
-    const sugg=slots.map(s=>{ const u=[...new Set(cat[s.kind]||cat.Snack)]; return {kind:s.kind,time:s.time,options:u.slice(0,3)}; });
-    const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML=''; sugg.forEach(s=>{ const w=document.createElement('div'); w.style.margin='0.5em 0'; const t=document.createElement('div'); t.innerHTML='<b>'+ (s.time?(s.time+' · '):'') + s.kind + '</b>'; w.appendChild(t); const o=document.createElement('div'); s.options.forEach(opt=>{ const b=document.createElement('button'); b.textContent='Add: '+opt; b.style.marginRight='0.5em'; b.onclick=()=>addPlannedMeal(s.kind,s.time,opt); o.appendChild(b); }); w.appendChild(o); list.appendChild(w); }); }
-  }catch(e){ const list=document.getElementById('suggestions-list'); if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; } }
+    const cat={Breakfast:['Oatmeal with fruit','Scrambled eggs and toast','Greek yogurt with granola',...soft],
+               Lunch:['Turkey & cheese sandwich','Chicken salad wrap','Soup and crackers',...soft],
+               Dinner:['Chicken stir fry','Rice and beans','Pasta with marinara',...soft],
+               Snack:['Apple slices','Yogurt','Broth','Banana','Cheese and crackers',...soft]};
+    const slots=[]; 
+      if(plan&&Array.isArray(plan.meals)){ 
+          for(const m of plan.meals) slots.push({kind:m.name,time:m.time||'',want:m.text||''}); } 
+      else { slots.push({kind:'Breakfast',time:'8:00 AM'},{kind:'Lunch',time:'12:00 PM'},{kind:'Dinner',time:'6:00 PM'}); }
+    const snackTimes=(plan&&plan.snacks&&Array.isArray(plan.snacks.times))?plan.snacks.times:[]; 
+      for(const t of snackTimes) slots.push({kind:'Snack',time:t, want:(plan&&plan.snacks&&plan.snacks.text)||''});
+    const sugg=slots.map(s=>{ 
+        const u=[...new Set(cat[s.kind]||cat.Snack)]; 
+        return {kind:s.kind,time:s.time,options:u.slice(0,3)}; });
+    const list=document.getElementById('suggestions-list'); 
+      if(list) { 
+          list.innerHTML=''; 
+          sugg.forEach(s=>{ 
+              const w=document.createElement('div'); 
+              w.style.margin='0.5em 0'; 
+              const t=document.createElement('div'); 
+              t.innerHTML='<b>'+ (s.time?(s.time+' · '):'') + s.kind + '</b>'; 
+              w.appendChild(t); 
+              const o=document.createElement('div'); 
+              s.options.forEach(opt=>{ 
+                  const b=document.createElement('button'); 
+                  b.textContent='Add: '+opt; b.style.marginRight='0.5em'; 
+                  b.onclick=()=>addPlannedMeal(s.kind,s.time,opt); 
+                  o.appendChild(b); 
+              }); 
+              w.appendChild(o); 
+              list.appendChild(w); 
+          }); 
+      }
+  }
+  catch(e){ 
+      const list=document.getElementById('suggestions-list'); 
+      if(list){ list.innerHTML='<div>Suggestions unavailable. Using fallback.</div>'; } }
 }
 
 ////    
@@ -776,7 +809,15 @@ async function parseBaseMealFile(file, callback) {
 </script>
 
 <script>window.modular=window.modular||{};</script>
-<script>(function(){window.cat=window.cat||{Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],Snack:["Apple slices","Yogurt","Broth"]};})();</script>
+<script>
+    function() {
+        window.cat=window.cat||
+        {Breakfast:["Oatmeal with fruit","Scrambled eggs and toast","Yogurt with honey"],
+         Lunch:["Turkey & cheese sandwich","Chicken salad wrap","Soup and crackers"],
+         Dinner:["Chicken stir fry","Rice and beans","Pasta with marinara"],
+         Snack:["Apple slices","Yogurt","Broth"]};
+    }
+</script>
 
 
 
@@ -803,7 +844,33 @@ async function parseBaseMealFile(file, callback) {
     <button type="button" id="close-template-modal">Cancel</button>
   </form>
 </div>
-<script>(function(){const b=document.getElementById('show-plan-template');if(b){b.onclick=()=>{document.getElementById('plan-template-modal').style.display='block';}}const c=document.getElementById('close-template-modal');if(c){c.onclick=()=>{document.getElementById('plan-template-modal').style.display='none';}}const f=document.getElementById('template-form');if(f){f.onsubmit=function(e){e.preventDefault();const snackTimes=(this.snack_times.value||'').split(',').map(s=>s.trim()).filter(Boolean);const plan={date:this.plandate.value||null,meals:[{name:'Breakfast',time:this.breakfast_time.value||'8:00 AM',text:this.breakfast.value||'Oatmeal with fruit'},{name:'Lunch',time:this.lunch_time.value||'12:00 PM',text:this.lunch.value||'Turkey & cheese sandwich'},{name:'Dinner',time:this.dinner_time.value||'6:00 PM',text:this.dinner.value||'Chicken stir fry'}],snacks:{times:snackTimes,text:this.snacks.value||'Yogurt; apple slices; broth'},restrictions:this.restrictions.value||''};localStorage.setItem('simpleMealPlan',JSON.stringify(plan));alert("Plan saved! Click 'Suggest Meals' to apply it.");document.getElementById('plan-template-modal').style.display='none';};}})();</script>
+<script>
+function() {
+    const b=document.getElementById('show-plan-template');
+    if(b) {
+        b.onclick=()=>{document.getElementById('plan-template-modal').style.display='block';}
+    }
+    const c=document.getElementById('close-template-modal');
+    if(c){c.onclick=()=>{document.getElementById('plan-template-modal').style.display='none';}}
+    const f=document.getElementById('template-form');
+    if(f) {
+        f.onsubmit=function(e){
+            e.preventDefault();
+            const snackTimes=(this.snack_times.value||'').split(',').map(s=>s.trim()).filter(Boolean);
+            const plan={
+                date:this.plandate.value||null,meals:[
+                    {name:'Breakfast',time:this.breakfast_time.value||'8:00 AM',text:this.breakfast.value||'Oatmeal with fruit'},
+                    {name:'Lunch',time:this.lunch_time.value||'12:00 PM',text:this.lunch.value||'Turkey & cheese sandwich'},
+                    {name:'Dinner',time:this.dinner_time.value||'6:00 PM',text:this.dinner.value||'Chicken stir fry'}],
+                snacks:{times:snackTimes,text:this.snacks.value||'Yogurt; apple slices; broth'},
+                restrictions:this.restrictions.value||''
+            };
+            localStorage.setItem('simpleMealPlan',JSON.stringify(plan));
+            alert("Plan saved! Click 'Suggest Meals' to apply it.");
+            document.getElementById('plan-template-modal').style.display='none';
+        };
+    }};
+</script>
 <!-- END CAj ONE-MODAL PATCH -->
 <!-- CAJ-ANCHOR:MODALS -->
 <script src="./bootstrap-suggestor.js"></script>

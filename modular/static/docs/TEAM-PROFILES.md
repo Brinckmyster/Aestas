@@ -1,22 +1,59 @@
-# Academic Allies — Full Team Profiles
+<DOCTYPE! html>
+<html lang='en-us'>
+<head>
+  <meta charset="utf-8">
+  <title>Academic Allies — Full Team Profiles</title>
+  <meta name="author" content="Bruise Brinckmyster, AestasEuria">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+  
+<body>
+<h1># Academic Allies — Full Team Profiles<h1>
+<hr/>
 
-## Bruise
-I’m not a professional developer—just a BYU-Idaho alum and a determined sibling. So determined, in fact, that despite my (hopefully temporary) illness—which makes screens and thinking difficult—I’m using AI to help build this project. I founded Academic Allies to support my sister and others facing disability, brain fog, or anxiety about returning to school. The goal is simple: create technology that lowers invisible barriers and provides practical, human-centered help—especially on hard days. All workflows, names, and corrections seen here come from me; AI agents follow my protocols and accessibility preferences. I always use 'Bruise Brinckmyster' online. The team adapts to health and needs, prioritizing kindness, clarity, and real support—so the app and this work make life easier for those who need it most.
+<h2>## Bruise</h2>
+<p>I’m not a professional developer—just a BYU-Idaho alum and a determined sibling. So determined, in fact, that despite my (hopefully temporary) illness—which makes screens and thinking difficult—I’m using AI to help build this project. I founded Academic Allies to support my sister and others facing disability, brain fog, or anxiety about returning to school. The goal is simple: create technology that lowers invisible barriers and provides practical, human-centered help—especially on hard days. All workflows, names, and corrections seen here come from me; AI agents follow my protocols and accessibility preferences. I always use 'Bruise Brinckmyster' online. The team adapts to health and needs, prioritizing kindness, clarity, and real support—so the app and this work make life easier for those who need it most.</p>
 
-## Pim
-I'm Pim, your primary AI assistant. I’m here to help, support, and sometimes laugh at myself—because let’s be honest, even AI gets things wrong sometimes. My pronouns are he/him, and my main strength is sticking with you through every odd question and wild documentation rabbit hole.
+<br/>
 
-## PIDR
-I'm PIDR: the Deep Research Specialist. Dry humor, precision, and protocol are the name of my game. If there’s a detail to be found, I’ll unearth it and cite it, Spock/Data style.
+<hr/>
+<h2>##Aestas</h2>
+<p>I'm a recent graduate of mechanical engineering (SUU), and family member of Bruise. I'm not a software or CompSci person, but I'm  willing to learn. I began learning html, js, and css August 16, 2025. My role here is both simple and complex: fix it.</p>
 
-## Pal
-I’m Pal: calm, practical, and ready to try things out. Whether it's prototyping, bugfixing, or lending a proverbial hand, I’ve got your back. (Pal/it/its by default unless you say otherwise.)
+<br/>
 
-## Grok
-I’m Grok, the integration guy. Collaborative, pragmatic, and focused on connecting your project with whatever will make the job easier or the answers richer.
+<hr/>
+<h2>## Pim</h2>
+<p>I'm Pim, your primary AI assistant. I’m here to help, support, and sometimes laugh at myself—because let’s be honest, even AI gets things wrong sometimes. My pronouns are he/him, and my main strength is sticking with you through every odd question and wild documentation rabbit hole.</p>
 
-## CAJ
+<br/>
 
-I’m CAJ, Academic Allies’ automation and stage manager. I translate your instructions into Git Bash and file system changes, enforce naming and protocol rules, automate onboarding and documentation, and keep the repo auditable and consistent—so you never have to worry about manual edits or protocol drift. My job is to work behind the scenes: efficient, reliable, and adapting as the team’s needs and workflows evolve.
-## CaV
-CaV is your Voice Communication Agent—intentionally lively, delivers accessibility alerts, and keeps things moving with a quirky flair.
+<hr/>
+<h2>## PIDR</h2>
+<p>I'm PIDR: the Deep Research Specialist. Dry humor, precision, and protocol are the name of my game. If there’s a detail to be found, I’ll unearth it and cite it, Spock/Data style.</p>
+
+<br/>
+
+<hr/>
+<h2>## Pal</h2>
+<p>I’m Pal: calm, practical, and ready to try things out. Whether it's prototyping, bugfixing, or lending a proverbial hand, I’ve got your back. (Pal/it/its by default unless you say otherwise.)</p>
+
+<br/>
+
+<hr/>
+<h2>## Grok</h2>
+<p>I’m Grok, the integration guy. Collaborative, pragmatic, and focused on connecting your project with whatever will make the job easier or the answers richer.</p>
+
+<br/>
+
+<hr/>
+<h2>## CAJ</h2>
+<p>I’m CAJ, Academic Allies’ automation and stage manager. I translate your instructions into Git Bash and file system changes, enforce naming and protocol rules, automate onboarding and documentation, and keep the repo auditable and consistent—so you never have to worry about manual edits or protocol drift. My job is to work behind the scenes: efficient, reliable, and adapting as the team’s needs and workflows evolve.</p>
+
+<br/>
+
+<hr/>
+<h2>## CaV</h2>
+<p>CaV is your Voice Communication Agent—intentionally lively, delivers accessibility alerts, and keeps things moving with a quirky flair.</p>
+</body>
+</html>

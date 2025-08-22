@@ -226,11 +226,11 @@ function resetPlannedMeals(){ setPlannedMeals([]); renderPlannedMeals(); }
         <button type="button" id="suggest-meals" class="suggest-btn" aria-label="Generate meal suggestions">Suggest Meals</button>
     </div>
     <form id="add-meal-form" class="add-meal-form" autocomplete="off">
-        <label style="margin-bottom:-50px" for="meal-name">Meal</label>
+        <label for="meal-name">Meal</label>
         <input type="text" id="meal-name" name="meal-name" required aria-required="true" maxlength="40" /><br/><br/>
-        <label style="margin-bottom:-50px" for="meal-time">Time</label>
+        <label for="meal-time">Time</label>
         <input type="time" id="meal-time" name="meal-time" required aria-required="true" /><br/><br/>
-        <label style="margin-bottom:-50px" for="meal-notes">Notes</label>
+        <label for="meal-notes">Notes</label>
         <input type="text" id="meal-notes" name="meal-notes" maxlength="80" /><br/>
         <button type="submit" class="add-btn">Add Meal</button>
     </form>
@@ -310,11 +310,11 @@ function resetPlannedMeals(){ setPlannedMeals([]); renderPlannedMeals(); }
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em 1em;
-    align-items: flex-end;
+    justify-items: center;
     margin-bottom: 1rem;
 }
 .add-meal-form label {
-    flex: 1 1 100px;
+    flex: 1 1 10px;
     font-weight: 600;
 }
 .add-meal-form input {

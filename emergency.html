@@ -1,0 +1,248 @@
+<DOCTYPE html>
+<html lang="en-US">
+<head>
+   <title>Emergency Contacts - Academic Allies</title>
+   <link rel="icon" type="image/x-icon" href="\Academic Allies\Modular\icons\favicon.jpeg">
+   <meta name="author" content="Bruise Brinckmyster, AestasEuria">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta charset="utf-8">
+
+
+<style>
+p,h1,h2,h3 {
+  text-align: center;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.site-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  padding: 12px 20px;
+}
+
+.header-content {
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+
+.home-link:hover {
+  color: #0066cc;
+}
+
+.home-icon {
+  margin-right: 8px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 20px;
+}
+
+.nav-list li {
+  margin: 0;
+}
+
+.nav-list a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.nav-list a:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#status-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #dc3545;
+  cursor: pointer;
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+#status-circle:hover {
+  background-color: #c82333;
+}
+
+#status-circle.signed-in {
+  background-color: #28a745;
+}
+
+#status-circle.signed-in:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+  justify-content: flex-start;
+    gap: 15px;
+  }
+  
+  .nav-list {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+}</style>
+
+
+</head>
+
+<header class="site-header" role="banner">
+  <div class="header-content">
+    <a aria-label="Home" class="home-link" href="\Academic Allies\AcademicAllies.html" title="Go Home">
+    <img alt="Home" class="home-icon" src="..\icons\branding.png" width="48" height="48" title="Academic Allies Home"/>
+    </a>
+      <span id="tagalog" class="tagline" title="Academic Allies
+Your disability accommodations and support network">Your disability accommodations and support network</span>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="calendar\calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="emergency.html" title="Emergency Contact">Emergency Contact</a></li>
+  	<li><a href="messages.html" title="Messages">Messages</a></li>
+        <li><a href="checkin.html" title="Daily Check-In">Daily Check-In</a></li>
+        <li><a href="..\icons\icon-gallery.html" title="Icon Gallery">Icon Gallery</a></li>
+        <li><a href="..\static\sitemap.html" title="Site Map">Site Map</a></li>
+      </ul>
+    </nav>
+
+<br>
+    
+    <div class="header-controls">
+      <!-- Google Sign-In Container -->
+      <div id="googleSignInContainer"></div>
+      
+      <!-- JS-Draggable Status Circle -->
+      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
+    </div>
+  </div>
+  
+  <!-- Status Circle Container -->
+  <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
+  
+  <!-- Google Identity Services -->
+  <script async defer src="https://accounts.google.com/gsi/client"></script>
+  
+  <!-- Google Sign-In JavaScript -->
+  <script>
+    // Initialize Google Sign-In when the API loads
+    window.onload = function() {
+      google.accounts.id.initialize({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID',
+        callback: handleCredentialResponse
+      });
+      
+      google.accounts.id.renderButton(
+        document.getElementById('googleSignInContainer'),
+        {
+          theme: 'outline',
+          size: 'medium',
+          type: 'standard',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          text: 'signin_with'
+        }
+      );
+    };
+    
+    function handleCredentialResponse(response) {
+      // Handle the signed-in user info
+      console.log('Encoded JWT ID token: ' + response.credential);
+      // Add your sign-in logic here
+    }
+  </script>
+<script src="/Academic-Allies/modular/js/draggable.js"></script>
+</header>
+
+
+
+
+<!-- This page is meant to have phone number, email, and email template for each of the people listed in "message". Additionally, it should be possible to add emergency contacts like doctors. -->
+
+
+<body>
+<p><a href="#Ad" style="text-align:left;">Jump to Admin</a></p>
+<!-- Emergency Contacts -->
+<h1 style="color:rgb(255,0,0);"><sub><img src="..\icons\icon-user-emergency-contact.png" height="40" width="40"></sub> Emergency Contacts <sub><img src="..\icons\icon-user-emergency-contact.png" height="40" width="40"></sub></h1>
+
+<h2>Mom</h2>
+<p><a href="tel:661-400-2545"><img src="..\icons\Dorothy-Brinck.JPEG" height="180" width="180"> <br>(661) 400-2545</a></p>
+
+<p><a href="mailto:Dorothy.brinck@gmail.com">Dorothy.brinck@gmail.com</a></p>
+
+<p>Help! I'm overwhelmed. Please call me when you get the chance.</p>
+
+<br><br>
+
+<h2>Dad</h2>
+<p><a href="tel:661-878-2414"><img src="..\icons\Brian-Brinck.JPEG" height="180" width="180"> <br>(661) 878-2414</a></p>
+<p><a href="mailto:Brian.e.brinck@gmail.com">Brian.e.brinck@gmail.com</a></p>
+
+<p>Help! I'm overwhelmed. Please call me when you get the chance.</p>
+
+<hr>
+<!-- Nearby Help -->
+<h1 style="color:rgb(162, 88, 42);"><sub><img src="..\icons\icon-user-nearby-help.png" height="40" width="30"></sub> Nearby Help <sub><img src="..\icons\icon-user-nearby-help.png" height="40" width="30"></sub></h1>
+
+
+
+<hr>
+
+<!-- Teachers -->
+<h1 style="color:rgb(25, 107, 38);"><sub><img src="..\icons\icon-user-support.png" height="35" width="35"></sub> Teachers <sub><img src="..\icons\icon-user-support.png" height="35" width="35"></sub></h1>
+
+
+<hr>
+
+<!-- Designated Classmates -->
+<h1 style="color:rgb(162, 88, 42);"><sub><img src="..\icons\icon-user-nearby-help.png" height="40" width="30"></sub> Designated Classmates <sub><img src="..\icons\icon-user-nearby-help.png" height="40" width="30"></sub></h1>
+
+
+<hr>
+
+<!-- Admin -->
+<h1 id="Ad" style="color:rgb(38, 50, 186);"><sub><img src="..\icons\icon-user-admin.png" height="50" width="50"></sub> Admins <sub><img src="..\icons\icon-user-admin.png" height="50" width="50"></sub></h1>
+
+<h2>Karen</h2>
+<p><a href="tel:661-429-7477"><img src="..\icons\Goose-ADmin.JPEG" height="130" width="220"><br>(661) 429-7477</a></p>
+<p><a href="mailto:brinckmyster@gmail.com">brinckmyster@gmail.com</a></p>
+
+<p>My app broke. Help!</p>
+
+<hr>
+<!-- Family -->
+
+
+<!-- Services -->
+<h1 style="color:rgb(25, 107, 38);"><sub><img src="..\icons\icon-user-support.png" height="35" width="35"></sub> Services <sub><img src="..\icons\icon-user-support.png" height="35" width="35"></sub></h1>
+
+</body>
+</html>

@@ -175,6 +175,7 @@ Your disability accommodations and support network">Your disability accommodatio
 <body data-student-id="mary">
 <div class="green-banner">Welcome to Mary's Meal Planner!</div>
 <div id="shared-header-container"></div>
+    
 <script>
 function getPlannedMeals(){ try{return JSON.parse(localStorage.getItem('plannedMeals')||'[]');}catch(e){return[];} }
 function setPlannedMeals(a){ localStorage.setItem('plannedMeals', JSON.stringify(a||[])); }
@@ -251,8 +252,9 @@ function resetPlannedMeals(){ setPlannedMeals([]); renderPlannedMeals(); }
     color: #22223b;
 }
 .meal-upload {
-    display: flex;
+    display: flex safe;
     align-items: center;
+    justify-items: space-between;
     gap: 1em;
     margin-bottom: 0.5em;
 }

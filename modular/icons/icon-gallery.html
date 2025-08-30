@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>Image Gallery - Academic Allies</title>
+  <link rel="icon" type="image/x-icon" href="\Academic Allies\Modular\icons\favicon.jpeg">
+  <meta name="author" content="Bruise Brinckmyster, AestasEuria">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+
+  <link rel="icon" href="/Academic-Allies/favicon.ico?v=44">
+  <link rel="icon" href="/favicon.ico?v=3">
+
+
+
+<style>
+.icon-img {
+   max-width:90px;
+   max-height:90px;
+   width:auto;
+   height:auto;
+   display:block;
+   background:repeating-conic-gradient(#ddd 0% 25%,#fff 0% 50%) 0.5em 0.5em/20px 20px;
+   border:2px dashed #0090c1;
+   margin:8px auto 4px auto;
+   box-shadow:0 1px 8px #ccc;
+}
+
+.icon-block {
+   display:inline-block;
+   margin:12px;
+   text-align:center;
+   vertical-align:top;
+   background:#fafbff;
+   padding:12px 6px 8px 6px;
+   border-radius:10px;
+   min-width:110px;
+}
+
+.icon-filename {
+   font-size:.88em;
+   line-height:1.2;
+   margin-top:4px;
+   word-break:break-all;
+   color:#155283;
+}
+
+.icon-gallery-container {
+   text-align:left;
+   padding-bottom:8px;
+   padding: 2rem; 
+   padding-top: 0;
+}
+
+body {
+   margin: 0;
+   font-family: sans-serif;
+   background: #fff;
+
+}
+
+header {
+   text-align: left;
+   margin-bottom: 2rem;
+}
+
+.site-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  padding: 12px 20px;
+}
+
+.header-content {
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+
+.home-link:hover {
+  color: #0066cc;
+}
+
+.home-icon {
+  margin-right: 8px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 20px;
+}
+
+.nav-list li {
+  margin: 0;
+}
+
+.nav-list a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.nav-list a:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+h1 {
+   color: #1f2937;
+   margin-bottom: 0.5rem; 
+}
+
+.subtitle {
+   color: #4b5563;
+   margin-bottom: 2rem; 
+}
+
+.icon-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+   gap: 1.5rem;
+   max-width: 1200px;
+   margin: 0 auto 3rem; 
+}
+
+.icon-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 1rem;
+   border: 1px solid #e5e7eb;
+   border-radius: 0.5rem;
+   background: #f9fafb;
+   transition: transform 0.2s, box-shadow 0.2s; 
+}
+
+.icon-item:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); 
+}
+
+.icon-item img {
+   max-width: 100px;
+   max-height: 100px;
+   object-fit: contain;
+   margin-bottom: 0.75rem;
+   border-radius: 0.25rem; 
+}
+
+.icon-filename {
+   font-size: 0.875rem;
+   color: #374151;
+   text-align: center;
+   word-break: break-word;
+   padding: 0.5rem 0.75rem;
+   background: #3b82f6;
+   color: #fff;
+   border-radius: 0.375rem;
+   font-weight: 500;
+   min-height: 1.25rem;
+   display: flex;
+   align-items: center;
+   justify-content: center; 
+}
+
+.return-home {
+   display: block;
+   margin: 2rem auto 0;
+   padding: 0.75rem 1.5rem;
+   background: #3b82f6;
+   color: #fff;
+   text-decoration: none;
+   border-radius: 0.5rem;
+   text-align: center;
+   max-width: 200px;
+   font-weight: 500;
+   transition: background-color 0.2s; 
+}
+
+.return-home:hover {
+   background: #2563eb; 
+}
+
+.user-tier img, .icon-item img {
+   width: 32px !important;
+   height: 32px !important;
+   object-fit: contain; padding: 4px; border-radius: 4px; }
+</style>
+
+</head>
+<body>
+
+<header class="site-header" role="banner">
+  <div class="header-content">
+    <a aria-label="Home" class="home-link" href="\Academic Allies\AcademicAllies.html" title="Go Home">
+    <img alt="Home" class="home-icon" src="branding.png" width="48" height="48" title="Academic Allies Home"/>
+    </a>
+      <span class="tagline" title="Academic Allies
+Your disability accommodations and support network">Your disability accommodations and support network</span>
+    <nav aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="..\components\calendar\calendar.html" title="Calendar">Calendar</a></li>
+        <li><a href="..\components\emergency.html" title="Emergency Contact">Emergency Contact</a></li>
+  	<li><a href="..\components\messages.html" title="Messages">Messages</a></li>
+        <li><a href="..\components\checkin.html" title="Daily Check-In">Daily Check-In</a></li>
+        <li><a href="..\icons\icon-gallery.html" title="Icon Gallery">Icon Gallery</a></li>
+        <li><a href="..\static\sitemap.html" title="Site Map">Site Map</a></li>
+      </ul>
+    </nav>
+
+<br>
+    
+    <div class="header-controls">
+      <!-- Google Sign-In Container -->
+      <div id="googleSignInContainer"></div>
+      
+      <!-- JS-Draggable Status Circle -->
+      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
+    </div>
+  </div>
+  
+  <!-- Status Circle Container -->
+  <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
+  
+  <!-- Google Identity Services -->
+  <script async defer src="https://accounts.google.com/gsi/client"></script>
+  
+  <!-- Google Sign-In JavaScript -->
+  <script>
+    // Initialize Google Sign-In when the API loads
+    window.onload = function() {
+      google.accounts.id.initialize({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID',
+        callback: handleCredentialResponse
+      });
+      
+      google.accounts.id.renderButton(
+        document.getElementById('googleSignInContainer'),
+        {
+          theme: 'outline',
+          size: 'medium',
+          type: 'standard',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          text: 'signin_with'
+        }
+      );
+    };
+    
+    function handleCredentialResponse(response) {
+      // Handle the signed-in user info
+      console.log('Encoded JWT ID token: ' + response.credential);
+      // Add your sign-in logic here
+    }
+  </script>
+<script src="/Academic-Allies/modular/js/draggable.js"></script>
+</header>
+
+<style>
+#status-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #dc3545;
+  cursor: pointer;
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+#status-circle:hover {
+  background-color: #c82333;
+}
+
+#status-circle.signed-in {
+  background-color: #28a745;
+}
+
+#status-circle.signed-in:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+  justify-content: flex-start;
+    gap: 15px;
+  }
+  
+  .nav-list {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+}</style>
+
+  
+
+  
+  <div style="padding-left:2rem">
+    <h1>Icon Gallery</h1>
+    <p class="subtitle">Visual icon collection</p>
+  </div>
+<div class="icon-gallery-container">
+
+  <div class="icon-block">
+    <img src="brain-scan.jpeg" alt="brain-scan.jpeg" class="icon-img">
+    <div class="icon-filename">brain-scan.jpeg</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="icon-user-admin.png" alt="icon-user-admin.png" class="icon-img">
+    <div class="icon-filename">icon-user-admin.png</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="branding.png" alt="branding.png" class="icon-img">
+    <div class="icon-filename">branding.png</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="Goose-ADmin.JPEG" alt="Goose-ADmin.jpeg" class="icon-img">
+    <div class="icon-filename">Goose-ADmin.jpeg</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="icon-user-emergency-contact.png" alt="icon-user-emergency-contact.png" class="icon-img">
+    <div class="icon-filename">icon-user-emergency-contact.png</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="icon-user-nearby-help.png" alt="icon-user-nearby-help.png" class="icon-img">
+    <div class="icon-filename">icon-user-nearby-help.png</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="icon-user-support.png" alt="icon-user-support.png" class="icon-img">
+    <div class="icon-filename">icon-user-support.png</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="mode-bad-brain-day.jpg" alt="mode-bad-brain-day.jpg" class="icon-img">
+    <div class="icon-filename">mode-bad-brain-day.jpg</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="mode-nope-button.png" alt="mode-nope-button.png" class='icon-img'>
+    <div class="icon-filename">mode-nope-button.png</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="mode-normal.png" alt="mode-normal.png" class="icon-img">
+    <div class="icon-filename">mode-normal.png</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="mode-recovery.png" alt="mode-recovery.png" class="icon-img">
+    <div class="icon-filename">mode-recovery.png</div>
+  </div>
+
+  <div class="icon-block">
+    <img src="mode-semi-nope.png" alt="mode-semi-nope.png" class="icon-img">
+    <div class="icon-filename">mode-semi-nope.png</div>
+  </div>
+
+
+</div>
+<div class="ca-autogen-block" style="margin:42px 0 0 0;text-align:center;font-size:0.96em;color:#9944ff;">Autogenerated by CAj, fixed by Aestas &mdash; <a href="https://github.com/Brinckmyster/Academic-Allies/blob/main/modular/static/docs/TEAM-PROFILES.md" target="_blank" style="color:#b505a7;">see the team profiles</a></div>

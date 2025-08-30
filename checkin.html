@@ -1,182 +1,44 @@
-<DOCTYPE! html>
-<html lang="en-US">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-   <title>Daily Check-In - Academic Allies</title>
-   <link rel="icon" type="image/x-icon" href="\Academic Allies\Modular\icons\favicon.jpeg">
-   <meta name="author" content="Bruise Brinckmyster, AestasEuria">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <meta charset="utf-8">
+<link rel="icon" href="favicon.ico">
+<link rel="icon" href="favicon.ico">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academic Allies – Daily Check-In</title>
+  <link href="./css/style.css" rel="stylesheet" />
 </head>
-
-
-<header class="site-header" role="banner">
-  <div class="header-content">
-    <a aria-label="Home" class="home-link" href="\Academic Allies\AcademicAllies.html" title="Go Home">
-    <img alt="Home" class="home-icon" src="\Academic Allies\Modular\icons\branding.png" width="48" height="48" title="Academic Allies Home"/>
-    </a>
-      <span class="tagline" title="Academic Allies
-Your disability accommodations and support network">Your disability accommodations and support network</span>
-    <nav aria-label="Main navigation">
-      <ul class="nav-list">
-        <li><a href="/Academic Allies/Modular/components/calendar/calendar.html" title="Calendar">Calendar</a></li>
-        <li><a href="emergency.html" title="Emergency Contact">Emergency Contact</a></li>
-  	<li><a href="messages.html" title="Messages">Messages</a></li>
-        <li><a href="checkin.html" title="Daily Check-In">Daily Check-In</a></li>
-        <li><a href="..\icons\icon-gallery.html" title="Icon Gallery">Icon Gallery</a></li>
-        <li><a href="../static/sitemap.html" title="Site Map">Site Map</a></li>
-      </ul>
-    </nav>
-    
-<br>
-
-    <div class="header-controls">
-      <!-- Google Sign-In Container -->
-      <div id="googleSignInContainer"></div>
-      
-      <!-- JS-Draggable Status Circle -->
-      <div aria-label="Status: Not signed in" id="status-circle" tabindex="0" title="Click to toggle status, drag to reorder"></div>
-    </div>
-  </div>
-  
-  <!-- Status Circle Container -->
-  <div aria-live="polite" id="status-circle-container" role="status" title="Authentication Status"></div>
-  
-  <!-- Google Identity Services -->
-  <script async defer src="https://accounts.google.com/gsi/client"></script>
-  
-  <!-- Google Sign-In JavaScript -->
-  <script>
-    // Initialize Google Sign-In when the API loads
-    window.onload = function() {
-      google.accounts.id.initialize({
-        client_id: 'YOUR_GOOGLE_CLIENT_ID',
-        callback: handleCredentialResponse
-      });
-      
-      google.accounts.id.renderButton(
-        document.getElementById('googleSignInContainer'),
-        {
-          theme: 'outline',
-          size: 'medium',
-          type: 'standard',
-          shape: 'rectangular',
-          logo_alignment: 'left',
-          text: 'signin_with'
-        }
-      );
-    };
-    
-    function handleCredentialResponse(response) {
-      // Handle the signed-in user info
-      console.log('Encoded JWT ID token: ' + response.credential);
-      // Add your sign-in logic here
-    }
-  </script>
-<script src="/Academic-Allies/modular/js/draggable.js"></script>
-</header>
-
-<style>
-.site-header {
-  background: #f8f9fa;
-  border-bottom: 1px solid #e1e5e9;
-  padding: 12px 20px;
-}
-
-.header-content {
-  justify-content: flex-start;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.home-link {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: #333;
-  font-weight: 600;
-}
-
-.home-link:hover {
-  color: #0066cc;
-}
-
-.home-icon {
-  margin-right: 8px;
-}
-
-.nav-list {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 20px;
-}
-
-.nav-list li {
-  margin: 0;
-}
-
-.nav-list a {
-  text-decoration: none;
-  color: #555;
-  font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.nav-list a:hover {
-  background-color: #e9ecef;
-  color: #333;
-}
-
-.header-controls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-#status-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #dc3545;
-  cursor: pointer;
-  position: fixed; top: 16px; right: 16px; z-index: 1000;
-  transition: background-color 0.3s;
-}
-
-#status-circle:hover {
-  background-color: #c82333;
-}
-
-#status-circle.signed-in {
-  background-color: #28a745;
-}
-
-#status-circle.signed-in:hover {
-  background-color: #218838;
-}
-
-@media (max-width: 768px) {
-  .header-content {
-  justify-content: flex-start;
-    gap: 15px;
-  }
-  
-  .nav-list {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 10px;
-  }
-}</style>
-
-
-
-
 <body>
-<p>Check-in</p>
+  <!-- Header will be injected here -->
+  <div id="site-header"></div>
 
+  <main id="checkin-page">
+    <h2>Daily Check-In</h2>
+    <div id="checkin-component-container"></div>
+    <script type="module">
+      import { renderCheckIn } from './components/spoon-planner/js/spoon-planner.js';
+      renderCheckIn(document.getElementById('checkin-component-container'), window.firebaseAuth);
+    </script>
+  </main>
+
+  <!-- Fail-safe header loader (ensures all scripts run after insertion)-->
+  <script>
+    fetch('/Academic-Allies/modular/shared-header.html')
+      .then(response => response.text())
+      .then(html => {
+        const container = document.getElementById('site-header');
+        container.innerHTML = html;
+        // Execute any scripts found in the loaded header
+        const scripts = container.querySelectorAll('script');
+        scripts.forEach(oldScript => {
+          const newScript = document.createElement('script');
+          Array.from(oldScript.attributes).forEach(attr =>
+            newScript.setAttribute(attr.name, attr.value)
+          );
+          newScript.textContent = oldScript.textContent;
+          oldScript.replaceWith(newScript);
+        });
+      });
+  </script>
 </body>
 </html>
